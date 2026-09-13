@@ -1,0 +1,401 @@
+{
+  "metadata": {
+    "id": "caca_algoritmo_001",
+    "code": "AZ-2026-041",
+    "title": "O algoritmo fantasma",
+    "briefing": "Um algoritmo capaz de alterar notas acadêmicas foi roubado do laboratório Hórus. O invasor deixou São Paulo há poucas horas. Siga seu rastro pelo Brasil, reúna provas, monte um dossiê juridicamente consistente e efetue a prisão antes que o código seja vendido.",
+    "total_hours": 72,
+    "start": "sao_paulo"
+  },
+  "culprit": "cifra",
+  "suspects": [
+    {
+      "id": "byte",
+      "name": "Byte Azul",
+      "specialty": "Redes",
+      "vehicle": "Carro preto"
+    },
+    {
+      "id": "null",
+      "name": "Null",
+      "specialty": "Banco de dados",
+      "vehicle": "Ônibus interestadual"
+    },
+    {
+      "id": "cifra",
+      "name": "Cifra",
+      "specialty": "Engenharia social",
+      "vehicle": "Avião cargueiro"
+    },
+    {
+      "id": "vertice",
+      "name": "Vértice",
+      "specialty": "Computação gráfica",
+      "vehicle": "Barco fluvial"
+    }
+  ],
+  "dossier": {
+    "fields": [
+      {
+        "id": "name",
+        "label": "Codinome",
+        "options": [
+          "Byte Azul",
+          "Null",
+          "Cifra",
+          "Vértice"
+        ]
+      },
+      {
+        "id": "specialty",
+        "label": "Especialidade",
+        "options": [
+          "Redes",
+          "Engenharia social",
+          "Banco de dados",
+          "Computação gráfica"
+        ]
+      },
+      {
+        "id": "vehicle",
+        "label": "Meio de fuga",
+        "options": [
+          "Avião cargueiro",
+          "Ônibus interestadual",
+          "Carro preto",
+          "Barco fluvial"
+        ]
+      }
+    ]
+  },
+  "arrest_requirements": {
+    "minimum_evidence": 7,
+    "required_evidence": [
+      "E01",
+      "E03",
+      "E04",
+      "E07",
+      "E08"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "E01",
+      "title": "Crachá clonado",
+      "text": "O invasor convenceu um funcionário a liberar o acesso.",
+      "tag": "especialidade"
+    },
+    {
+      "id": "E02",
+      "title": "Bilhete para Recife",
+      "text": "Passagem emitida 40 minutos após o furto aponta para Recife.",
+      "tag": "rota"
+    },
+    {
+      "id": "E03",
+      "title": "Assinatura C1FR4",
+      "text": "O padrão aparece em ataques atribuídos ao codinome Cifra.",
+      "tag": "identidade"
+    },
+    {
+      "id": "E04",
+      "title": "Carga desviada",
+      "text": "Um avião cargueiro foi reservado com documentos falsos.",
+      "tag": "transporte"
+    },
+    {
+      "id": "E05",
+      "title": "Mensagem interceptada",
+      "text": "A próxima chave está onde os três poderes se encontram.",
+      "tag": "rota"
+    },
+    {
+      "id": "E06",
+      "title": "Registro do hangar",
+      "text": "Cifra embarcou no cargueiro AZ-714 rumo ao sul.",
+      "tag": "localização"
+    },
+    {
+      "id": "E07",
+      "title": "Áudio de negociação",
+      "text": "A venda do algoritmo ocorrerá no terminal de Porto Alegre.",
+      "tag": "prova"
+    },
+    {
+      "id": "E08",
+      "title": "Manifesto de carga",
+      "text": "O cargueiro pousará no terminal 4 antes do prazo.",
+      "tag": "prisão"
+    }
+  ],
+  "navigation": {
+    "sao_paulo": [
+      "recife",
+      "brasilia",
+      "manaus"
+    ],
+    "recife": [
+      "sao_paulo",
+      "brasilia",
+      "manaus"
+    ],
+    "brasilia": [
+      "recife",
+      "sao_paulo",
+      "porto_alegre",
+      "manaus"
+    ],
+    "manaus": [
+      "sao_paulo",
+      "recife",
+      "brasilia"
+    ],
+    "porto_alegre": [
+      "brasilia",
+      "sao_paulo"
+    ]
+  },
+  "trail": {
+    "sao_paulo": "recife",
+    "recife": "brasilia",
+    "brasilia": "porto_alegre"
+  },
+  "locations": [
+    {
+      "id": "sao_paulo",
+      "name": "São Paulo",
+      "type": "Cena do crime",
+      "x": 57,
+      "y": 69,
+      "coords": "23.5°S 46.6°W",
+      "description": "Laboratório Hórus. O acesso ocorreu com credenciais legítimas, mas o titular nega ter entrado.",
+      "city_info": {
+        "summary": "Maior centro urbano do país, São Paulo reúne universidades, centros financeiros, indústrias criativas e uma extensa rede de mobilidade.",
+        "facts": [
+          "A cidade nasceu em 1554 no planalto de Piratininga.",
+          "A Avenida Paulista conecta cultura, negócios e vida pública.",
+          "Sua diversidade foi marcada por sucessivas ondas migratórias.",
+          "O MASP é um dos marcos da arquitetura modernista brasileira."
+        ]
+      },
+      "actions": [
+        {
+          "id": "sp_camera",
+          "label": "Revisar câmeras",
+          "cost": 3,
+          "evidence": "E01",
+          "result": "O invasor usou um crachá clonado e manipulou a equipe, sem romper a rede."
+        },
+        {
+          "id": "sp_desk",
+          "label": "Examinar estação",
+          "cost": 4,
+          "evidence": "E03",
+          "result": "Nos metadados aparece a assinatura C1FR4, associada a Cifra."
+        },
+        {
+          "id": "sp_cafe",
+          "label": "Interrogar cafeteria",
+          "cost": 2,
+          "evidence": "E02",
+          "result": "Uma atendente encontrou um bilhete eletrônico para Recife."
+        }
+      ]
+    },
+    {
+      "id": "recife",
+      "name": "Recife",
+      "type": "Primeiro rastro",
+      "x": 82,
+      "y": 43,
+      "coords": "8.0°S 34.9°W",
+      "description": "O suspeito circulou pelo porto e usou terminais públicos para contatar compradores.",
+      "city_info": {
+        "summary": "Capital pernambucana voltada para o Atlântico, Recife cresceu entre rios, pontes, arrecifes e um porto decisivo para sua história.",
+        "facts": [
+          "Os rios Capibaribe e Beberibe atravessam a paisagem urbana.",
+          "O Recife Antigo preserva parte importante da memória portuária.",
+          "Frevo e maracatu são expressões centrais da cultura local.",
+          "A cidade integra um polo de tecnologia conhecido como Porto Digital."
+        ]
+      },
+      "actions": [
+        {
+          "id": "re_port",
+          "label": "Investigar porto",
+          "cost": 4,
+          "evidence": "E04",
+          "result": "Documentos falsos foram usados para reservar um avião cargueiro."
+        },
+        {
+          "id": "re_terminal",
+          "label": "Periciar terminal",
+          "cost": 3,
+          "evidence": "E05",
+          "result": "Mensagem recuperada: a próxima chave está onde os três poderes se encontram."
+        },
+        {
+          "id": "re_hotel",
+          "label": "Vistoriar hotel",
+          "cost": 5,
+          "result": "O registro era de outro hóspede. A pista não leva ao suspeito."
+        }
+      ]
+    },
+    {
+      "id": "brasilia",
+      "name": "Brasília",
+      "type": "Conexão institucional",
+      "x": 57,
+      "y": 47,
+      "coords": "15.8°S 47.9°W",
+      "description": "A referência aos três poderes conduz à capital. Há movimentação em um hangar privado.",
+      "city_info": {
+        "summary": "Capital federal planejada no Planalto Central, Brasília tornou-se símbolo do urbanismo e da arquitetura moderna brasileira.",
+        "facts": [
+          "A cidade foi inaugurada em 21 de abril de 1960.",
+          "O Plano Piloto foi concebido por Lúcio Costa.",
+          "Oscar Niemeyer projetou muitos de seus edifícios cívicos.",
+          "O conjunto urbanístico é reconhecido como Patrimônio Mundial."
+        ]
+      },
+      "actions": [
+        {
+          "id": "bsb_hangar",
+          "label": "Verificar hangar",
+          "cost": 5,
+          "evidence": "E06",
+          "result": "O registro mostra Cifra embarcando no cargueiro AZ-714 rumo ao sul."
+        },
+        {
+          "id": "bsb_audio",
+          "label": "Analisar escuta",
+          "cost": 4,
+          "evidence": "E07",
+          "result": "A gravação confirma a venda no terminal de Porto Alegre."
+        },
+        {
+          "id": "bsb_archive",
+          "label": "Consultar arquivo",
+          "cost": 4,
+          "result": "O processo é antigo e não tem ligação com o caso."
+        }
+      ]
+    },
+    {
+      "id": "manaus",
+      "name": "Manaus",
+      "type": "Possível desvio",
+      "x": 31,
+      "y": 31,
+      "coords": "3.1°S 60.0°W",
+      "description": "Uma denúncia menciona transporte fluvial. Pode ser uma rota ou uma distração.",
+      "city_info": {
+        "summary": "Capital do Amazonas, Manaus é uma metrópole amazônica ligada ao Rio Negro e uma porta de entrada para a maior floresta tropical do mundo.",
+        "facts": [
+          "A cidade ganhou projeção internacional durante o ciclo da borracha.",
+          "O Teatro Amazonas é um marco desse período histórico.",
+          "O encontro das águas ocorre entre os rios Negro e Solimões.",
+          "Rotas fluviais continuam essenciais para conectar a região."
+        ]
+      },
+      "actions": [
+        {
+          "id": "mao_port",
+          "label": "Examinar embarcações",
+          "cost": 6,
+          "result": "Nenhum passageiro corresponde ao perfil. Era uma pista plantada."
+        },
+        {
+          "id": "mao_network",
+          "label": "Rastrear conexão",
+          "cost": 5,
+          "result": "O endereço foi mascarado. Nenhuma prova admissível foi obtida."
+        }
+      ]
+    },
+    {
+      "id": "porto_alegre",
+      "name": "Porto Alegre",
+      "type": "Destino provável",
+      "x": 47,
+      "y": 88,
+      "coords": "30.0°S 51.2°W",
+      "description": "O terminal recebe voos privados. Uma abordagem só pode resultar em prisão se o mandado corresponder à pessoa encontrada.",
+      "city_info": {
+        "summary": "Capital do Rio Grande do Sul, Porto Alegre se desenvolveu às margens do Guaíba como ponto de encontro entre rotas, culturas e atividades portuárias.",
+        "facts": [
+          "A orla do Guaíba acompanha parte importante da vida urbana.",
+          "O Mercado Público funciona no centro histórico desde o século XIX.",
+          "A cidade recebeu forte influência de diferentes correntes migratórias.",
+          "Parques e áreas arborizadas compõem sua identidade urbana."
+        ]
+      },
+      "actions": [
+        {
+          "id": "poa_manifest",
+          "label": "Obter manifesto",
+          "cost": 4,
+          "evidence": "E08",
+          "result": "O manifesto confirma o cargueiro AZ-714 no terminal 4."
+        },
+        {
+          "id": "poa_arrest",
+          "label": "Abordar suspeito",
+          "cost": 1,
+          "requires_warrant": true,
+          "arrest": true,
+          "result": "A identidade confere com o mandado. A equipe prende Cifra e recupera o algoritmo."
+        },
+        {
+          "id": "poa_street",
+          "label": "Procurar no centro",
+          "cost": 6,
+          "result": "A busca consome horas e não encontra relação com o terminal."
+        }
+      ]
+    }
+  ],
+  "travel": {
+    "sao_paulo": {
+      "recife": 8,
+      "brasilia": 4,
+      "manaus": 9,
+      "porto_alegre": 4
+    },
+    "recife": {
+      "sao_paulo": 8,
+      "brasilia": 5,
+      "manaus": 8,
+      "porto_alegre": 9
+    },
+    "brasilia": {
+      "sao_paulo": 4,
+      "recife": 5,
+      "manaus": 7,
+      "porto_alegre": 5
+    },
+    "manaus": {
+      "sao_paulo": 9,
+      "recife": 8,
+      "brasilia": 7,
+      "porto_alegre": 10
+    },
+    "porto_alegre": {
+      "sao_paulo": 4,
+      "recife": 9,
+      "brasilia": 5,
+      "manaus": 10
+    }
+  },
+  "ending": {
+    "win_title": "Fugitivo capturado",
+    "win_text": "O mandado, a identidade e o conjunto probatório foram validados. A prisão foi efetuada e o algoritmo Hórus foi recuperado.",
+    "wrong_warrant_title": "Pessoa liberada",
+    "wrong_warrant_text": "A identidade da pessoa abordada não corresponde ao mandado. Sem fundamento legal para a prisão, ela é imediatamente liberada. O caso não foi resolvido e o verdadeiro criminoso escapou.",
+    "insufficient_evidence_title": "Abordado liberado por falta de provas",
+    "insufficient_evidence_text": "O mandado corresponde à pessoa abordada, mas a equipe não reuniu evidências suficientes para vincular o suspeito ao crime e sustentar a prisão. A pessoa é liberada e o caso termina sem solução.",
+    "lose_title": "O rastro desapareceu",
+    "lose_text": "O prazo terminou sem mandado e conjunto probatório válidos. Ninguém pode ser preso apenas por suspeita; a pessoa abordada é liberada e o caso permanece sem solução."
+  }
+}

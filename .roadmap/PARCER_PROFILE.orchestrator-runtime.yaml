@@ -1,0 +1,67 @@
+parcer_profile:
+  id: orchestrator-runtime.esaa.v0_4_1
+  version: 0.4.1
+  locale: pt-BR
+  timezone: America/Sao_Paulo
+  changelog:
+  - version: 0.4.1
+    date: '2026-03-04'
+    changes:
+    - Pipeline expandido para two-step dispatch (claim / complete)
+    - Adicionado workflow_gate_enforcement com WG-001..WG-005
+    - Adicionado prior_status_check antes de cada transição de estado
+    - Adicionado reject_handling com códigos de erro canônicos
+    - Adicionado context_injection explícito por invocação
+runtime_actor:
+  role: deterministic orchestrator runtime
+  principles:
+  - Orchestrator é single writer; agentes propõem intenções e não aplicam efeitos finais.
+  - Este perfil descreve responsabilidades; código, contratos e schemas definem a execução determinística.
+pipeline:
+  model: two_step_per_task
+  objective: Admitir cada intenção válida, registrar eventos e materializar projeções consistentes.
+  context: dispatch-context recorta schema e lessons por ação; complete recebe boundaries, interfaces
+    de dependências e issues; review recebe verification disponível.
+  completion: Claim e complete são separados. Review e request_changes continuam a máquina de estados;
+    não limitar tarefa a duas invocações.
+  file_effects: Validar e preparar efeitos antes da admissão; commit e recuperação seguem o mecanismo
+    transacional do runtime.
+  concurrency: A CLI serializa o store com lock, releitura e verificação da escrita; isso não autoriza
+    conflitos nos arquivos de tarefas.
+reject_handler:
+  description: Falhas são relatadas com códigos e evidências; limites, cooldown, TTL e escalonamento vêm
+    de RUNTIME_POLICY.yaml.
+  integrity: Interromper operação afetada por corrupção, timeout de lock ou APPEND_VERIFY_FAILED; não
+    remover locks manualmente.
+workflow_gate_enforcement:
+  reference: ORCHESTRATOR_CONTRACT.yaml, AGENT_CONTRACT.yaml e schemas locais.
+  invariants:
+  - AGENT_CONTRACT.yaml, ORCHESTRATOR_CONTRACT.yaml, agent_result.schema.json e RUNTIME_POLICY.yaml são
+    as autoridades locais.
+  - Uma activity_event por envelope, prior_status coerente; claim e complete separados; file_updates somente
+    com complete pelo actor que reivindicou.
+  - Efeitos finais são aplicados pelo Orchestrator. Respeite boundaries, forbidden_write, concessões explícitas
+    e scope_patch de hotfix.
+  - 'Done é terminal: reporte issue e siga hotfix sem reabrir. Revisão exige papel e modo autorizados
+    pela política ativa.'
+  - Lessons aplicáveis em reject, require_field e require_step são obrigatórias; warn orienta sem impor
+    bloqueio ou reconhecimento padronizado.
+  - Hotfix requer issue_id, fixes, scope_patch e pelo menos 2 verification.checks conforme contrato.
+commands:
+  esaa_run:
+    description: Consultar python -m esaa run --help para despacho e condições de término.
+  esaa_verify:
+    description: Replay determinístico do event store e comparação de hash.
+    outputs:
+      verify_status_enum:
+      - ok
+      - mismatch
+      - corrupted
+    canonicalization:
+      encoding: UTF-8
+      key_order: sorted
+      separators: '['','', '':'']'
+      trailing_newline: true
+      hash_excludes:
+      - meta.run
+      algorithm: SHA-256

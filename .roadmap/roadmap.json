@@ -1,0 +1,236 @@
+{
+  "meta": {
+    "schema_version": "0.4.1",
+    "esaa_version": "0.4.x",
+    "immutable_done": true,
+    "master_correlation_id": "CID-ESAA-INIT",
+    "run": {
+      "run_id": "RUN-0001",
+      "status": "success",
+      "last_event_seq": 49,
+      "projection_hash_sha256": "7dc876a109fc8880b62a7cfd67b8a4a58a3088366b1e122a390612343e7348ff",
+      "verify_status": "ok"
+    },
+    "updated_at": "2026-09-13T17:29:23Z"
+  },
+  "project": {
+    "name": "esaa-core",
+    "audit_scope": ".roadmap/"
+  },
+  "tasks": [
+    {
+      "task_id": "TITO-MVP-RETRO-20260913",
+      "task_kind": "qa",
+      "title": "Regularização retrospectiva do MVP Arquivo Zero",
+      "description": "Registrar retrospectivamente no ESAA o MVP já existente do jogo investigativo data-driven Arquivo Zero, sem apresentar os artefatos como previamente governados.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "dist/**"
+      ],
+      "outputs": {
+        "files": [
+          "dist/index.html",
+          "dist/styles.css",
+          "dist/app.js",
+          "dist/game.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/**"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Os quatro artefatos do MVP existem e são legíveis.",
+        "game.json possui JSON válido e referências estruturais essenciais verificáveis.",
+        "app.js possui sintaxe JavaScript válida.",
+        "A aplicação estática é servida localmente e index.html e game.json respondem com HTTP 200."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-13T16:44:16Z",
+      "verification": {
+        "checks": [
+          "PASS: dist/index.html, dist/styles.css, dist/app.js e dist/game.json existem e são legíveis; SHA-256 registrados na evidência da execução.",
+          "PASS: jq leu game.json; STRUCTURE_PASS confirmou 5 locais, 4 suspeitos, 8 evidências e referências essenciais válidas.",
+          "PASS: node --check dist/app.js.",
+          "PASS: servidor local respondeu HTTP 200 para / e /game.json."
+        ]
+      },
+      "completed_at": "2026-09-13T16:45:34Z"
+    },
+    {
+      "task_id": "TITO-FUNCTION-MAP-001",
+      "task_kind": "impl",
+      "title": "Mapear funções do jogo e instituir rastreabilidade de impacto",
+      "description": "Construir um mapa completo, humano e legível por máquina, de todas as funções e callbacks executáveis do MVP Arquivo Zero e incorporar ao contrato do projeto a obrigação de registrar as funções afetadas em cada alteração futura governada pelo ESAA.",
+      "status": "done",
+      "depends_on": [
+        "TITO-MVP-RETRO-20260913"
+      ],
+      "targets": [
+        "dist/app.js",
+        "dist/game.json",
+        "dist/index.html",
+        "dist/styles.css"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "scripts/verify-function-map.mjs",
+          "AGENTS.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/**",
+        "scripts/**",
+        "AGENTS.md"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Inventariar 100% das funções executáveis de dist/app.js, incluindo declarações nomeadas, arrow functions, callbacks, IIFEs, manipuladores de eventos e funções assíncronas, sem omissões ou duplicidades.",
+        "Cada função deve possuir identificador estável, localização de origem, assinatura, responsabilidade, entradas, saídas, funções chamadas e chamadoras, eventos, seletores DOM, campos de state, seções de game.json, chaves de localStorage, efeitos colaterais e dependências externas aplicáveis.",
+        "Gerar docs/architecture/function-map.md para consulta humana e docs/architecture/function-map.json como fonte estruturada equivalente e validável.",
+        "Criar scripts/verify-function-map.mjs que analise dist/app.js e falhe quando uma função estiver ausente, duplicada ou com âncora obsoleta no mapa estruturado.",
+        "Atualizar AGENTS.md para exigir que toda tarefa futura que altere o motor ou seus contratos declare os IDs das funções impactadas, atualize o mapa quando necessário e registre a execução do verificador nas evidências de complete.",
+        "A documentação deve incluir uma matriz de impacto ligando funções a interface, estado, persistência, game.json, navegação, evidências, dossiê, tempo, desfechos e Three.js.",
+        "A execução desta tarefa não deve alterar o comportamento funcional do jogo; node --check, validação do JSON, verificador do mapa e smoke HTTP devem passar."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-13T16:50:37Z",
+      "verification": {
+        "checks": [
+          "PASS: node scripts/verify-function-map.mjs -> FUNCTION_MAP_PASS total=58 functions=25 arrows=33.",
+          "PASS: mapa JSON contém 58 entradas, IDs únicos, âncoras atuais, campos de impacto e paridade com a documentação humana.",
+          "PASS: node --check dist/app.js e node --check scripts/verify-function-map.mjs.",
+          "PASS: jq empty dist/game.json.",
+          "PASS: SHA-256 de dist/app.js permaneceu 860c6993fbfb7a6389ba4f55dd2a5a31f8ed3592af6400d55d38f3fcc94764fa, confirmando ausência de mudança comportamental.",
+          "PASS: smoke HTTP retornou 200 para index.html, app.js e game.json."
+        ]
+      },
+      "completed_at": "2026-09-13T16:58:53Z"
+    },
+    {
+      "task_id": "TITO-UI-AUDIT-001",
+      "task_kind": "qa",
+      "title": "Auditar a interface gráfica e o fluxo investigativo",
+      "description": "Executar auditoria combinada de UX, design responsivo e riscos de acessibilidade na interface real do Arquivo Zero, usando capturas atuais em desktop e mobile e relacionando achados às funções mapeadas.",
+      "status": "done",
+      "depends_on": [
+        "TITO-FUNCTION-MAP-001"
+      ],
+      "targets": [
+        "dist/index.html",
+        "dist/styles.css",
+        "dist/app.js",
+        "dist/game.json",
+        "docs/architecture/function-map.json"
+      ],
+      "outputs": {
+        "files": [
+          "docs/ux/interface-audit-20260913.md",
+          "docs/ux/screenshots/01-desktop-start.png",
+          "docs/ux/screenshots/02-desktop-travel.png",
+          "docs/ux/screenshots/03-desktop-investigation.png",
+          "docs/ux/screenshots/04-desktop-dossier.png",
+          "docs/ux/screenshots/05-mobile-start.png"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/ux/**"
+      ],
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "A aplicação real deve ser aberta em navegador e cada captura aceita deve ser inspecionada, estar legível e corresponder ao estado descrito.",
+        "Cobrir em desktop a entrada do caso, confirmação de viagem, investigação com evidência e abertura do dossiê; cobrir também o estado inicial em viewport móvel.",
+        "Produzir relatório combinado com escopo, objetivo do usuário, pontos fortes, riscos de UX, riscos de acessibilidade, oportunidades, limites de evidência e recomendações priorizadas.",
+        "Cada achado deve citar a etapa ou screenshot que o sustenta e relacionar os IDs FN-* ou CB-* provavelmente impactados quando houver alteração futura.",
+        "Verificar visualmente hierarquia, legibilidade, affordances, feedback de estado, responsividade, conteúdo cortado e clareza dos próximos passos; testar estrutura DOM e navegação por teclado quando observáveis.",
+        "A auditoria não deve alterar o comportamento nem os arquivos distribuídos do jogo."
+      ],
+      "required_review_mode": "docs",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-13T17:12:32Z",
+      "verification": {
+        "checks": [
+          "PASS: cinco capturas atuais foram salvas, inspecionadas e validadas como PNG: quatro desktop 1265x712 e uma mobile 375x812.",
+          "PASS: fluxo coberto em navegador real: início, viagem, evidência, dossiê, mobile e ordem básica de foco por teclado.",
+          "PASS: relatório GFM contém escopo, objetivo, forças, riscos UX, riscos de acessibilidade, prioridades, limites e recomendações ligadas às etapas e IDs funcionais.",
+          "PASS: Pandoc renderizou o relatório GFM sem erro e todos os links de screenshots apontam para arquivos legíveis.",
+          "PASS: FUNCTION_MAP_PASS total=58 functions=25 arrows=33.",
+          "PASS: hashes de dist/app.js, dist/game.json, dist/index.html e dist/styles.css permaneceram inalterados."
+        ]
+      },
+      "completed_at": "2026-09-13T17:20:01Z"
+    },
+    {
+      "task_id": "TITO-CITY-INTEL-001",
+      "task_kind": "impl",
+      "title": "Contexto das cidades e revelação progressiva",
+      "description": "Enriquecer cada cidade visitada com contexto cultural/geográfico e limitar a interface ao conhecimento adquirido pelo jogador. Preservar o motor existente, atualizar a rastreabilidade funcional e validar a experiência gráfica em desktop e mobile. Impactos previstos: FN-007, FN-009, FN-010, FN-011, FN-012, FN-016, CB-004, CB-008, CB-012.",
+      "status": "in_progress",
+      "depends_on": [
+        "TITO-UI-AUDIT-001"
+      ],
+      "targets": [
+        "Cidade atual exibe contexto local educativo separado das pistas do caso",
+        "Mapa mostra somente posição atual, cidades visitadas e destinos diretamente acessíveis",
+        "Quadro de evidências mostra somente provas descobertas, sem inventário oculto ou total secreto",
+        "Contadores não revelam o total de cidades ou evidências não descobertas",
+        "Fluxos de investigação, viagem, dossiê, persistência e importação continuam funcionais"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "dist/index.html",
+          "dist/styles.css",
+          "dist/app.js",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/06-city-intel-desktop.png",
+          "docs/ux/screenshots/07-city-intel-mobile.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "design-qa.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Cada localização de game.json possui contexto da cidade e a interface o apresenta somente quando ela é a localização atual",
+        "Cidades fora do conhecimento atual e evidências não localizadas não são renderizadas no DOM",
+        "A interface não apresenta totais de cidades ou provas ainda desconhecidas",
+        "Não há overflow horizontal em 375px e a importação por teclado permanece acessível",
+        "Mapas funcional humano e JSON estão sincronizados e o verificador passa",
+        "QA visual comparativa termina com design-qa.md em passed"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-13T17:29:23Z"
+    }
+  ],
+  "indexes": {
+    "by_status": {
+      "done": 3,
+      "in_progress": 1
+    },
+    "by_kind": {
+      "impl": 2,
+      "qa": 2
+    }
+  }
+}
