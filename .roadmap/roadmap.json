@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 132,
-      "projection_hash_sha256": "4607c69d7c448770c5eaa0e1f2ace5362e096f78a1cb215d437cc1d2911ab046",
+      "last_event_seq": 155,
+      "projection_hash_sha256": "b2d059904d88f2205e0d77d4815cb16e156eddb05d752f486973ee4978bdcff4",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-14T22:02:51Z"
+    "updated_at": "2026-09-15T02:38:55Z"
   },
   "project": {
     "name": "esaa-core",
@@ -533,14 +533,121 @@
         ]
       },
       "completed_at": "2026-09-14T22:02:51Z"
+    },
+    {
+      "task_id": "TITO-RETRO-UI-001",
+      "task_kind": "impl",
+      "title": "Redesign retro investigativo da interface",
+      "description": "Recriar a apresentação visual do jogo a partir das referências fornecidas: molduras claras, painéis pretos, tipografia pixelada, ilustração contextual da cidade, painel textual e barra inferior de ações, preservando campanha, cenários, progressão, evidências, dossiê e responsividade.",
+      "status": "done",
+      "depends_on": [
+        "TITO-RANDOM-CLUES-001"
+      ],
+      "targets": [
+        "A interface desktop reproduz a composição e linguagem visual retro dos prints sem copiar os personagens ou cenários originais",
+        "A cidade atual recebe arte pixelada própria e informação cultural visível",
+        "Mapa, viagem, investigação, dossiê, evidências e campanha continuam funcionais",
+        "A versão mobile mantém conteúdo e ações utilizáveis sem overflow horizontal"
+      ],
+      "outputs": {
+        "files": [
+          "dist/index.html",
+          "dist/styles.css",
+          "dist/app.js",
+          "dist/assets/cities/*.webp",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/retro-ui-desktop.png",
+          "docs/ux/screenshots/retro-ui-mobile.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/**",
+        "docs/**",
+        "scripts/**",
+        "design-qa.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Design QA comparando referência e implementação termina com final result: passed",
+        "Fluxos essenciais funcionam no navegador real em desktop e mobile",
+        "Mapas funcionais e verificadores existentes passam após a mudança"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T00:54:48Z",
+      "verification": {
+        "checks": [
+          "PASS: Design QA comparou fonte e implementação no mesmo quadro; design-qa.md termina em final result: passed após corrigir largura desktop P2 e sobreposição móvel P2.",
+          "PASS: navegador real 1920x1080 sem overflow ou rolagem; viagem São Paulo→Brasília atualizou horas, cidade, contexto e imagem; investigação revelou somente E12; mapa, pistas, dossiê e notas abriram.",
+          "PASS: viewport móvel 390x844 (375 px úteis) sem overflow horizontal; mapa abriu com largura 289 px e barra de comandos não encobre conteúdo.",
+          "PASS: console do navegador com zero erros e zero avisos.",
+          "PASS: FUNCTION_MAP_PASS total=69 functions=34 arrows=35; sourceSha256=ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f.",
+          "PASS: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra; node --check, jq empty e git diff --check.",
+          "PASS: HTTP 200 para página, CSS, JS, game.json, cinco artes de cidade e mapa; screenshots desktop 1920x1080 e mobile 375x1475 em PNG."
+        ]
+      },
+      "completed_at": "2026-09-15T01:34:56Z"
+    },
+    {
+      "task_id": "TITO-BRAZIL-CAPITALS-ART-001",
+      "task_kind": "impl",
+      "title": "Arte pixelada para todas as capitais brasileiras",
+      "description": "Completar a biblioteca visual do Arquivo Zero com uma ilustração original, coerente e identificável para cada uma das 27 capitais brasileiras, preservando as cinco artes já aprovadas.",
+      "status": "review",
+      "depends_on": [
+        "TITO-RETRO-UI-001"
+      ],
+      "targets": [
+        "Existem 27 artes de capitais em dist/assets/cities",
+        "As 22 novas artes seguem enquadramento paisagem 4:3, pixel art retrô e marco urbano reconhecível",
+        "Nenhuma arte contém texto, logotipo ou marca dágua"
+      ],
+      "outputs": {
+        "files": [
+          "dist/assets/cities/*.webp",
+          "docs/ux/screenshots/brazil-capitals-contact-sheet.png",
+          "docs/art/brazil-capitals-art.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/assets/cities/**",
+        "docs/**"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Inventário automatizado confirma 27 capitais e dimensões uniformes",
+        "Inspeção visual da folha de contato aprova coerência, identidade e ausência de artefatos graves"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T02:18:36Z",
+      "verification": {
+        "checks": [
+          "PASS: inventário exato contém as 27 capitais brasileiras, sem nomes ausentes ou excedentes.",
+          "PASS: identify confirmou 27 arquivos WEBP, todos com 1448x1086 pixels.",
+          "PASS: folha de contato PNG 1860x1896 criada em docs/ux/screenshots/brazil-capitals-contact-sheet.png.",
+          "PASS: inspeção visual ampliada em quatro páginas confirmou marco reconhecível, coesão de pixel art, enquadramento 4:3 e ausência de texto, marca de água ou artefato grave.",
+          "PASS: as cinco artes existentes (Brasília, Manaus, Porto Alegre, Recife e São Paulo) não foram regeneradas ou sobrescritas.",
+          "PASS: git diff --check; nenhum arquivo de motor, conteúdo ou mapa de funções foi alterado por esta tarefa."
+        ]
+      }
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 10
+      "done": 11,
+      "review": 1
     },
     "by_kind": {
-      "impl": 8,
+      "impl": 10,
       "qa": 2
     }
   }

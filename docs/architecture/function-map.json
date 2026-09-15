@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "generatedForTask": "TITO-FUNCTION-MAP-001",
-  "lastUpdatedForTask": "TITO-CAMPAIGN-ENGINE-001",
+  "lastUpdatedForTask": "TITO-RETRO-UI-001",
   "source": "dist/app.js",
-  "sourceSha256": "56f49a3db625654655c175fab6a10bc790b564ae1fe0daf5be4e8ac037f7dc38",
+  "sourceSha256": "ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f",
   "inventory": {
-    "total": 67,
+    "total": 69,
     "functions": 34,
-    "arrows": 33
+    "arrows": 35
   },
   "idPolicy": "IDs FN-* e CB-* são permanentes e não podem ser reutilizados após remoção.",
   "functions": [
@@ -35,8 +35,11 @@
         "FN-025",
         "CB-025",
         "CB-026",
+        "CB-014",
         "CB-030",
-        "CB-031"
+        "CB-031",
+        "CB-033",
+        "CB-034"
       ],
       "events": [],
       "dom": [
@@ -242,6 +245,7 @@
         "CB-002"
       ],
       "calledBy": [
+        "FN-007",
         "FN-010",
         "FN-013",
         "FN-014",
@@ -311,7 +315,7 @@
       "name": "render",
       "kind": "function",
       "signature": "render()",
-      "responsibility": "Sincronizar toda a interface com game e state.",
+      "responsibility": "Sincronizar toda a interface com game e state, incluindo a arte contextual da cidade atual.",
       "source": {
         "file": "dist/app.js",
         "line": 9,
@@ -321,6 +325,7 @@
       "returns": "void",
       "calls": [
         "FN-028",
+        "FN-005",
         "FN-024",
         "FN-018",
         "FN-008",
@@ -347,22 +352,26 @@
         "game-title",
         "briefing",
         "case-code",
-        "notebook"
+        "notebook",
+        "city-image"
       ],
       "stateReads": [
         "notes",
-        "scenario"
+        "scenario",
+        "location"
       ],
       "stateWrites": [],
       "gamePaths": [
         "metadata.title",
         "metadata.briefing",
         "metadata.code",
-        "scenarios[].code"
+        "scenarios[].code",
+        "locations[].name"
       ],
       "storage": [],
       "sideEffects": [
-        "atualização ampla do DOM"
+        "atualização ampla do DOM",
+        "troca da ilustração e texto alternativo da cidade"
       ],
       "external": [
         "DOM"
@@ -393,7 +402,7 @@
       "dom": [
         "time-left",
         "time-bar",
-        ".clock-card"
+        ".location-header"
       ],
       "stateReads": [
         "hours"
@@ -1986,6 +1995,7 @@
       "inputs": [],
       "returns": "void",
       "calls": [
+        "FN-001",
         "FN-015",
         "FN-004",
         "FN-007"
@@ -1996,7 +2006,8 @@
       ],
       "dom": [
         "confirm-travel",
-        "travel-dialog"
+        "travel-dialog",
+        "map-dialog"
       ],
       "stateReads": [
         "location",
@@ -2016,7 +2027,7 @@
       ],
       "sideEffects": [
         "persistência",
-        "fechamento de dialog",
+        "fechamento dos dialogs de viagem e mapa",
         "renderização"
       ],
       "external": [],
@@ -2740,6 +2751,48 @@
         "Three.js",
         "interface"
       ]
+    },
+    {
+      "id": "CB-033",
+      "name": "events.openMap",
+      "kind": "arrow",
+      "signature": "() => mapDialog.showModal()",
+      "responsibility": "Abrir a janela retro de mapa e destinos disponíveis.",
+      "source": {"file": "dist/app.js", "line": 23, "anchor": "$(\"#map-button\").onclick=()=>$(\"#map-dialog\").showModal()"},
+      "inputs": [],
+      "returns": "void",
+      "calls": ["FN-001"],
+      "calledBy": [],
+      "events": ["click em map-button"],
+      "dom": ["map-button", "map-dialog"],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": ["abertura de dialog"],
+      "external": ["HTMLDialogElement"],
+      "impactAreas": ["interface", "navegação"]
+    },
+    {
+      "id": "CB-034",
+      "name": "events.openEvidence",
+      "kind": "arrow",
+      "signature": "() => evidenceDialog.showModal()",
+      "responsibility": "Abrir a janela retro com apenas as pistas já catalogadas.",
+      "source": {"file": "dist/app.js", "line": 23, "anchor": "$(\"#evidence-button\").onclick=()=>$(\"#evidence-dialog\").showModal()"},
+      "inputs": [],
+      "returns": "void",
+      "calls": ["FN-001"],
+      "calledBy": [],
+      "events": ["click em evidence-button"],
+      "dom": ["evidence-button", "evidence-dialog"],
+      "stateReads": ["evidence"],
+      "stateWrites": [],
+      "gamePaths": ["evidence"],
+      "storage": [],
+      "sideEffects": ["abertura de dialog"],
+      "external": ["HTMLDialogElement"],
+      "impactAreas": ["interface", "evidências"]
     },
     {
       "id": "FN-030",
