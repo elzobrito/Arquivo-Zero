@@ -1,0 +1,13 @@
+{
+  "after_sha256": "095d72b4d84daaf4cd193aa06f248e82b62ef820484590b6761b78877d44ef45",
+  "artifact_id": "ART-095d72b4d84daaf4cd193aa06f248e82b62ef820484590b6761b78877d44ef45",
+  "artifact_sha256": "3ded1dbc68f63d036f71a0a184466eb83301e6b53468456db93933ab69ba9983",
+  "before_sha256": "095d72b4d84daaf4cd193aa06f248e82b62ef820484590b6761b78877d44ef45",
+  "bytes": 495,
+  "content": "ISS-MAP-LABEL-CARTOGRAPHY-001\n\nO apontamento cartográfico inicial foi atendido por\nTITO-MAP-CARTOGRAPHIC-LABELS-001, que materializou a correção em dist/styles.css\ncom boundary_grant explícito, atualizou o mapa funcional e concluiu revisão\nfuncional. Esta hotfix registra a reconciliação sem duplicar efeitos em dist.\n\nVerificações herdadas da correção materializada:\n- unit: node --check e validação JSON PASS\n- regression: function-map e random-scenarios PASS\n- design QA: passed\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-MAP-LABEL-CARTOGRAPHY-001.txt",
+  "source_path": "src/hotfix/HF-ISS-MAP-LABEL-CARTOGRAPHY-001.txt",
+  "ts": "2026-09-15T14:49:51Z"
+}

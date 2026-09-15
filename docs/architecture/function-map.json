@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedForTask": "TITO-FUNCTION-MAP-001",
-  "lastUpdatedForTask": "TITO-RETRO-UI-001",
+  "lastUpdatedForTask": "TITO-MAP-RECIFE-MARKER-001",
   "source": "dist/app.js",
   "sourceSha256": "ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f",
   "inventory": {
@@ -429,7 +429,7 @@
       "name": "map",
       "kind": "function",
       "signature": "map()",
-      "responsibility": "Renderizar somente a cidade atual, visitadas e destinos diretamente acessíveis, com custos, eventos de viagem e linha da rota.",
+      "responsibility": "Renderizar somente a cidade atual, visitadas e destinos diretamente acessíveis, projetando marcador clicável, nomes, custos e linha da rota a partir das coordenadas cartográficas de cada capital.",
       "source": {
         "file": "dist/app.js",
         "line": 11,
@@ -453,7 +453,9 @@
       "dom": [
         "city-layer",
         "route-lines",
-        ".city:not(:disabled)"
+        ".city:not(:disabled)",
+        ".city-name",
+        ".city small"
       ],
       "stateReads": [
         "location",
@@ -472,7 +474,9 @@
       "storage": [],
       "sideEffects": [
         "substituição de HTML",
-        "vinculação de onclick"
+        "vinculação de onclick",
+        "rótulos posicionados pelo CSS com âncoras direcionais específicas para cada capital",
+        "marcador clicável e término da rota compartilham as coordenadas geográficas da cidade"
       ],
       "external": [
         "DOM",
@@ -1572,7 +1576,7 @@
       "name": "map.renderCity",
       "kind": "arrow",
       "signature": "city => HTML",
-      "responsibility": "Projetar uma cidade conhecida em botão HTML com estado, custo e nome acessível.",
+      "responsibility": "Projetar uma cidade conhecida em botão HTML acessível, usando locations[].x/y para coincidir área clicável e marcador com a posição geográfica.",
       "source": {
         "file": "dist/app.js",
         "line": 11,
@@ -1736,7 +1740,7 @@
       "name": "map.projectRoutePoint",
       "kind": "arrow",
       "signature": "city => 'x,y'",
-      "responsibility": "Converter coordenadas percentuais de uma cidade em ponto SVG.",
+      "responsibility": "Converter as mesmas coordenadas percentuais do marcador clicável em ponto SVG, mantendo o término da rota coincidente.",
       "source": {
         "file": "dist/app.js",
         "line": 11,

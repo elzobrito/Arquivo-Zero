@@ -4,7 +4,11 @@ Este documento é a visão humana do mapa canônico
 [`function-map.json`](function-map.json). Ele registra a linha de base do motor em
 `dist/app.js`, criada em `TITO-FUNCTION-MAP-001`, estendida por
 `TITO-RANDOM-CLUES-001`, reconciliada por `TITO-FUNCTION-MAP-002` e atualizada
-por `TITO-CAMPAIGN-ENGINE-001` e redesenhada por `TITO-RETRO-UI-001`.
+por `TITO-CAMPAIGN-ENGINE-001`, redesenhada por `TITO-RETRO-UI-001`, ajustada
+por `TITO-MAP-LABEL-ALIGN-001`, corrigida cartograficamente por
+`HF-ISS-MAP-GEOGRAPHIC-FRAME-001` e materializada por
+`TITO-MAP-CARTOGRAPHIC-LABELS-001` e teve o marcador de Recife alinhado por
+`TITO-MAP-RECIFE-MARKER-001`.
 
 - SHA-256 mapeado: `ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f`
 - Unidades executáveis: **69**
@@ -29,7 +33,7 @@ dependências detalhados estão no JSON canônico.
 | `FN-006` | `ev` | 7 | Resolver evidência e aplicar o texto da variante. |
 | `FN-007` | `render` | 9 | Sincronizar a interface e a arte contextual da cidade. |
 | `FN-008` | `clock` | 10 | Renderizar prazo e alerta no cabeçalho retro. |
-| `FN-009` | `map` | 11 | Renderizar somente cidades conhecidas, disponibilidade e rota SVG. |
+| `FN-009` | `map` | 11 | Renderizar somente cidades conhecidas, projetando marcador clicável, rótulos e rota SVG pelas coordenadas cartográficas. |
 | `FN-010` | `place` | 12 | Renderizar local, contexto da cidade e ações investigativas. |
 | `FN-011` | `evidence` | 12 | Renderizar somente evidências já encontradas ou o estado vazio. |
 | `FN-012` | `route` | 13 | Renderizar o histórico sem antecipar o total de cidades. |
@@ -64,11 +68,11 @@ dependências detalhados estão no JSON canônico.
 | `CB-001` | `loadGame.parseResponse` | 5 | Decodificar a resposta HTTP como JSON. |
 | `CB-002` | `loc.match` | 7 | Comparar cidade por ID. |
 | `CB-003` | `ev.match` | 7 | Comparar evidência por ID. |
-| `CB-004` | `map.renderCity` | 10 | Projetar uma cidade conhecida em botão HTML acessível. |
+| `CB-004` | `map.renderCity` | 10 | Projetar uma cidade conhecida em botão HTML acessível na coordenada geográfica. |
 | `CB-005` | `map.bindCity` | 10 | Vincular clicks das cidades. |
 | `CB-006` | `map.onCityClick` | 10 | Encaminhar destino para confirmação. |
 | `CB-007` | `map.resolveRouteLocation` | 10 | Resolver IDs da rota em cidades. |
-| `CB-008` | `map.projectRoutePoint` | 10 | Projetar coordenadas para SVG. |
+| `CB-008` | `map.projectRoutePoint` | 10 | Projetar para SVG as mesmas coordenadas usadas pelo marcador clicável. |
 | `CB-009` | `place.renderAction` | 11 | Aplicar a variante e projetar ação investigativa. |
 | `CB-010` | `place.bindAction` | 11 | Vincular clicks das ações. |
 | `CB-011` | `place.onActionClick` | 11 | Encaminhar ação para o motor. |

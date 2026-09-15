@@ -1,68 +1,67 @@
-# Design QA — TITO-RETRO-UI-001
+# Design QA — TITO-MAP-RECIFE-MARKER-001
 
 ## Alvos e evidências
 
-- Verdade visual primária: `/tmp/codex-clipboard-52a4ac92-9f5a-4c15-8103-912912829677.png` (1920×1080). As outras três capturas fornecidas pelo usuário foram usadas para os estados de mapa, seleção de local e depoimento.
-- Implementação desktop: `docs/ux/screenshots/retro-ui-desktop.png` (1920×1080).
-- Implementação móvel: `docs/ux/screenshots/retro-ui-mobile.png` (375×1475, captura da página inteira).
-- Comparação conjunta: `/tmp/arquivo-zero-design-qa-combined-final.png` (3840×1080).
-- Comparação focada do painel informativo: `/tmp/arquivo-zero-design-qa-focused.png` (1840×500).
-- Viewport desktop: 1920×1080 CSS px, `deviceScaleFactor=1`; fonte e implementação têm a mesma densidade e não exigiram reamostragem.
-- Viewport móvel solicitado: 390×844 CSS px; área útil registrada pelo navegador em 375 px por causa da barra de rolagem. A captura full-page mede 375×1475 em densidade 1.
-- Estado comparado: cidade visitada com ilustração, arquivo cultural, contexto do caso, ações locais e quatro comandos persistentes.
+- Fonte visual: `/tmp/codex-clipboard-1ad5c30c-bb44-492c-a428-2b9df5521ac2.png` (1474×921 px).
+- Implementação final: `docs/ux/screenshots/map-recife-marker-aligned.png` (1474×921 px).
+- Comparação conjunta normalizada: `/tmp/recife-marker-comparison.png` (1506×477 px), com fonte e implementação lado a lado na mesma entrada visual.
+- Evidência móvel: `/tmp/map-recife-marker-mobile.png` (390×844 px).
+- Viewport desktop: 1474×921 CSS px, `deviceScaleFactor=1`; fonte e implementação possuem a mesma densidade e dimensão, sem normalização de densidade.
+- Viewport móvel: 390×844 CSS px, `deviceScaleFactor=1`.
+- Estado: mapa aberto; teste funcional adicional confirmou uma rota São Paulo → Recife.
 
 ## Findings
 
 Nenhum P0, P1 ou P2 permanece.
 
-- [P3] A implementação usa uma escala tipográfica mais compacta no painel direito.
-  Local: `.intel-frame`, `.briefing` e `.city-briefing`.
-  Evidência: a referência exibe um único bloco cultural em letras grandes; o Arquivo Zero precisa acomodar briefing, contexto da pista, quatro fatos da cidade e três ações no mesmo quadro.
-  Impacto: a composição é mais densa, mas continua legível e preserva a hierarquia retrô.
-  Classificação: diferença intencional para manter todo o conteúdo funcional acima da faixa de comandos.
+- [P3] A captura final usa uma partida limpa com menos cidades reveladas que a fonte.
+  Local: painel “Rota da caçada”.
+  Evidência: a fonte mostra três cidades; a captura final mostra uma cidade antes do teste de viagem.
+  Impacto: não afeta a comparação focada do marcador, rótulo e contorno de Recife.
+  Classificação: diferença de estado dinâmica e aceitável.
 
 ## Superfícies de fidelidade
 
-- Tipografia: Pixelify Sans reproduz a cadência bitmap; títulos, metadados, corpo e comandos têm pesos e escalas distintos. Não há truncamento ou colisão em desktop ou móvel.
-- Espaçamento e ritmo: grade 48/52, cabeçalhos simétricos, molduras duplas, painel preto e faixa inferior seguem a composição da referência. Em 1920 px o console ocupa 1760 px e mantém margens laterais equilibradas.
-- Cores e tokens: papel quente, preto, vermelho de navegação, azul cartográfico, verde de seleção e amarelo de tempo correspondem ao vocabulário visual observado. Não foram usados gradientes.
-- Imagens: cinco ilustrações urbanas e o mapa do Brasil são rasters WebP originais, nítidos e coerentes com pixel art. Não há arte substituída por CSS, emoji ou SVG artesanal; o SVG já existente continua restrito às linhas funcionais de rota.
-- Copy e conteúdo: a interface está localizada em português, mantém as informações culturais de cada cidade e revela somente cidades, pistas e atributos conhecidos pelo jogador.
-- Ícones: Material Symbols fornece família consistente para pistas, viagem, notas, dossiê e ações; o estado do mandado preserva o ícone do botão.
-- Acessibilidade: botões e diálogos têm nomes semânticos, a imagem muda o texto alternativo por cidade, foco é visível e `prefers-reduced-motion` remove transições.
+- Tipografia: família pixel, peso, escala, contorno e hierarquia foram preservados; “Recife” e o custo mantêm a âncora cartográfica aprovada à esquerda/acima do ponto.
+- Espaçamento e layout: `locations[].x` de Recife passou de 82 para 73; o quadrado de 15×15 px fica integralmente dentro da massa territorial e não colide com o rótulo.
+- Cores e tokens: azul do oceano, papel do território, bordas, estados azul/amarelo/cinza e linha verde-amarela permanecem inalterados.
+- Imagem: `brasil-map.webp` foi preservado sem recorte, substituição, deformação ou perda de nitidez.
+- Copy e conteúdo: nomes, custos, legenda, rota e divulgação progressiva não mudaram.
+- Acessibilidade e interação: o botão continua com nome acessível “Viajar para Recife, 8 horas”; o clique abriu “Rota para Recife”.
 
 ## Comparação full-view e focada
 
-- Full-view: a comparação conjunta confirma a mesma arquitetura visual — barra superior clara, duas colunas, arte urbana à esquerda, informação em painel preto à direita e quatro comandos inferiores.
-- Região focada: o recorte do painel direito confirmou molduras, contraste, tipografia bitmap, hierarquia e alinhamento. A densidade adicional é deliberada e não gerou quebra de linhas, clipping ou perda de contraste.
-- Estados adicionais: mapa, pistas vazias, uma pista revelada, confirmação de viagem, troca da imagem de cidade, dossiê e notas foram abertos na interface real.
+- Full-view: a estrutura do diálogo, legenda, mapa e painel lateral coincide com a fonte; a diferença dinâmica do número de cidades não interfere no alvo.
+- Foco Recife: na fonte, o rótulo estava correto, mas o quadrado ficava no oceano. Na implementação final, a borda direita do quadrado toca o contorno por dentro e o rótulo permanece sobre o território.
+- Rota: após confirmar a viagem de teste, o SVG reportou `570,427.8 730,266.6`; o ponto final `730` corresponde diretamente ao `x=73` usado pelo botão.
+- Mobile: marcador e rótulo ficaram contidos no diálogo em 390×844, sem sobreposição ou corte.
 
 ## Histórico das iterações
 
-1. Primeira comparação desktop: [P2] o console estava limitado a 1460 px e ficava estreito diante da referência de 1920×1080. Correção: largura máxima elevada para 1760 px. Evidência pós-fix: `retro-ui-desktop.png`, sem overflow e com `scrollHeight=1080`.
-2. Primeira comparação móvel: [P2] a barra `sticky` sobrepunha o arquivo cultural durante a rolagem. Correção: a faixa passou a `position: static` abaixo do conteúdo em até 620 px. Evidência pós-fix: `retro-ui-mobile.png`, `scrollWidth=375`, sem sobreposição.
-3. Segunda comparação conjunta: nenhum P0, P1 ou P2 foi encontrado; permaneceu somente a diferença P3 de densidade informacional.
+1. Estado reportado: [P1] rótulo de Recife correto, mas marcador clicável e término da rota em `x=82`, fora da costa.
+2. Primeira correção: `x=78` moveu o ponto 4% para dentro, porém a inspeção ampliada ainda mostrou o quadrado tangenciando o lado oceânico.
+3. Ajuste intermediário: `x=76` com compensação absoluta do rótulo aproximou texto e marcador demais; resultado ainda bloqueado.
+4. Correção final: `x=73` e restauração da âncora relativa `right:50px`; comparação conjunta mostra o quadrado inteiro dentro do território, texto separado e rota coincidente. Nenhum P0/P1/P2 permanece.
 
 ## Interações e execução
 
-- Viagem São Paulo → Brasília: confirmação exibiu custo e saldo; após confirmar, cidade, horas, contexto e imagem foram atualizados.
-- Investigação em Brasília: a ação consumiu tempo, abriu E12 e desabilitou somente a ação concluída.
-- Pistas: começou com zero e depois mostrou somente E12, confirmando divulgação progressiva.
-- Mapa móvel: abriu em 375 px úteis, sem overflow horizontal.
-- Dossiê e bloco de notas: ambos abriram com campos e estados acessíveis.
-- Console do navegador: zero erros e zero avisos no fluxo testado.
+- VIAJAR abriu o mapa em origem limpa.
+- O ponto de Recife foi clicado e abriu a autorização “Rota para Recife”.
+- Uma viagem de teste produziu rota com término `730,266.6`, igual à projeção da coordenada do marcador.
+- Divulgação progressiva permaneceu ativa.
+- Console desktop e mobile: zero erros e zero avisos.
 
 ## Implementation Checklist
 
-- [x] Estrutura desktop inspirada nas capturas.
-- [x] Arte urbana original para todas as cidades.
-- [x] Mapa retrô em janela modal.
-- [x] Pistas, notas e dossiê encapsulados em janelas próprias.
-- [x] Responsividade sem conteúdo encoberto.
-- [x] Fluxos essenciais e console verificados em navegador real.
+- [x] Mover coordenada funcional de Recife para dentro do contorno.
+- [x] Manter rótulo relativo à esquerda/acima do marcador.
+- [x] Confirmar que marcador e rota compartilham `locations[].x/y`.
+- [x] Testar clique e diálogo de viagem.
+- [x] Verificar desktop e 390×844.
+- [x] Atualizar os mapas canônico e humano de funções.
 
 ## Follow-up Polish
 
-- P3 opcional: explorar um modo “ampliação 8-bit” com menos conteúdo simultâneo e corpo maior, sem retirar as informações culturais.
+- Nenhum refinamento adicional necessário para esta hotfix.
 
 final result: passed

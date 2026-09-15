@@ -4,10 +4,105 @@
     "esaa_version": "0.4.x",
     "generated_by": "esaa.project",
     "source_event_store": ".roadmap/activity.jsonl",
-    "last_event_seq": 155,
-    "updated_at": "2026-09-15T02:38:55Z"
+    "last_event_seq": 240,
+    "updated_at": "2026-09-15T15:13:01Z"
   },
-  "issues": [],
+  "issues": [
+    {
+      "issue_id": "ISS-MAP-GEOGRAPHIC-FRAME-001",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Quadro geográfico e âncoras de rótulos inconsistentes",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "O fundo 16:9 é recortado por cover dentro de um quadro de outra proporção, mas pontos e rotas usam percentuais do mapa completo; rótulos costeiros também precisam apontar para dentro do território como no mapa político de referência.",
+        "repro_steps": [
+          "Comparar a moldura do mapa do jogo com a referência política e observar Recife, São Paulo e Porto Alegre no viewport 1473x900."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-MAP-GEOGRAPHIC-FRAME-001",
+        "review_task_id": "HF-ISS-MAP-GEOGRAPHIC-FRAME-001",
+        "checks": [
+          "unit: node --check e validação JSON PASS",
+          "regression: function-map e random-scenarios PASS",
+          "Design QA passed em navegador real",
+          "Materialização governada atribuída à sucessora com boundary_grant explícito"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "TITO-MAP-LABEL-ALIGN-001",
+        "fixes_task_id": null,
+        "hotfix_task_id": "HF-ISS-MAP-GEOGRAPHIC-FRAME-001"
+      },
+      "timeline": {
+        "created_event_seq": 176,
+        "resolved_event_seq": 195
+      }
+    },
+    {
+      "issue_id": "ISS-MAP-LABEL-CARTOGRAPHY-001",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Rótulos ainda não seguem posição cartográfica",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "Os nomes ficaram centralizados sob os marcadores, mas continuam fora da convenção cartográfica da referência: Recife e Porto Alegre caem sobre o oceano/limite e São Paulo cruza a rota; o fundo também usa cover e recorta o quadro geográfico.",
+        "repro_steps": [
+          "Abrir VIAJAR em Porto Alegre no viewport 1473x900 e comparar São Paulo, Recife e Porto Alegre com o mapa político fornecido pelo usuário."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-MAP-LABEL-CARTOGRAPHY-001",
+        "review_task_id": "HF-ISS-MAP-LABEL-CARTOGRAPHY-001",
+        "checks": [
+          "unit: node --check e validação JSON PASS",
+          "regression: function-map e random-scenarios PASS",
+          "TITO-MAP-CARTOGRAPHIC-LABELS-001 confirmado em done"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "TITO-MAP-LABEL-ALIGN-001",
+        "fixes_task_id": "TITO-MAP-LABEL-ALIGN-001",
+        "hotfix_task_id": "HF-ISS-MAP-LABEL-CARTOGRAPHY-001"
+      },
+      "timeline": {
+        "created_event_seq": 172,
+        "resolved_event_seq": 219
+      }
+    },
+    {
+      "issue_id": "ISS-RECIFE-MARKER-OFF-MAP-001",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Ponto interativo de Recife fora da costa",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "O rótulo Recife está cartograficamente correto, mas o quadrado clicável e o término da rota permanecem no oceano porque usam a coordenada x antiga.",
+        "repro_steps": [
+          "Abrir o mapa após visitar São Paulo, Recife e Porto Alegre e observar o quadrado cinza de Recife à direita da costa."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command",
+        "hotfix_task_id": "TITO-MAP-RECIFE-MARKER-001"
+      },
+      "links": {
+        "reported_by_task_id": "TITO-MAP-CARTOGRAPHIC-LABELS-001",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 222,
+        "resolved_event_seq": 238
+      }
+    }
+  ],
   "indexes": {
     "open_by_baseline": {}
   }

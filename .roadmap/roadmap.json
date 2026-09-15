@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 155,
-      "projection_hash_sha256": "b2d059904d88f2205e0d77d4815cb16e156eddb05d752f486973ee4978bdcff4",
+      "last_event_seq": 240,
+      "projection_hash_sha256": "44094cafaa6bad75de4f1b3e1725041741ed329f0f0d2eeea6e35c14e383921c",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-15T02:38:55Z"
+    "updated_at": "2026-09-15T15:13:01Z"
   },
   "project": {
     "name": "esaa-core",
@@ -598,7 +598,7 @@
       "task_kind": "impl",
       "title": "Arte pixelada para todas as capitais brasileiras",
       "description": "Completar a biblioteca visual do Arquivo Zero com uma ilustração original, coerente e identificável para cada uma das 27 capitais brasileiras, preservando as cinco artes já aprovadas.",
-      "status": "review",
+      "status": "done",
       "depends_on": [
         "TITO-RETRO-UI-001"
       ],
@@ -638,16 +638,281 @@
           "PASS: as cinco artes existentes (Brasília, Manaus, Porto Alegre, Recife e São Paulo) não foram regeneradas ou sobrescritas.",
           "PASS: git diff --check; nenhum arquivo de motor, conteúdo ou mapa de funções foi alterado por esta tarefa."
         ]
-      }
+      },
+      "completed_at": "2026-09-15T14:17:57Z"
+    },
+    {
+      "task_id": "TITO-MAP-LABEL-ALIGN-001",
+      "task_kind": "impl",
+      "title": "Alinhar nomes das cidades aos marcadores do mapa",
+      "description": "Corrigir o deslocamento horizontal dos nomes e custos das cidades no mapa retrô, mantendo cada rótulo visualmente associado ao seu marcador.",
+      "status": "done",
+      "depends_on": [
+        "TITO-RETRO-UI-001"
+      ],
+      "targets": [
+        "Nome e custo ficam centralizados sob o marcador correspondente",
+        "Rótulos continuam legíveis no mapa desktop e mobile",
+        "Navegação e divulgação progressiva de cidades permanecem inalteradas"
+      ],
+      "outputs": {
+        "files": [
+          "dist/styles.css",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/map-labels-aligned.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/styles.css",
+        "docs/**",
+        "design-qa.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Comparação visual confirma rótulos alinhados aos centros dos marcadores",
+        "Verificadores de funções e cenários passam sem alteração comportamental"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T14:18:25Z",
+      "verification": {
+        "checks": [
+          "Design QA: final result passed; comparação full-view e focada sem P0/P1/P2",
+          "DOM desktop: nameDelta=0 e costDelta=0 para São Paulo, Recife e Porto Alegre",
+          "DOM móvel 390x844: desvios 0 px e todos os rótulos dentro do mapa",
+          "Console do navegador: zero erros e zero avisos",
+          "node --check dist/app.js: PASS",
+          "jq empty dist/game.json e function-map.json: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=69 functions=34 arrows=35",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "Smoke HTTP: 200",
+          "git diff --check: PASS"
+        ]
+      },
+      "completed_at": "2026-09-15T14:27:21Z"
+    },
+    {
+      "task_id": "HF-ISS-MAP-LABEL-CARTOGRAPHY-001",
+      "task_kind": "impl",
+      "title": "Reconciliar apontamento cartográfico inicial",
+      "description": "Registrar que o apontamento inicial foi atendido pela correção governada TITO-MAP-CARTOGRAPHIC-LABELS-001, sem duplicar alterações em dist.",
+      "status": "done",
+      "depends_on": [
+        "TITO-MAP-CARTOGRAPHIC-LABELS-001"
+      ],
+      "targets": [
+        "ISS-MAP-LABEL-CARTOGRAPHY-001"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-MAP-LABEL-CARTOGRAPHY-001.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-MAP-LABEL-CARTOGRAPHY-001",
+      "fixes": "TITO-MAP-LABEL-ALIGN-001",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "acceptance_criteria": [
+        "Referenciar a tarefa governada que materializou a correção",
+        "Confirmar verificações unit e regression sem duplicar efeitos"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T14:48:59Z",
+      "verification": {
+        "checks": [
+          "unit: node --check e validação JSON PASS",
+          "regression: function-map e random-scenarios PASS",
+          "TITO-MAP-CARTOGRAPHIC-LABELS-001 confirmado em done"
+        ]
+      },
+      "completed_at": "2026-09-15T14:49:55Z"
+    },
+    {
+      "task_id": "HF-ISS-MAP-GEOGRAPHIC-FRAME-001",
+      "task_kind": "impl",
+      "title": "Aplicar rótulos cartográficos no mapa do Brasil",
+      "description": "Preservar o quadro geográfico 16:9 completo e posicionar cada nome/custo para dentro do território, seguindo a convenção do mapa político fornecido.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-MAP-GEOGRAPHIC-FRAME-001"
+      ],
+      "outputs": {
+        "files": [
+          "dist/styles.css",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/map-labels-cartographic.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-MAP-GEOGRAPHIC-FRAME-001",
+      "fixes": "TITO-MAP-LABEL-ALIGN-001",
+      "scope_patch": [
+        "dist/styles.css",
+        "docs/",
+        "design-qa.md"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "acceptance_criteria": [
+        "Fundo, pontos e rotas compartilham o mesmo quadro geográfico 16:9 sem recorte",
+        "Rótulos de todas as cinco capitais usam âncoras cartográficas e não atravessam o oceano ou a rota",
+        "Desktop e mobile preservam navegação e divulgação progressiva"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T14:34:52Z",
+      "verification": {
+        "checks": [
+          "unit: node --check e validação JSON PASS",
+          "regression: function-map e random-scenarios PASS",
+          "Design QA passed em navegador real",
+          "Materialização governada atribuída à sucessora com boundary_grant explícito"
+        ]
+      },
+      "completed_at": "2026-09-15T14:47:20Z"
+    },
+    {
+      "task_id": "TITO-MAP-CARTOGRAPHIC-LABELS-001",
+      "task_kind": "impl",
+      "title": "Materializar rótulos cartográficos do mapa",
+      "description": "Aplicar com boundary explícita o candidato visual validado pela hotfix HF-ISS-MAP-GEOGRAPHIC-FRAME-001.",
+      "status": "done",
+      "depends_on": [
+        "HF-ISS-MAP-GEOGRAPHIC-FRAME-001"
+      ],
+      "targets": [
+        "Rótulos seguem convenção cartográfica da referência",
+        "Navegação e divulgação progressiva permanecem inalteradas"
+      ],
+      "outputs": {
+        "files": [
+          "dist/styles.css",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/map-labels-cartographic.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/styles.css",
+        "docs/**",
+        "design-qa.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "As cinco capitais usam âncoras direcionais validadas em navegador",
+        "Mapa funcional e regressões permanecem válidos"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T14:47:23Z",
+      "verification": {
+        "checks": [
+          "Design QA final result passed",
+          "Cinco capitais verificadas em navegador real entre três estados do mapa",
+          "Mobile 390x844 sem rótulos fora da moldura",
+          "FUNCTION_MAP_PASS total=69 functions=34 arrows=35",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node --check e validação JSON PASS",
+          "Console sem erros ou avisos",
+          "Smoke HTTP 200",
+          "git diff --check PASS"
+        ]
+      },
+      "completed_at": "2026-09-15T14:48:28Z"
+    },
+    {
+      "task_id": "TITO-MAP-RECIFE-MARKER-001",
+      "task_kind": "impl",
+      "title": "Alinhar ponto interativo de Recife ao mapa",
+      "description": "Corrigir a coordenada geográfica funcional de Recife para que marcador, área clicável e término da rota coincidam com a costa, preservando o rótulo aprovado.",
+      "status": "done",
+      "depends_on": [
+        "TITO-MAP-CARTOGRAPHIC-LABELS-001"
+      ],
+      "targets": [
+        "Marcador clicável de Recife coincide com sua posição na costa",
+        "Término da rota coincide com o marcador de Recife",
+        "Rótulo Recife permanece na posição cartográfica aprovada"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "dist/styles.css",
+          "docs/architecture/function-map.md",
+          "docs/architecture/function-map.json",
+          "docs/ux/screenshots/map-recife-marker-aligned.png",
+          "design-qa.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "dist/styles.css",
+        "docs/**",
+        "design-qa.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Medição DOM e comparação visual confirmam rótulo e marcador alinhados",
+        "Clique em Recife continua abrindo a confirmação de viagem",
+        "Mapa de funções e verificações de regressão passam"
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T14:58:26Z",
+      "verification": {
+        "checks": [
+          "Design QA final result passed com comparação conjunta fonte/implementação",
+          "Browser desktop: marcador Recife em left 73%, quadrado 15x15 integralmente no território",
+          "Clique abriu Rota para Recife e rota SVG terminou em 730,266.6",
+          "Mobile 390x844 manteve marcador e rótulo contidos",
+          "Console desktop e mobile sem erros ou avisos",
+          "FUNCTION_MAP_PASS total=69 functions=34 arrows=35",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node --check dist/app.js e validação JSON passaram",
+          "Smoke HTTP 200 e git diff --check passaram"
+        ]
+      },
+      "completed_at": "2026-09-15T15:12:37Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 11,
-      "review": 1
+      "done": 17
     },
     "by_kind": {
-      "impl": 10,
+      "impl": 15,
       "qa": 2
     }
   }

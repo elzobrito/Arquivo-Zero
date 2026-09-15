@@ -1,0 +1,11 @@
+ISS-MAP-LABEL-CARTOGRAPHY-001
+
+O apontamento cartográfico inicial foi atendido por
+TITO-MAP-CARTOGRAPHIC-LABELS-001, que materializou a correção em dist/styles.css
+com boundary_grant explícito, atualizou o mapa funcional e concluiu revisão
+funcional. Esta hotfix registra a reconciliação sem duplicar efeitos em dist.
+
+Verificações herdadas da correção materializada:
+- unit: node --check e validação JSON PASS
+- regression: function-map e random-scenarios PASS
+- design QA: passed
