@@ -2,6 +2,8 @@
 
 Jogo educacional investigativo desenvolvido com HTML, CSS e JavaScript puro. O conteúdo do caso, os suspeitos, as cidades, as pistas, os custos de viagem e os critérios para prisão são definidos em `dist/game.json`.
 
+![Vista de São Paulo em pixel art](dist/assets/cities/sao-paulo.webp)
+
 ## Arquivos
 
 - `dist/index.html`: estrutura da interface.

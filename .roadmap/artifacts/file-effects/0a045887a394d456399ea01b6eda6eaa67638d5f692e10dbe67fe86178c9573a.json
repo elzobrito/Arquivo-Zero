@@ -1,0 +1,13 @@
+{
+  "after_sha256": "f755bbf385337bc78577f9c32c8fcf1fd091688c50182bc3cc372bccb14afb52",
+  "artifact_id": "ART-f755bbf385337bc78577f9c32c8fcf1fd091688c50182bc3cc372bccb14afb52",
+  "artifact_sha256": "0a045887a394d456399ea01b6eda6eaa67638d5f692e10dbe67fe86178c9573a",
+  "before_sha256": "f755bbf385337bc78577f9c32c8fcf1fd091688c50182bc3cc372bccb14afb52",
+  "bytes": 1562,
+  "content": "# Arquivo Zero — Caçada Digital\n\nJogo educacional investigativo desenvolvido com HTML, CSS e JavaScript puro. O conteúdo do caso, os suspeitos, as cidades, as pistas, os custos de viagem e os critérios para prisão são definidos em `dist/game.json`.\n\n![Vista de São Paulo em pixel art](dist/assets/cities/sao-paulo.webp)\n\n## Arquivos\n\n- `dist/index.html`: estrutura da interface.\n- `dist/styles.css`: layout responsivo e identidade visual.\n- `dist/app.js`: motor do jogo, persistência, tempo, viagens, mandado, prisão e estrelas.\n- `dist/game.json`: definição completa do caso.\n- `.openai/hosting.json`: configuração usada na publicação do site.\n\n## Executar localmente\n\nNa pasta raiz do projeto, execute:\n\n```bash\npython3 -m http.server 8000 -d dist\n```\n\nDepois, abra:\n\n```text\nhttp://localhost:8000\n```\n\nO servidor local é necessário porque o navegador carrega `game.json` com `fetch()`.\n\n## Criar outro caso\n\nEdite ou substitua `dist/game.json`. O arquivo controla:\n\n- metadados e prazo;\n- banco de suspeitos;\n- campos do dossiê;\n- quantidade e tipos de evidência;\n- requisitos probatórios para a prisão;\n- cidades e destinos disponíveis;\n- rota verdadeira e destinos-isca;\n- locais investigáveis e custo em horas;\n- mandado, captura, liberação e derrota.\n\nO botão **Importar caso** também permite testar outro JSON diretamente pela interface.\n\n## Persistência\n\nO progresso e as estrelas são armazenados em `localStorage` no navegador. Reiniciar uma investigação apaga apenas a partida atual; as estrelas acumuladas permanecem.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "README.md",
+  "source_path": "README.md",
+  "ts": "2026-09-15T18:34:21Z"
+}

@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 240,
-      "projection_hash_sha256": "44094cafaa6bad75de4f1b3e1725041741ed329f0f0d2eeea6e35c14e383921c",
+      "last_event_seq": 253,
+      "projection_hash_sha256": "9e6ebd46231cdc72ed6c85db793161c9b2cd2f99a475ee31a72526ab08b226b7",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-15T15:13:01Z"
+    "updated_at": "2026-09-15T18:34:40Z"
   },
   "project": {
     "name": "esaa-core",
@@ -905,14 +905,54 @@
         ]
       },
       "completed_at": "2026-09-15T15:12:37Z"
+    },
+    {
+      "task_id": "TITO-README-SAO-PAULO-001",
+      "task_kind": "impl",
+      "title": "Exibir arte de São Paulo no README",
+      "description": "Adicionar ao README principal a imagem de São Paulo já usada pelo jogo, com caminho relativo portátil e texto alternativo.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "README exibe a arte de São Paulo do jogo"
+      ],
+      "outputs": {
+        "files": [
+          "README.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "README.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Markdown referencia dist/assets/cities/sao-paulo.webp por caminho relativo válido",
+        "Imagem possui texto alternativo descritivo"
+      ],
+      "required_review_mode": "docs",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-15T18:33:28Z",
+      "verification": {
+        "checks": [
+          "Imagem dist/assets/cities/sao-paulo.webp existe e é WEBP válido 1448x1086",
+          "Referência Markdown relativa encontrada na linha 5",
+          "Texto alternativo descritivo presente",
+          "git diff --check README.md passou",
+          "ESAA verify ok"
+        ]
+      },
+      "completed_at": "2026-09-15T18:34:40Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 17
+      "done": 18
     },
     "by_kind": {
-      "impl": 15,
+      "impl": 16,
       "qa": 2
     }
   }
