@@ -126,6 +126,42 @@
       "title": "Manifesto de carga",
       "text": "O cargueiro pousará no terminal 4 antes do prazo.",
       "tag": "prisão"
+    },
+    {
+      "id": "E11",
+      "title": "Token de rede clonado",
+      "text": "Um token corporativo foi clonado para abrir o perímetro interno.",
+      "tag": "especialidade"
+    },
+    {
+      "id": "E12",
+      "title": "Sedã preto na fuga",
+      "text": "Câmeras registram um carro preto na janela do furto.",
+      "tag": "transporte"
+    },
+    {
+      "id": "E13",
+      "title": "Dump da base acadêmica",
+      "text": "Um export da tabela de notas saiu por um canal de manutenção.",
+      "tag": "especialidade"
+    },
+    {
+      "id": "E14",
+      "title": "Passagem de ônibus",
+      "text": "Uma passagem interestadual foi emitida com documento falso.",
+      "tag": "transporte"
+    },
+    {
+      "id": "E15",
+      "title": "Overlay gráfico forjado",
+      "text": "A interface do boletim recebeu uma camada visual falsa.",
+      "tag": "especialidade"
+    },
+    {
+      "id": "E16",
+      "title": "Despacho fluvial",
+      "text": "Uma carga foi lançada em manifesto de barco sem destinatário claro.",
+      "tag": "transporte"
     }
   ],
   "navigation": {
@@ -160,6 +196,282 @@
     "recife": "brasilia",
     "brasilia": "porto_alegre"
   },
+  "scenarios": [
+    {
+      "id": "eixo_nordeste",
+      "code": "N-17",
+      "route": [
+        "sao_paulo",
+        "recife",
+        "brasilia",
+        "porto_alegre"
+      ],
+      "navigation": {
+        "sao_paulo": [
+          "recife",
+          "manaus"
+        ],
+        "recife": [
+          "sao_paulo",
+          "brasilia",
+          "manaus"
+        ],
+        "brasilia": [
+          "recife",
+          "sao_paulo",
+          "porto_alegre",
+          "manaus"
+        ],
+        "manaus": [
+          "sao_paulo",
+          "recife"
+        ],
+        "porto_alegre": [
+          "brasilia",
+          "sao_paulo"
+        ]
+      },
+      "action_overrides": {
+        "sp_cafe": {
+          "evidence": "E02",
+          "result": "Uma atendente encontrou um comprovante de embarque emitido para Recife."
+        },
+        "re_port": {
+          "evidence": "E04",
+          "result": "Documentos falsos foram usados para reservar um avião cargueiro no porto."
+        },
+        "re_terminal": {
+          "evidence": "E05",
+          "result": "Mensagem recuperada: a próxima chave está onde os três poderes se encontram."
+        },
+        "re_hotel": {
+          "evidence": null,
+          "result": "O registro pertence a outro hóspede e não se conecta ao invasor."
+        },
+        "bsb_hangar": {
+          "evidence": "E06",
+          "result": "O registro mostra Cifra embarcando no cargueiro AZ-714 rumo ao sul."
+        },
+        "bsb_audio": {
+          "evidence": "E07",
+          "result": "A gravação confirma a venda no terminal de Porto Alegre."
+        },
+        "bsb_archive": {
+          "evidence": null,
+          "result": "O processo consultado é antigo e não tem ligação com o caso."
+        }
+      },
+      "evidence_overrides": {
+        "E02": {
+          "title": "Embarque para Recife",
+          "text": "Um comprovante emitido após o furto aponta para Recife."
+        },
+        "E04": {
+          "title": "Reserva de carga",
+          "text": "A documentação falsa identifica um avião cargueiro."
+        },
+        "E05": {
+          "title": "Referência aos três poderes",
+          "text": "A mensagem direciona a investigação para Brasília."
+        },
+        "E06": {
+          "title": "Registro do hangar",
+          "text": "Cifra embarcou no cargueiro AZ-714 rumo ao sul."
+        },
+        "E07": {
+          "title": "Áudio de negociação",
+          "text": "A venda ocorrerá em um terminal de Porto Alegre."
+        }
+      }
+    },
+    {
+      "id": "eixo_amazonico",
+      "code": "A-23",
+      "route": [
+        "sao_paulo",
+        "manaus",
+        "brasilia",
+        "porto_alegre"
+      ],
+      "navigation": {
+        "sao_paulo": [
+          "manaus",
+          "recife"
+        ],
+        "manaus": [
+          "sao_paulo",
+          "brasilia",
+          "recife"
+        ],
+        "brasilia": [
+          "manaus",
+          "sao_paulo",
+          "porto_alegre",
+          "recife"
+        ],
+        "recife": [
+          "sao_paulo",
+          "manaus"
+        ],
+        "porto_alegre": [
+          "brasilia",
+          "sao_paulo"
+        ]
+      },
+      "action_overrides": {
+        "sp_cafe": {
+          "evidence": "E02",
+          "result": "Uma remessa urgente foi registrada para um terminal de cargas em Manaus."
+        },
+        "mao_port": {
+          "label": "Verificar terminal de cargas",
+          "cost": 5,
+          "evidence": "E04",
+          "result": "A equipe encontra documentos falsos vinculados a um avião cargueiro."
+        },
+        "mao_network": {
+          "label": "Rastrear mensagem",
+          "cost": 4,
+          "evidence": "E05",
+          "result": "O texto interceptado menciona a cidade planejada onde se reúnem os três poderes."
+        },
+        "re_port": {
+          "evidence": null,
+          "result": "Os documentos do porto não correspondem ao período do furto."
+        },
+        "re_terminal": {
+          "evidence": null,
+          "result": "O acesso partiu de uma conexão mascarada e não produz prova admissível."
+        },
+        "re_hotel": {
+          "evidence": null,
+          "result": "Nenhum registro relaciona o hotel ao invasor."
+        },
+        "bsb_hangar": {
+          "evidence": "E06",
+          "result": "O hangar registra Cifra no cargueiro AZ-714, que seguiu para o sul."
+        },
+        "bsb_audio": {
+          "evidence": "E07",
+          "result": "A escuta confirma a negociação no terminal de Porto Alegre."
+        },
+        "bsb_archive": {
+          "evidence": null,
+          "result": "O arquivo contém apenas movimentações administrativas antigas."
+        }
+      },
+      "evidence_overrides": {
+        "E02": {
+          "title": "Remessa para Manaus",
+          "text": "Um despacho urgente após o furto aponta para Manaus."
+        },
+        "E04": {
+          "title": "Documentos de carga",
+          "text": "Papéis falsos vinculam a fuga a um avião cargueiro."
+        },
+        "E05": {
+          "title": "Mensagem da cidade planejada",
+          "text": "A referência aos três poderes conduz a Brasília."
+        },
+        "E06": {
+          "title": "Registro de embarque",
+          "text": "Cifra embarcou no cargueiro AZ-714 com destino ao sul."
+        },
+        "E07": {
+          "title": "Escuta do terminal",
+          "text": "A negociação final foi marcada em Porto Alegre."
+        }
+      }
+    },
+    {
+      "id": "eixo_central",
+      "code": "C-31",
+      "route": [
+        "sao_paulo",
+        "brasilia",
+        "recife",
+        "porto_alegre"
+      ],
+      "navigation": {
+        "sao_paulo": [
+          "brasilia",
+          "manaus"
+        ],
+        "brasilia": [
+          "sao_paulo",
+          "recife",
+          "manaus"
+        ],
+        "recife": [
+          "brasilia",
+          "sao_paulo",
+          "porto_alegre",
+          "manaus"
+        ],
+        "manaus": [
+          "sao_paulo",
+          "brasilia"
+        ],
+        "porto_alegre": [
+          "recife",
+          "sao_paulo"
+        ]
+      },
+      "action_overrides": {
+        "sp_cafe": {
+          "evidence": "E02",
+          "result": "A cafeteria recebeu uma reserva emitida para Brasília minutos após o furto."
+        },
+        "bsb_hangar": {
+          "evidence": "E04",
+          "result": "A documentação do hangar revela a reserva fraudulenta de um avião cargueiro."
+        },
+        "bsb_audio": {
+          "evidence": null,
+          "result": "A gravação trata de outro voo e não pode ser vinculada ao invasor."
+        },
+        "bsb_archive": {
+          "label": "Cruzar autorizações",
+          "evidence": "E05",
+          "result": "Uma autorização falsificada remete a um terminal público no Recife."
+        },
+        "re_port": {
+          "evidence": "E06",
+          "result": "O controle portuário registra Cifra transferindo a carga para o voo AZ-714."
+        },
+        "re_terminal": {
+          "evidence": "E07",
+          "result": "Uma mensagem confirma a entrega final em um terminal de Porto Alegre."
+        },
+        "re_hotel": {
+          "evidence": null,
+          "result": "O hóspede investigado não corresponde ao perfil procurado."
+        }
+      },
+      "evidence_overrides": {
+        "E02": {
+          "title": "Reserva para Brasília",
+          "text": "Uma reserva feita após o furto conduz à capital federal."
+        },
+        "E04": {
+          "title": "Autorização do cargueiro",
+          "text": "O documento confirma o uso de um avião cargueiro."
+        },
+        "E05": {
+          "title": "Credencial para Recife",
+          "text": "A autorização falsificada aponta para um terminal no Recife."
+        },
+        "E06": {
+          "title": "Transferência AZ-714",
+          "text": "Cifra transferiu a carga para o voo AZ-714 no Recife."
+        },
+        "E07": {
+          "title": "Mensagem de entrega",
+          "text": "O algoritmo será entregue em Porto Alegre."
+        }
+      }
+    }
+  ],
   "locations": [
     {
       "id": "sao_paulo",
@@ -397,5 +709,694 @@
     "insufficient_evidence_text": "O mandado corresponde à pessoa abordada, mas a equipe não reuniu evidências suficientes para vincular o suspeito ao crime e sustentar a prisão. A pessoa é liberada e o caso termina sem solução.",
     "lose_title": "O rastro desapareceu",
     "lose_text": "O prazo terminou sem mandado e conjunto probatório válidos. Ninguém pode ser preso apenas por suspeita; a pessoa abordada é liberada e o caso permanece sem solução."
+  },
+  "campaign": {
+    "id": "az-2026-041-gangue",
+    "lieutenant_pool": [
+      "byte",
+      "null",
+      "vertice"
+    ],
+    "lieutenant_chapters": 2,
+    "boss": "cifra",
+    "chapters": {
+      "byte": {
+        "culprit": "byte",
+        "start": "sao_paulo",
+        "briefing": "Byte Azul abriu o perímetro do laboratório Hórus. Prenda o especialista em redes antes que ele some com os tokens clonados.",
+        "total_hours": 56,
+        "arrest_requirements": {
+          "minimum_evidence": 2,
+          "required_evidence": [
+            "E11",
+            "E12"
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "byte_litoral",
+            "code": "B-17",
+            "route": [
+              "sao_paulo",
+              "recife",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "recife",
+                "manaus"
+              ],
+              "recife": [
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "porto_alegre": [
+                "recife",
+                "sao_paulo"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "recife"
+              ],
+              "brasilia": [
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_camera": {
+                "evidence": "E11",
+                "result": "O acesso usou um token de rede clonado, sem quebrar a firewall."
+              },
+              "sp_cafe": {
+                "evidence": "E12",
+                "result": "A atendente viu um sedã preto deixar o quarteirão após o alarme."
+              },
+              "re_port": {
+                "evidence": null,
+                "result": "O porto não registra o sedã neste horário."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Byte Azul é detido com os tokens clonados."
+              }
+            },
+            "evidence_overrides": {
+              "E11": {
+                "title": "Token clonado",
+                "text": "O perímetro foi aberto com credencial de rede duplicada."
+              },
+              "E12": {
+                "title": "Sedã na fuga",
+                "text": "Um carro preto saiu da cena minutos após o alarme."
+              }
+            }
+          },
+          {
+            "id": "byte_planalto",
+            "code": "B-23",
+            "route": [
+              "sao_paulo",
+              "brasilia",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "brasilia",
+                "manaus"
+              ],
+              "brasilia": [
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "porto_alegre": [
+                "brasilia",
+                "sao_paulo"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "brasilia"
+              ],
+              "recife": [
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_camera": {
+                "evidence": "E11",
+                "result": "O invasor autenticou-se com um token corporativo clonado."
+              },
+              "sp_cafe": {
+                "evidence": null,
+                "result": "Ninguém na cafeteria viu o veículo da fuga."
+              },
+              "bsb_hangar": {
+                "evidence": "E12",
+                "result": "O hangar registrou um carro preto deixando um passageiro para um voo sul."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Byte Azul é detido com os tokens clonados."
+              }
+            },
+            "evidence_overrides": {
+              "E11": {
+                "title": "Token corporativo",
+                "text": "A autenticação veio de um token de rede duplicado."
+              },
+              "E12": {
+                "title": "Carro no hangar",
+                "text": "Um sedã preto entregou o fugitivo em Brasília."
+              }
+            }
+          }
+        ]
+      },
+      "null": {
+        "culprit": "null",
+        "start": "sao_paulo",
+        "briefing": "Null extraiu a base de notas. Siga o rastro do dump e do ônibus interestadual até o terminal do sul.",
+        "total_hours": 56,
+        "arrest_requirements": {
+          "minimum_evidence": 2,
+          "required_evidence": [
+            "E13",
+            "E14"
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "null_amazonia",
+            "code": "U-11",
+            "route": [
+              "sao_paulo",
+              "manaus",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "manaus",
+                "recife"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "porto_alegre",
+                "recife"
+              ],
+              "porto_alegre": [
+                "manaus",
+                "sao_paulo"
+              ],
+              "recife": [
+                "sao_paulo",
+                "manaus"
+              ],
+              "brasilia": [
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_desk": {
+                "evidence": "E13",
+                "result": "A estação disparou um export completo da tabela de notas."
+              },
+              "sp_cafe": {
+                "evidence": "E14",
+                "result": "Sobrou o canhoto de uma passagem de ônibus emitida com CPF falso."
+              },
+              "mao_port": {
+                "evidence": null,
+                "result": "As embarcações não carregam o dump."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Null é detido com o dump acadêmico."
+              }
+            },
+            "evidence_overrides": {
+              "E13": {
+                "title": "Export das notas",
+                "text": "Um dump da base acadêmica saiu pela estação invadida."
+              },
+              "E14": {
+                "title": "Canhoto de ônibus",
+                "text": "A fuga usou uma linha interestadual com documento falso."
+              }
+            }
+          },
+          {
+            "id": "null_nordeste",
+            "code": "U-19",
+            "route": [
+              "sao_paulo",
+              "recife",
+              "brasilia",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "recife",
+                "manaus"
+              ],
+              "recife": [
+                "sao_paulo",
+                "brasilia",
+                "manaus"
+              ],
+              "brasilia": [
+                "recife",
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "porto_alegre": [
+                "brasilia",
+                "sao_paulo"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "recife"
+              ]
+            },
+            "action_overrides": {
+              "sp_desk": {
+                "evidence": "E13",
+                "result": "Os logs mostram um dump SQL da base de notas."
+              },
+              "re_terminal": {
+                "evidence": "E14",
+                "result": "O terminal vendeu uma passagem de ônibus com identidade falsa."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Null é detido com o dump acadêmico."
+              }
+            },
+            "evidence_overrides": {
+              "E13": {
+                "title": "Dump SQL",
+                "text": "A extração copiou a tabela de notas por um canal de manutenção."
+              },
+              "E14": {
+                "title": "Passagem falsa",
+                "text": "Um ônibus interestadual foi pago com documento clonado."
+              }
+            }
+          }
+        ]
+      },
+      "vertice": {
+        "culprit": "vertice",
+        "start": "sao_paulo",
+        "briefing": "Vértice forjou a camada visual do boletim. O rastro mistura renderização falsa e despacho fluvial.",
+        "total_hours": 56,
+        "arrest_requirements": {
+          "minimum_evidence": 2,
+          "required_evidence": [
+            "E15",
+            "E16"
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "vertice_rio",
+            "code": "V-08",
+            "route": [
+              "sao_paulo",
+              "manaus",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "manaus",
+                "recife"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "porto_alegre",
+                "recife"
+              ],
+              "porto_alegre": [
+                "manaus",
+                "sao_paulo"
+              ],
+              "recife": [
+                "sao_paulo",
+                "manaus"
+              ],
+              "brasilia": [
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_desk": {
+                "evidence": "E15",
+                "result": "A estação aplicou um overlay gráfico sobre o boletim real."
+              },
+              "mao_port": {
+                "evidence": "E16",
+                "result": "Um barco saiu com manifesto incompleto na hora do alarme."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Vértice é detido com os arquivos visuais forjados."
+              }
+            },
+            "evidence_overrides": {
+              "E15": {
+                "title": "Overlay forjado",
+                "text": "A interface do boletim recebeu uma camada gráfica falsa."
+              },
+              "E16": {
+                "title": "Manifesto fluvial",
+                "text": "Um barco despachou carga sem destinatário no horário do furto."
+              }
+            }
+          },
+          {
+            "id": "vertice_litoral",
+            "code": "V-14",
+            "route": [
+              "sao_paulo",
+              "recife",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "recife",
+                "manaus"
+              ],
+              "recife": [
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "porto_alegre": [
+                "recife",
+                "sao_paulo"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "recife"
+              ],
+              "brasilia": [
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_desk": {
+                "evidence": "E15",
+                "result": "Os shaders da interface acadêmica foram trocados por um pacote falso."
+              },
+              "re_port": {
+                "evidence": "E16",
+                "result": "O porto lançou um despacho fluvial irregular, depois transferido ao sul."
+              },
+              "poa_arrest": {
+                "result": "A identidade confere com o mandado. Vértice é detido com os arquivos visuais forjados."
+              }
+            },
+            "evidence_overrides": {
+              "E15": {
+                "title": "Pacote visual falso",
+                "text": "A camada gráfica do boletim não é a original."
+              },
+              "E16": {
+                "title": "Despacho irregular",
+                "text": "A carga saiu por via fluvial com manifesto incompleto."
+              }
+            }
+          }
+        ]
+      },
+      "cifra": {
+        "culprit": "cifra",
+        "start": "sao_paulo",
+        "briefing": "Um algoritmo capaz de alterar notas acadêmicas foi roubado do laboratório Hórus. O invasor deixou São Paulo há poucas horas. Siga seu rastro pelo Brasil, reúna provas, monte um dossiê juridicamente consistente e efetue a prisão antes que o código seja vendido.",
+        "total_hours": 72,
+        "arrest_requirements": {
+          "minimum_evidence": 7,
+          "required_evidence": [
+            "E01",
+            "E03",
+            "E04",
+            "E07",
+            "E08"
+          ]
+        },
+        "scenarios": [
+          {
+            "id": "eixo_nordeste",
+            "code": "N-17",
+            "route": [
+              "sao_paulo",
+              "recife",
+              "brasilia",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "recife",
+                "manaus"
+              ],
+              "recife": [
+                "sao_paulo",
+                "brasilia",
+                "manaus"
+              ],
+              "brasilia": [
+                "recife",
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "recife"
+              ],
+              "porto_alegre": [
+                "brasilia",
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_cafe": {
+                "evidence": "E02",
+                "result": "Uma atendente encontrou um comprovante de embarque emitido para Recife."
+              },
+              "re_port": {
+                "evidence": "E04",
+                "result": "Documentos falsos foram usados para reservar um avião cargueiro no porto."
+              },
+              "re_terminal": {
+                "evidence": "E05",
+                "result": "Mensagem recuperada: a próxima chave está onde os três poderes se encontram."
+              },
+              "re_hotel": {
+                "evidence": null,
+                "result": "O registro pertence a outro hóspede e não se conecta ao invasor."
+              },
+              "bsb_hangar": {
+                "evidence": "E06",
+                "result": "O registro mostra Cifra embarcando no cargueiro AZ-714 rumo ao sul."
+              },
+              "bsb_audio": {
+                "evidence": "E07",
+                "result": "A gravação confirma a venda no terminal de Porto Alegre."
+              },
+              "bsb_archive": {
+                "evidence": null,
+                "result": "O processo consultado é antigo e não tem ligação com o caso."
+              }
+            },
+            "evidence_overrides": {
+              "E02": {
+                "title": "Embarque para Recife",
+                "text": "Um comprovante emitido após o furto aponta para Recife."
+              },
+              "E04": {
+                "title": "Reserva de carga",
+                "text": "A documentação falsa identifica um avião cargueiro."
+              },
+              "E05": {
+                "title": "Referência aos três poderes",
+                "text": "A mensagem direciona a investigação para Brasília."
+              },
+              "E06": {
+                "title": "Registro do hangar",
+                "text": "Cifra embarcou no cargueiro AZ-714 rumo ao sul."
+              },
+              "E07": {
+                "title": "Áudio de negociação",
+                "text": "A venda ocorrerá em um terminal de Porto Alegre."
+              }
+            }
+          },
+          {
+            "id": "eixo_amazonico",
+            "code": "A-23",
+            "route": [
+              "sao_paulo",
+              "manaus",
+              "brasilia",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "manaus",
+                "recife"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "brasilia",
+                "recife"
+              ],
+              "brasilia": [
+                "manaus",
+                "sao_paulo",
+                "porto_alegre",
+                "recife"
+              ],
+              "recife": [
+                "sao_paulo",
+                "manaus"
+              ],
+              "porto_alegre": [
+                "brasilia",
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_cafe": {
+                "evidence": "E02",
+                "result": "Uma remessa urgente foi registrada para um terminal de cargas em Manaus."
+              },
+              "mao_port": {
+                "label": "Verificar terminal de cargas",
+                "cost": 5,
+                "evidence": "E04",
+                "result": "A equipe encontra documentos falsos vinculados a um avião cargueiro."
+              },
+              "mao_network": {
+                "label": "Rastrear mensagem",
+                "cost": 4,
+                "evidence": "E05",
+                "result": "O texto interceptado menciona a cidade planejada onde se reúnem os três poderes."
+              },
+              "re_port": {
+                "evidence": null,
+                "result": "Os documentos do porto não correspondem ao período do furto."
+              },
+              "re_terminal": {
+                "evidence": null,
+                "result": "O acesso partiu de uma conexão mascarada e não produz prova admissível."
+              },
+              "re_hotel": {
+                "evidence": null,
+                "result": "Nenhum registro relaciona o hotel ao invasor."
+              },
+              "bsb_hangar": {
+                "evidence": "E06",
+                "result": "O hangar registra Cifra no cargueiro AZ-714, que seguiu para o sul."
+              },
+              "bsb_audio": {
+                "evidence": "E07",
+                "result": "A escuta confirma a negociação no terminal de Porto Alegre."
+              },
+              "bsb_archive": {
+                "evidence": null,
+                "result": "O arquivo contém apenas movimentações administrativas antigas."
+              }
+            },
+            "evidence_overrides": {
+              "E02": {
+                "title": "Remessa para Manaus",
+                "text": "Um despacho urgente após o furto aponta para Manaus."
+              },
+              "E04": {
+                "title": "Documentos de carga",
+                "text": "Papéis falsos vinculam a fuga a um avião cargueiro."
+              },
+              "E05": {
+                "title": "Mensagem da cidade planejada",
+                "text": "A referência aos três poderes conduz a Brasília."
+              },
+              "E06": {
+                "title": "Registro de embarque",
+                "text": "Cifra embarcou no cargueiro AZ-714 com destino ao sul."
+              },
+              "E07": {
+                "title": "Escuta do terminal",
+                "text": "A negociação final foi marcada em Porto Alegre."
+              }
+            }
+          },
+          {
+            "id": "eixo_central",
+            "code": "C-31",
+            "route": [
+              "sao_paulo",
+              "brasilia",
+              "recife",
+              "porto_alegre"
+            ],
+            "navigation": {
+              "sao_paulo": [
+                "brasilia",
+                "manaus"
+              ],
+              "brasilia": [
+                "sao_paulo",
+                "recife",
+                "manaus"
+              ],
+              "recife": [
+                "brasilia",
+                "sao_paulo",
+                "porto_alegre",
+                "manaus"
+              ],
+              "manaus": [
+                "sao_paulo",
+                "brasilia"
+              ],
+              "porto_alegre": [
+                "recife",
+                "sao_paulo"
+              ]
+            },
+            "action_overrides": {
+              "sp_cafe": {
+                "evidence": "E02",
+                "result": "A cafeteria recebeu uma reserva emitida para Brasília minutos após o furto."
+              },
+              "bsb_hangar": {
+                "evidence": "E04",
+                "result": "A documentação do hangar revela a reserva fraudulenta de um avião cargueiro."
+              },
+              "bsb_audio": {
+                "evidence": null,
+                "result": "A gravação trata de outro voo e não pode ser vinculada ao invasor."
+              },
+              "bsb_archive": {
+                "label": "Cruzar autorizações",
+                "evidence": "E05",
+                "result": "Uma autorização falsificada remete a um terminal público no Recife."
+              },
+              "re_port": {
+                "evidence": "E06",
+                "result": "O controle portuário registra Cifra transferindo a carga para o voo AZ-714."
+              },
+              "re_terminal": {
+                "evidence": "E07",
+                "result": "Uma mensagem confirma a entrega final em um terminal de Porto Alegre."
+              },
+              "re_hotel": {
+                "evidence": null,
+                "result": "O hóspede investigado não corresponde ao perfil procurado."
+              }
+            },
+            "evidence_overrides": {
+              "E02": {
+                "title": "Reserva para Brasília",
+                "text": "Uma reserva feita após o furto conduz à capital federal."
+              },
+              "E04": {
+                "title": "Autorização do cargueiro",
+                "text": "O documento confirma o uso de um avião cargueiro."
+              },
+              "E05": {
+                "title": "Credencial para Recife",
+                "text": "A autorização falsificada aponta para um terminal no Recife."
+              },
+              "E06": {
+                "title": "Transferência AZ-714",
+                "text": "Cifra transferiu a carga para o voo AZ-714 no Recife."
+              },
+              "E07": {
+                "title": "Mensagem de entrega",
+                "text": "O algoritmo será entregue em Porto Alegre."
+              }
+            }
+          }
+        ]
+      }
+    }
   }
 }

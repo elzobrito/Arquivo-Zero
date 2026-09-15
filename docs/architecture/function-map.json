@@ -1,256 +1,3000 @@
 {
   "schemaVersion": 1,
   "generatedForTask": "TITO-FUNCTION-MAP-001",
-  "lastUpdatedForTask": "TITO-CITY-INTEL-001",
+  "lastUpdatedForTask": "TITO-CAMPAIGN-ENGINE-001",
   "source": "dist/app.js",
-  "sourceSha256": "8b3e591b0a1d32e3c80346d44da1fb326824896f1cd68dd68009aad6be68ca7e",
-  "inventory": { "total": 58, "functions": 25, "arrows": 33 },
+  "sourceSha256": "56f49a3db625654655c175fab6a10bc790b564ae1fe0daf5be4e8ac037f7dc38",
+  "inventory": {
+    "total": 67,
+    "functions": 34,
+    "arrows": 33
+  },
   "idPolicy": "IDs FN-* e CB-* são permanentes e não podem ser reutilizados após remoção.",
   "functions": [
     {
-      "id": "FN-001", "name": "$", "kind": "arrow", "signature": "$(selector)",
+      "id": "FN-001",
+      "name": "$",
+      "kind": "arrow",
+      "signature": "$(selector)",
       "responsibility": "Resolver o primeiro elemento DOM correspondente a um seletor CSS.",
-      "source": { "file": "dist/app.js", "line": 1, "anchor": "const $=s=>document.querySelector(s)" },
-      "inputs": ["seletor CSS"], "returns": "Element ou null", "calls": [], "calledBy": ["FN-013", "FN-016", "FN-018", "FN-021", "FN-025", "CB-025", "CB-026", "CB-030", "CB-031"],
-      "events": [], "dom": ["qualquer seletor fornecido"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [],
-      "sideEffects": [], "external": ["DOM document.querySelector"], "impactAreas": ["interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 1,
+        "anchor": "const $=s=>document.querySelector(s)"
+      },
+      "inputs": [
+        "seletor CSS"
+      ],
+      "returns": "Element ou null",
+      "calls": [],
+      "calledBy": [
+        "FN-013",
+        "FN-016",
+        "FN-018",
+        "FN-021",
+        "FN-025",
+        "CB-025",
+        "CB-026",
+        "CB-030",
+        "CB-031"
+      ],
+      "events": [],
+      "dom": [
+        "qualquer seletor fornecido"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "DOM document.querySelector"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
     },
     {
-      "id": "FN-002", "name": "loadGame", "kind": "function", "signature": "async loadGame(src = 'game.json?v=city-intel-001')",
-      "responsibility": "Carregar, validar minimamente e ativar um caso, restaurando ou criando a partida.",
-      "source": { "file": "dist/app.js", "line": 5, "anchor": "async function loadGame(src=\"game.json?v=city-intel-001\")" },
-      "inputs": ["URL ou objeto de caso"], "returns": "Promise<void>", "calls": ["CB-001", "FN-003", "FN-007", "FN-021"], "calledBy": ["CB-031"],
-      "events": ["inicialização", "importação de arquivo"], "dom": [], "stateReads": [], "stateWrites": ["game", "state"],
-      "gamePaths": ["metadata.id", "locations", "travel", "dossier"], "storage": ["STORE + metadata.id"],
-      "sideEffects": ["fetch", "leitura de localStorage", "substituição do caso e estado", "renderização ou diálogo de erro"], "external": ["Fetch API", "localStorage", "JSON"], "impactAreas": ["dados", "estado", "persistência", "interface"]
+      "id": "FN-002",
+      "name": "loadGame",
+      "kind": "function",
+      "signature": "async loadGame(src = 'game.json?v=random-clues-001')",
+      "responsibility": "Carregar, validar e ativar um caso, restaurando ou criando a partida e migrando estados sem cenário.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 6,
+        "anchor": "async function loadGame(src=\"game.json?v=campaign-001\")"
+      },
+      "inputs": [
+        "URL ou objeto de caso"
+      ],
+      "returns": "Promise<void>",
+      "calls": [
+        "CB-001",
+        "FN-003",
+        "FN-027",
+        "FN-004",
+        "FN-007",
+        "FN-021",
+        "FN-030",
+        "FN-034",
+        "FN-035",
+        "FN-031"
+      ],
+      "calledBy": [
+        "CB-031"
+      ],
+      "events": [
+        "inicialização",
+        "importação de arquivo"
+      ],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [
+        "game",
+        "state",
+        "scenario"
+      ],
+      "gamePaths": [
+        "metadata.id",
+        "locations",
+        "travel",
+        "dossier",
+        "scenarios"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "fetch",
+        "leitura de localStorage",
+        "migração e persistência do cenário",
+        "substituição do caso e estado",
+        "renderização ou diálogo de erro"
+      ],
+      "external": [
+        "Fetch API",
+        "localStorage",
+        "JSON"
+      ],
+      "impactAreas": [
+        "dados",
+        "estado",
+        "persistência",
+        "interface"
+      ]
     },
     {
-      "id": "FN-003", "name": "fresh", "kind": "function", "signature": "fresh()",
-      "responsibility": "Criar o estado inicial mutável de uma partida.",
-      "source": { "file": "dist/app.js", "line": 6, "anchor": "function fresh()" },
-      "inputs": [], "returns": "novo objeto state", "calls": [], "calledBy": ["FN-002", "FN-020", "CB-030"],
-      "events": ["novo caso", "reset", "primeiro carregamento"], "dom": [], "stateReads": [], "stateWrites": [],
-      "gamePaths": ["metadata.start", "metadata.total_hours"], "storage": [], "sideEffects": [], "external": [], "impactAreas": ["estado", "tempo", "navegação", "evidências", "dossiê"]
+      "id": "FN-003",
+      "name": "fresh",
+      "kind": "function",
+      "signature": "fresh(previousScenario = null)",
+      "responsibility": "Criar o estado inicial da partida com um cenário sorteado diferente do anterior quando possível.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 7,
+        "anchor": "function fresh(previousScenario=null)"
+      },
+      "inputs": [
+        "ID opcional do cenário anterior"
+      ],
+      "returns": "novo objeto state com scenario",
+      "calls": [
+        "FN-027"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-020",
+        "CB-030"
+      ],
+      "events": [
+        "novo caso",
+        "reset",
+        "primeiro carregamento"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "metadata.start",
+        "metadata.total_hours",
+        "scenarios"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "estado",
+        "tempo",
+        "navegação",
+        "evidências",
+        "dossiê"
+      ]
     },
     {
-      "id": "FN-004", "name": "save", "kind": "function", "signature": "save()",
+      "id": "FN-004",
+      "name": "save",
+      "kind": "function",
+      "signature": "save()",
       "responsibility": "Persistir o estado atual da investigação sob a chave específica do caso.",
-      "source": { "file": "dist/app.js", "line": 7, "anchor": "function save()" },
-      "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-014", "FN-015", "FN-017", "FN-020", "CB-014", "CB-029"],
-      "events": [], "dom": [], "stateReads": ["state completo"], "stateWrites": [], "gamePaths": ["metadata.id"],
-      "storage": ["STORE + metadata.id"], "sideEffects": ["escrita em localStorage"], "external": ["localStorage", "JSON.stringify"], "impactAreas": ["persistência", "estado"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 8,
+        "anchor": "function save(){localStorage.setItem(saveKey()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-031"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-014",
+        "FN-015",
+        "FN-017",
+        "FN-020",
+        "CB-014",
+        "CB-029",
+        "CB-030"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "state completo"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "metadata.id"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "escrita em localStorage"
+      ],
+      "external": [
+        "localStorage",
+        "JSON.stringify"
+      ],
+      "impactAreas": [
+        "persistência",
+        "estado"
+      ]
     },
     {
-      "id": "FN-005", "name": "loc", "kind": "function", "signature": "loc(id = state.location)",
+      "id": "FN-005",
+      "name": "loc",
+      "kind": "function",
+      "signature": "loc(id = state.location)",
       "responsibility": "Localizar uma cidade do caso pelo identificador.",
-      "source": { "file": "dist/app.js", "line": 7, "anchor": "function loc(id=state.location)" },
-      "inputs": ["ID opcional de cidade"], "returns": "objeto location ou undefined", "calls": ["CB-002"], "calledBy": ["FN-010", "FN-013", "FN-014", "CB-007"],
-      "events": [], "dom": [], "stateReads": ["location"], "stateWrites": [], "gamePaths": ["locations"], "storage": [], "sideEffects": [], "external": [], "impactAreas": ["dados", "navegação"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 8,
+        "anchor": "function loc(id=state.location)"
+      },
+      "inputs": [
+        "ID opcional de cidade"
+      ],
+      "returns": "objeto location ou undefined",
+      "calls": [
+        "CB-002"
+      ],
+      "calledBy": [
+        "FN-010",
+        "FN-013",
+        "FN-014",
+        "CB-007",
+        "CB-013"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "location"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "dados",
+        "navegação"
+      ]
     },
     {
-      "id": "FN-006", "name": "ev", "kind": "function", "signature": "ev(id)",
-      "responsibility": "Localizar uma evidência do caso pelo identificador.",
-      "source": { "file": "dist/app.js", "line": 7, "anchor": "function ev(id)" },
-      "inputs": ["ID de evidência"], "returns": "objeto evidence ou undefined", "calls": ["CB-003"], "calledBy": ["FN-014"],
-      "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["evidence"], "storage": [], "sideEffects": [], "external": [], "impactAreas": ["dados", "evidências"]
+      "id": "FN-006",
+      "name": "ev",
+      "kind": "function",
+      "signature": "ev(id)",
+      "responsibility": "Resolver uma evidência pelo identificador, aplicando o texto da variante ativa.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 8,
+        "anchor": "function ev(id)"
+      },
+      "inputs": [
+        "ID de evidência"
+      ],
+      "returns": "objeto evidence efetivo ou undefined",
+      "calls": [
+        "CB-003",
+        "FN-028"
+      ],
+      "calledBy": [
+        "FN-011",
+        "FN-014"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "evidence",
+        "scenarios[].evidence_overrides"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "dados",
+        "evidências"
+      ]
     },
     {
-      "id": "FN-007", "name": "render", "kind": "function", "signature": "render()",
+      "id": "FN-007",
+      "name": "render",
+      "kind": "function",
+      "signature": "render()",
       "responsibility": "Sincronizar toda a interface com game e state.",
-      "source": { "file": "dist/app.js", "line": 8, "anchor": "function render()" },
-      "inputs": [], "returns": "void", "calls": ["FN-024", "FN-018", "FN-008", "FN-009", "FN-010", "FN-011", "FN-012", "FN-016"],
-      "calledBy": ["FN-002", "FN-014", "FN-015", "FN-017", "FN-020", "CB-014", "CB-030"],
-      "events": ["qualquer transição de estado"], "dom": ["game-title", "briefing", "case-code", "notebook"], "stateReads": ["notes"], "stateWrites": [],
-      "gamePaths": ["metadata.title", "metadata.briefing", "metadata.code"], "storage": [], "sideEffects": ["atualização ampla do DOM"], "external": ["DOM"], "impactAreas": ["interface", "estado"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 9,
+        "anchor": "function render()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-028",
+        "FN-024",
+        "FN-018",
+        "FN-008",
+        "FN-009",
+        "FN-010",
+        "FN-011",
+        "FN-012",
+        "FN-016",
+        "FN-030"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-014",
+        "FN-015",
+        "FN-017",
+        "FN-020",
+        "CB-014",
+        "CB-030"
+      ],
+      "events": [
+        "qualquer transição de estado"
+      ],
+      "dom": [
+        "game-title",
+        "briefing",
+        "case-code",
+        "notebook"
+      ],
+      "stateReads": [
+        "notes",
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "metadata.title",
+        "metadata.briefing",
+        "metadata.code",
+        "scenarios[].code"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "atualização ampla do DOM"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface",
+        "estado"
+      ]
     },
     {
-      "id": "FN-008", "name": "clock", "kind": "function", "signature": "clock()",
+      "id": "FN-008",
+      "name": "clock",
+      "kind": "function",
+      "signature": "clock()",
       "responsibility": "Renderizar horas restantes, barra proporcional e alerta de prazo.",
-      "source": { "file": "dist/app.js", "line": 9, "anchor": "function clock()" },
-      "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-007"], "events": [],
-      "dom": ["time-left", "time-bar", ".clock-card"], "stateReads": ["hours"], "stateWrites": [], "gamePaths": ["metadata.total_hours"],
-      "storage": [], "sideEffects": ["atualização do DOM"], "external": ["DOM", "Math.max"], "impactAreas": ["interface", "tempo"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 10,
+        "anchor": "function clock()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [],
+      "dom": [
+        "time-left",
+        "time-bar",
+        ".clock-card"
+      ],
+      "stateReads": [
+        "hours"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "metadata.total_hours"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "atualização do DOM"
+      ],
+      "external": [
+        "DOM",
+        "Math.max"
+      ],
+      "impactAreas": [
+        "interface",
+        "tempo"
+      ]
     },
     {
-      "id": "FN-009", "name": "map", "kind": "function", "signature": "map()",
+      "id": "FN-009",
+      "name": "map",
+      "kind": "function",
+      "signature": "map()",
       "responsibility": "Renderizar somente a cidade atual, visitadas e destinos diretamente acessíveis, com custos, eventos de viagem e linha da rota.",
-      "source": { "file": "dist/app.js", "line": 10, "anchor": "function map()" },
-      "inputs": [], "returns": "void", "calls": ["CB-004", "CB-005", "CB-007", "CB-008"], "calledBy": ["FN-007"],
-      "events": ["click em cidade disponível"], "dom": ["city-layer", "route-lines", ".city:not(:disabled)"],
-      "stateReads": ["location", "visited", "route", "finished"], "stateWrites": [], "gamePaths": ["navigation", "locations", "travel"], "storage": [],
-      "sideEffects": ["substituição de HTML", "vinculação de onclick"], "external": ["DOM", "Set"], "impactAreas": ["interface", "navegação", "tempo"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": "function map()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-028",
+        "CB-004",
+        "CB-005",
+        "CB-007",
+        "CB-008"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [
+        "click em cidade disponível"
+      ],
+      "dom": [
+        "city-layer",
+        "route-lines",
+        ".city:not(:disabled)"
+      ],
+      "stateReads": [
+        "location",
+        "visited",
+        "route",
+        "finished",
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "navigation",
+        "scenarios[].navigation",
+        "locations",
+        "travel"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "substituição de HTML",
+        "vinculação de onclick"
+      ],
+      "external": [
+        "DOM",
+        "Set"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação",
+        "tempo"
+      ]
     },
     {
-      "id": "FN-010", "name": "place", "kind": "function", "signature": "place()",
+      "id": "FN-010",
+      "name": "place",
+      "kind": "function",
+      "signature": "place()",
       "responsibility": "Renderizar o local atual, seu contexto cultural/geográfico e suas ações investigativas disponíveis.",
-      "source": { "file": "dist/app.js", "line": 11, "anchor": "function place()" },
-      "inputs": [], "returns": "void", "calls": ["FN-005", "FN-022", "CB-009", "CB-010"], "calledBy": ["FN-007"],
-      "events": ["click em ação investigativa"], "dom": ["location-title", "location-name", "location-type", "location-description", "city-summary", "city-facts", "coords", "location-actions"],
-      "stateReads": ["actions", "warrant", "finished"], "stateWrites": [], "gamePaths": ["locations[].city_info", "locations[].actions"], "storage": [],
-      "sideEffects": ["substituição de HTML", "vinculação de onclick"], "external": ["DOM"], "impactAreas": ["interface", "navegação", "dossiê", "evidências"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 12,
+        "anchor": "function place()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-005",
+        "FN-022",
+        "CB-009",
+        "CB-010"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [
+        "click em ação investigativa"
+      ],
+      "dom": [
+        "location-title",
+        "location-name",
+        "location-type",
+        "location-description",
+        "city-summary",
+        "city-facts",
+        "coords",
+        "location-actions"
+      ],
+      "stateReads": [
+        "actions",
+        "warrant",
+        "finished"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations[].city_info",
+        "locations[].actions"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "substituição de HTML",
+        "vinculação de onclick"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação",
+        "dossiê",
+        "evidências"
+      ]
     },
     {
-      "id": "FN-011", "name": "evidence", "kind": "function", "signature": "evidence()",
+      "id": "FN-011",
+      "name": "evidence",
+      "kind": "function",
+      "signature": "evidence()",
       "responsibility": "Renderizar somente evidências já encontradas ou um estado vazio, sem expor o inventário oculto.",
-      "source": { "file": "dist/app.js", "line": 12, "anchor": "function evidence()" },
-      "inputs": [], "returns": "void", "calls": ["CB-012"], "calledBy": ["FN-007"], "events": [],
-      "dom": ["evidence-count", "evidence-list"], "stateReads": ["evidence"], "stateWrites": [], "gamePaths": ["evidence"], "storage": [],
-      "sideEffects": ["substituição de HTML"], "external": ["DOM"], "impactAreas": ["interface", "evidências"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 13,
+        "anchor": "function evidence()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-006",
+        "CB-012"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [],
+      "dom": [
+        "evidence-count",
+        "evidence-list"
+      ],
+      "stateReads": [
+        "evidence"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "evidence"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "substituição de HTML"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface",
+        "evidências"
+      ]
     },
     {
-      "id": "FN-012", "name": "route", "kind": "function", "signature": "route()",
+      "id": "FN-012",
+      "name": "route",
+      "kind": "function",
+      "signature": "route()",
       "responsibility": "Renderizar a quantidade já visitada, sem total antecipado, e o histórico textual da rota.",
-      "source": { "file": "dist/app.js", "line": 13, "anchor": "function route()" },
-      "inputs": [], "returns": "void", "calls": ["CB-013"], "calledBy": ["FN-007"], "events": [],
-      "dom": ["visited-count", "route-log"], "stateReads": ["visited", "route"], "stateWrites": [], "gamePaths": ["locations"], "storage": [],
-      "sideEffects": ["substituição de HTML"], "external": ["DOM", "Set"], "impactAreas": ["interface", "navegação"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 14,
+        "anchor": "function route()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "CB-013"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [],
+      "dom": [
+        "visited-count",
+        "route-log"
+      ],
+      "stateReads": [
+        "visited",
+        "route"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "substituição de HTML"
+      ],
+      "external": [
+        "DOM",
+        "Set"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
     },
     {
-      "id": "FN-013", "name": "openTravel", "kind": "function", "signature": "openTravel(id)",
+      "id": "FN-013",
+      "name": "openTravel",
+      "kind": "function",
+      "signature": "openTravel(id)",
       "responsibility": "Preparar e abrir a confirmação de uma viagem.",
-      "source": { "file": "dist/app.js", "line": 14, "anchor": "function openTravel(id)" },
-      "inputs": ["ID do destino"], "returns": "void", "calls": ["FN-001", "FN-005"], "calledBy": ["CB-006"],
-      "events": ["click em cidade"], "dom": ["travel-title", "travel-copy", "travel-dialog"], "stateReads": ["location", "hours"], "stateWrites": ["pendingDestination"],
-      "gamePaths": ["travel"], "storage": [], "sideEffects": ["abertura de dialog", "atualização do DOM"], "external": ["HTMLDialogElement"], "impactAreas": ["interface", "navegação", "tempo"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 15,
+        "anchor": "function openTravel(id)"
+      },
+      "inputs": [
+        "ID do destino"
+      ],
+      "returns": "void",
+      "calls": [
+        "FN-001",
+        "FN-005"
+      ],
+      "calledBy": [
+        "CB-006"
+      ],
+      "events": [
+        "click em cidade"
+      ],
+      "dom": [
+        "travel-title",
+        "travel-copy",
+        "travel-dialog"
+      ],
+      "stateReads": [
+        "location",
+        "hours"
+      ],
+      "stateWrites": [
+        "pendingDestination"
+      ],
+      "gamePaths": [
+        "travel"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "abertura de dialog",
+        "atualização do DOM"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação",
+        "tempo"
+      ]
     },
     {
-      "id": "FN-014", "name": "act", "kind": "function", "signature": "act(id)",
-      "responsibility": "Executar uma ação investigativa e decidir evidência, prisão ou liberação.",
-      "source": { "file": "dist/app.js", "line": 16, "anchor": "function act(id)" },
-      "inputs": ["ID da ação"], "returns": "void", "calls": ["FN-005", "CB-015", "FN-015", "FN-004", "FN-007", "CB-016", "FN-019", "FN-021", "FN-006"], "calledBy": ["CB-011"],
-      "events": ["click em ação investigativa"], "dom": [], "stateReads": ["actions", "evidence", "warrant", "warrantSuspect"],
-      "stateWrites": ["actions", "evidence", "finished", "rewarded"], "gamePaths": ["locations[].actions", "arrest_requirements", "culprit", "ending"],
-      "storage": ["STORE + metadata.id", "CAREER"], "sideEffects": ["consumo de tempo", "persistência", "renderização", "diálogo final"], "external": [],
-      "impactAreas": ["estado", "tempo", "evidências", "dossiê", "desfechos", "persistência"]
+      "id": "FN-014",
+      "name": "act",
+      "kind": "function",
+      "signature": "act(id)",
+      "responsibility": "Executar a versão efetiva de uma ação investigativa e decidir evidência, prisão ou liberação.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 17,
+        "anchor": "function act(id)"
+      },
+      "inputs": [
+        "ID da ação"
+      ],
+      "returns": "void",
+      "calls": [
+        "FN-005",
+        "CB-015",
+        "FN-029",
+        "FN-015",
+        "FN-004",
+        "FN-007",
+        "CB-016",
+        "FN-019",
+        "FN-021",
+        "FN-006"
+      ],
+      "calledBy": [
+        "CB-011"
+      ],
+      "events": [
+        "click em ação investigativa"
+      ],
+      "dom": [],
+      "stateReads": [
+        "actions",
+        "evidence",
+        "warrant",
+        "warrantSuspect"
+      ],
+      "stateWrites": [
+        "actions",
+        "evidence",
+        "finished",
+        "rewarded"
+      ],
+      "gamePaths": [
+        "locations[].actions",
+        "scenarios[].action_overrides",
+        "arrest_requirements",
+        "culprit",
+        "ending"
+      ],
+      "storage": [
+        "STORE + metadata.id",
+        "CAREER"
+      ],
+      "sideEffects": [
+        "consumo de tempo",
+        "persistência",
+        "renderização",
+        "diálogo final"
+      ],
+      "external": [],
+      "impactAreas": [
+        "estado",
+        "tempo",
+        "evidências",
+        "dossiê",
+        "desfechos",
+        "persistência"
+      ]
     },
     {
-      "id": "FN-015", "name": "spend", "kind": "function", "signature": "spend(hours, allowZero = false)",
+      "id": "FN-015",
+      "name": "spend",
+      "kind": "function",
+      "signature": "spend(hours, allowZero = false)",
       "responsibility": "Consumir o orçamento de horas ou encerrar a partida por prazo.",
-      "source": { "file": "dist/app.js", "line": 17, "anchor": "function spend(h,allowZero=false)" },
-      "inputs": ["horas", "permissão para concluir em zero"], "returns": "boolean", "calls": ["FN-004", "FN-007", "FN-023", "FN-021"], "calledBy": ["FN-014", "CB-014"],
-      "events": [], "dom": [], "stateReads": ["hours"], "stateWrites": ["hours", "finished"], "gamePaths": ["ending.lose_title", "ending.lose_text"],
-      "storage": ["STORE + metadata.id"], "sideEffects": ["persistência", "renderização", "fechamento e abertura de dialogs"], "external": [], "impactAreas": ["tempo", "estado", "desfechos", "persistência"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 18,
+        "anchor": "function spend(h,allowZero=false)"
+      },
+      "inputs": [
+        "horas",
+        "permissão para concluir em zero"
+      ],
+      "returns": "boolean",
+      "calls": [
+        "FN-004",
+        "FN-007",
+        "FN-023",
+        "FN-021"
+      ],
+      "calledBy": [
+        "FN-014",
+        "CB-014"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "hours"
+      ],
+      "stateWrites": [
+        "hours",
+        "finished"
+      ],
+      "gamePaths": [
+        "ending.lose_title",
+        "ending.lose_text"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "persistência",
+        "renderização",
+        "fechamento e abertura de dialogs"
+      ],
+      "external": [],
+      "impactAreas": [
+        "tempo",
+        "estado",
+        "desfechos",
+        "persistência"
+      ]
     },
     {
-      "id": "FN-016", "name": "dossier", "kind": "function", "signature": "dossier()",
+      "id": "FN-016",
+      "name": "dossier",
+      "kind": "function",
+      "signature": "dossier()",
       "responsibility": "Renderizar formulário e situação do mandado sem revelar totais internos de suspeitos ou provas exigidas.",
-      "source": { "file": "dist/app.js", "line": 18, "anchor": "function dossier()" },
-      "inputs": [], "returns": "void", "calls": ["FN-001", "CB-017", "CB-018"], "calledBy": ["FN-007"],
-      "events": ["submit do formulário"], "dom": ["dossier-form", "dossier-button"], "stateReads": ["evidence", "warrant", "finished"], "stateWrites": [],
-      "gamePaths": ["dossier.fields"], "storage": [], "sideEffects": ["substituição de HTML", "vinculação de onsubmit"], "external": ["DOM"], "impactAreas": ["interface", "dossiê", "evidências"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 19,
+        "anchor": "function dossier()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-001",
+        "CB-017",
+        "FN-017"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [
+        "submit do formulário"
+      ],
+      "dom": [
+        "dossier-form",
+        "dossier-button"
+      ],
+      "stateReads": [
+        "evidence",
+        "warrant",
+        "finished"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "dossier.fields"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "substituição de HTML",
+        "vinculação de onsubmit"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface",
+        "dossiê",
+        "evidências"
+      ]
     },
     {
-      "id": "FN-017", "name": "submitDossier", "kind": "function", "signature": "submitDossier(event)",
+      "id": "FN-017",
+      "name": "submitDossier",
+      "kind": "function",
+      "signature": "submitDossier(event)",
       "responsibility": "Cruzar atributos do formulário com suspeitos e emitir mandado apenas para correspondência única.",
-      "source": { "file": "dist/app.js", "line": 19, "anchor": "function submitDossier(e)" },
-      "inputs": ["evento submit"], "returns": "void", "calls": ["CB-019", "CB-020", "CB-022", "FN-004", "FN-007", "FN-021"], "calledBy": ["FN-016"],
-      "events": ["submit do dossiê"], "dom": ["dossier-dialog", "dossier-form"], "stateReads": [], "stateWrites": ["warrant", "warrantSuspect"],
-      "gamePaths": ["suspects"], "storage": ["STORE + metadata.id"], "sideEffects": ["prevenção do submit", "persistência", "renderização", "dialogs"],
-      "external": ["FormData", "Object.fromEntries"], "impactAreas": ["dossiê", "estado", "persistência", "interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "function submitDossier(e)"
+      },
+      "inputs": [
+        "evento submit"
+      ],
+      "returns": "void",
+      "calls": [
+        "CB-019",
+        "CB-020",
+        "CB-022",
+        "FN-004",
+        "FN-007",
+        "FN-021"
+      ],
+      "calledBy": [
+        "FN-016"
+      ],
+      "events": [
+        "submit do dossiê"
+      ],
+      "dom": [
+        "dossier-dialog",
+        "dossier-form"
+      ],
+      "stateReads": [],
+      "stateWrites": [
+        "warrant",
+        "warrantSuspect"
+      ],
+      "gamePaths": [
+        "suspects"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "prevenção do submit",
+        "persistência",
+        "renderização",
+        "dialogs"
+      ],
+      "external": [
+        "FormData",
+        "Object.fromEntries"
+      ],
+      "impactAreas": [
+        "dossiê",
+        "estado",
+        "persistência",
+        "interface"
+      ]
     },
     {
-      "id": "FN-018", "name": "career", "kind": "function", "signature": "career()",
+      "id": "FN-018",
+      "name": "career",
+      "kind": "function",
+      "signature": "career()",
       "responsibility": "Ler e renderizar as estrelas acumuladas da carreira.",
-      "source": { "file": "dist/app.js", "line": 20, "anchor": "function career()" },
-      "inputs": [], "returns": "void", "calls": ["FN-001"], "calledBy": ["FN-007"], "events": [], "dom": ["career-stars"],
-      "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": ["CAREER"], "sideEffects": ["leitura de localStorage", "atualização do DOM"],
-      "external": ["localStorage"], "impactAreas": ["interface", "persistência"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 21,
+        "anchor": "function career()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-001"
+      ],
+      "calledBy": [
+        "FN-007"
+      ],
+      "events": [],
+      "dom": [
+        "career-stars"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [
+        "CAREER"
+      ],
+      "sideEffects": [
+        "leitura de localStorage",
+        "atualização do DOM"
+      ],
+      "external": [
+        "localStorage"
+      ],
+      "impactAreas": [
+        "interface",
+        "persistência"
+      ]
     },
     {
-      "id": "FN-019", "name": "awardStar", "kind": "function", "signature": "awardStar()",
+      "id": "FN-019",
+      "name": "awardStar",
+      "kind": "function",
+      "signature": "awardStar()",
       "responsibility": "Conceder uma única estrela para a vitória da partida.",
-      "source": { "file": "dist/app.js", "line": 20, "anchor": "function awardStar()" },
-      "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-014"], "events": ["vitória"], "dom": [],
-      "stateReads": ["rewarded"], "stateWrites": ["rewarded"], "gamePaths": [], "storage": ["CAREER"],
-      "sideEffects": ["leitura e escrita em localStorage"], "external": ["localStorage"], "impactAreas": ["estado", "persistência", "desfechos"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 21,
+        "anchor": "function awardStar()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-014"
+      ],
+      "events": [
+        "vitória"
+      ],
+      "dom": [],
+      "stateReads": [
+        "rewarded"
+      ],
+      "stateWrites": [
+        "rewarded"
+      ],
+      "gamePaths": [],
+      "storage": [
+        "CAREER"
+      ],
+      "sideEffects": [
+        "leitura e escrita em localStorage"
+      ],
+      "external": [
+        "localStorage"
+      ],
+      "impactAreas": [
+        "estado",
+        "persistência",
+        "desfechos"
+      ]
     },
     {
-      "id": "FN-020", "name": "newCase", "kind": "function", "signature": "newCase()",
-      "responsibility": "Reiniciar a partida preservando a carreira.",
-      "source": { "file": "dist/app.js", "line": 20, "anchor": "function newCase()" },
-      "inputs": [], "returns": "void", "calls": ["FN-023", "FN-003", "FN-004", "FN-007"], "calledBy": ["FN-021"],
-      "events": ["botão final de novo caso"], "dom": ["dialogs", "window scroll"], "stateReads": [], "stateWrites": ["state completo"],
-      "gamePaths": [], "storage": ["STORE + metadata.id"], "sideEffects": ["fecha dialogs", "persiste", "renderiza", "rola a página"],
-      "external": ["scrollTo"], "impactAreas": ["estado", "persistência", "interface"]
+      "id": "FN-020",
+      "name": "newCase",
+      "kind": "function",
+      "signature": "newCase()",
+      "responsibility": "Reiniciar a partida preservando a carreira e evitando repetir imediatamente a variante.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 21,
+        "anchor": "function newCase()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-023",
+        "FN-003",
+        "FN-004",
+        "FN-007",
+        "FN-030",
+        "FN-032",
+        "FN-033",
+        "FN-035"
+      ],
+      "calledBy": [
+        "FN-021"
+      ],
+      "events": [
+        "botão final de novo caso"
+      ],
+      "dom": [
+        "dialogs",
+        "window scroll"
+      ],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [
+        "state completo"
+      ],
+      "gamePaths": [
+        "scenarios"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "fecha dialogs",
+        "sorteia variante",
+        "persiste",
+        "renderiza",
+        "rola a página"
+      ],
+      "external": [
+        "scrollTo"
+      ],
+      "impactAreas": [
+        "estado",
+        "persistência",
+        "interface"
+      ]
     },
     {
-      "id": "FN-021", "name": "show", "kind": "function", "signature": "show(kicker, title, content, html = false, final = false)",
+      "id": "FN-021",
+      "name": "show",
+      "kind": "function",
+      "signature": "show(kicker, title, content, html = false, final = false)",
       "responsibility": "Configurar e abrir o diálogo genérico de mensagem ou desfecho.",
-      "source": { "file": "dist/app.js", "line": 21, "anchor": "function show(k,t,c,html=false,final=false)" },
-      "inputs": ["kicker", "título", "conteúdo", "modo HTML", "modo final"], "returns": "void", "calls": ["FN-001", "FN-022", "CB-023"],
-      "calledBy": ["FN-002", "FN-014", "FN-015", "FN-017"], "events": ["click em continuar ou novo caso"],
-      "dom": ["message-kicker", "message-title", "message-copy", "message-dialog"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [],
-      "sideEffects": ["atualização do DOM", "vinculação de onclick", "abertura de dialog"], "external": ["HTMLDialogElement"], "impactAreas": ["interface", "desfechos"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 22,
+        "anchor": "function show(k,t,c,html=false,final=false)"
+      },
+      "inputs": [
+        "kicker",
+        "título",
+        "conteúdo",
+        "modo HTML",
+        "modo final"
+      ],
+      "returns": "void",
+      "calls": [
+        "FN-001",
+        "FN-022",
+        "FN-020",
+        "CB-023",
+        "FN-030"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-014",
+        "FN-015",
+        "FN-017"
+      ],
+      "events": [
+        "click em continuar ou novo caso"
+      ],
+      "dom": [
+        "message-kicker",
+        "message-title",
+        "message-copy",
+        "message-dialog"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atualização do DOM",
+        "vinculação de onclick",
+        "abertura de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface",
+        "desfechos"
+      ]
     },
     {
-      "id": "FN-022", "name": "escape", "kind": "function", "signature": "escape(value)",
+      "id": "FN-022",
+      "name": "escape",
+      "kind": "function",
+      "signature": "escape(value)",
       "responsibility": "Escapar texto não confiável usando serialização segura pelo DOM.",
-      "source": { "file": "dist/app.js", "line": 21, "anchor": "function escape(v)" },
-      "inputs": ["valor"], "returns": "texto HTML escapado", "calls": [], "calledBy": ["FN-010", "FN-021"], "events": [], "dom": ["elemento div temporário"],
-      "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["criação de elemento DOM desconectado"], "external": ["DOM"], "impactAreas": ["interface", "segurança"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 22,
+        "anchor": "function escape(v)"
+      },
+      "inputs": [
+        "valor"
+      ],
+      "returns": "texto HTML escapado",
+      "calls": [],
+      "calledBy": [
+        "FN-010",
+        "FN-021"
+      ],
+      "events": [],
+      "dom": [
+        "elemento div temporário"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "criação de elemento DOM desconectado"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface",
+        "segurança"
+      ]
     },
     {
-      "id": "FN-023", "name": "closeAll", "kind": "function", "signature": "closeAll()",
+      "id": "FN-023",
+      "name": "closeAll",
+      "kind": "function",
+      "signature": "closeAll()",
       "responsibility": "Fechar todos os diálogos atualmente abertos.",
-      "source": { "file": "dist/app.js", "line": 21, "anchor": "function closeAll()" },
-      "inputs": [], "returns": "void", "calls": ["CB-024"], "calledBy": ["FN-015", "FN-020"], "events": [], "dom": ["dialog[open]"],
-      "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["fechamento de dialogs"], "external": ["DOM", "HTMLDialogElement"], "impactAreas": ["interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 22,
+        "anchor": "function closeAll()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "CB-024"
+      ],
+      "calledBy": [
+        "FN-015",
+        "FN-020"
+      ],
+      "events": [],
+      "dom": [
+        "dialog[open]"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "fechamento de dialogs"
+      ],
+      "external": [
+        "DOM",
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
     },
     {
-      "id": "FN-024", "name": "chars", "kind": "function", "signature": "chars()",
+      "id": "FN-024",
+      "name": "chars",
+      "kind": "function",
+      "signature": "chars()",
       "responsibility": "Atualizar a contagem de caracteres do caderno.",
-      "source": { "file": "dist/app.js", "line": 22, "anchor": "function chars()" },
-      "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-007", "CB-029"], "events": ["input no caderno"],
-      "dom": ["notebook", "char-count"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["atualização do DOM"], "external": ["DOM"], "impactAreas": ["interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "function chars()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-007",
+        "CB-029"
+      ],
+      "events": [
+        "input no caderno"
+      ],
+      "dom": [
+        "notebook",
+        "char-count"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atualização do DOM"
+      ],
+      "external": [
+        "DOM"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
     },
     {
-      "id": "FN-025", "name": "scene", "kind": "function", "signature": "async scene()",
+      "id": "FN-025",
+      "name": "scene",
+      "kind": "function",
+      "signature": "async scene()",
       "responsibility": "Inicializar a ambientação Three.js opcional e resiliente a falhas.",
-      "source": { "file": "dist/app.js", "line": 23, "anchor": "async function scene()" },
-      "inputs": [], "returns": "Promise<void>", "calls": ["FN-001", "FN-026", "CB-032"], "calledBy": [], "events": ["resize"], "dom": ["scene canvas"],
-      "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["import dinâmico", "criação de WebGL", "loop de animação", "listener global"],
-      "external": ["Three.js CDN", "WebGL", "requestAnimationFrame"], "impactAreas": ["Three.js", "interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 24,
+        "anchor": "async function scene()"
+      },
+      "inputs": [],
+      "returns": "Promise<void>",
+      "calls": [
+        "FN-001",
+        "FN-026",
+        "CB-032"
+      ],
+      "calledBy": [],
+      "events": [
+        "resize"
+      ],
+      "dom": [
+        "scene canvas"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "import dinâmico",
+        "criação de WebGL",
+        "loop de animação",
+        "listener global"
+      ],
+      "external": [
+        "Three.js CDN",
+        "WebGL",
+        "requestAnimationFrame"
+      ],
+      "impactAreas": [
+        "Three.js",
+        "interface"
+      ]
     },
     {
-      "id": "FN-026", "name": "scene.animate", "kind": "function-expression", "signature": "function a()",
+      "id": "FN-026",
+      "name": "scene.animate",
+      "kind": "function-expression",
+      "signature": "function a()",
       "responsibility": "Avançar a rotação do globo, renderizar o frame e reagendar o loop.",
-      "source": { "file": "dist/app.js", "line": 23, "anchor": "(function a(){" },
-      "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-025", "FN-026"], "events": ["animation frame"], "dom": ["scene canvas"],
-      "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["rotação do mesh", "render WebGL", "agendamento recursivo"],
-      "external": ["Three.js", "requestAnimationFrame"], "impactAreas": ["Three.js", "interface"]
+      "source": {
+        "file": "dist/app.js",
+        "line": 24,
+        "anchor": "(function a(){"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-026"
+      ],
+      "calledBy": [
+        "FN-025",
+        "FN-026"
+      ],
+      "events": [
+        "animation frame"
+      ],
+      "dom": [
+        "scene canvas"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "rotação do mesh",
+        "render WebGL",
+        "agendamento recursivo"
+      ],
+      "external": [
+        "Three.js",
+        "requestAnimationFrame"
+      ],
+      "impactAreas": [
+        "Three.js",
+        "interface"
+      ]
     },
-
-    { "id": "CB-001", "name": "loadGame.parseResponse", "kind": "arrow", "signature": "response => response.json()", "responsibility": "Decodificar a resposta HTTP do caso como JSON.", "source": { "file": "dist/app.js", "line": 5, "anchor": "fetch(src).then(r=>r.json())" }, "inputs": ["Response"], "returns": "Promise de JSON", "calls": [], "calledBy": ["FN-002"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["consumo do corpo HTTP"], "external": ["Fetch Response.json"], "impactAreas": ["dados"] },
-    { "id": "CB-002", "name": "loc.match", "kind": "arrow", "signature": "location => location.id === id", "responsibility": "Comparar uma cidade com o ID procurado.", "source": { "file": "dist/app.js", "line": 7, "anchor": "game.locations.find(x=>x.id===id)" }, "inputs": ["location"], "returns": "boolean", "calls": [], "calledBy": ["FN-005"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["locations[].id"], "storage": [], "sideEffects": [], "external": ["Array.find"], "impactAreas": ["dados", "navegação"] },
-    { "id": "CB-003", "name": "ev.match", "kind": "arrow", "signature": "evidence => evidence.id === id", "responsibility": "Comparar uma evidência com o ID procurado.", "source": { "file": "dist/app.js", "line": 7, "anchor": "game.evidence.find(x=>x.id===id)" }, "inputs": ["evidence"], "returns": "boolean", "calls": [], "calledBy": ["FN-006"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["evidence[].id"], "storage": [], "sideEffects": [], "external": ["Array.find"], "impactAreas": ["dados", "evidências"] },
-    { "id": "CB-004", "name": "map.renderCity", "kind": "arrow", "signature": "city => HTML", "responsibility": "Projetar uma cidade conhecida em botão HTML com estado, custo e nome acessível.", "source": { "file": "dist/app.js", "line": 10, "anchor": "visible.map(c=>{" }, "inputs": ["location conhecida"], "returns": "string HTML", "calls": [], "calledBy": ["FN-009"], "events": [], "dom": ["botão .city"], "stateReads": ["location", "visited", "finished"], "stateWrites": [], "gamePaths": ["locations", "navigation", "travel"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "navegação", "tempo"] },
-    { "id": "CB-005", "name": "map.bindCity", "kind": "arrow", "signature": "button => assignment", "responsibility": "Vincular o clique de cada cidade disponível.", "source": { "file": "dist/app.js", "line": 10, "anchor": "forEach(b=>b.onclick=()=>openTravel" }, "inputs": ["botão city"], "returns": "função atribuída", "calls": ["CB-006"], "calledBy": ["FN-009"], "events": ["bind click"], "dom": [".city:not(:disabled)"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["atribuição de onclick"], "external": ["NodeList.forEach"], "impactAreas": ["interface", "navegação"] },
-    { "id": "CB-006", "name": "map.onCityClick", "kind": "arrow", "signature": "() => openTravel(button.dataset.city)", "responsibility": "Encaminhar o destino clicado para a confirmação de viagem.", "source": { "file": "dist/app.js", "line": 10, "anchor": "b.onclick=()=>openTravel(b.dataset.city)" }, "inputs": [], "returns": "void", "calls": ["FN-013"], "calledBy": ["CB-005"], "events": ["click em cidade"], "dom": ["data-city"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["abertura de confirmação"], "external": [], "impactAreas": ["interface", "navegação"] },
-    { "id": "CB-007", "name": "map.resolveRouteLocation", "kind": "arrow", "signature": "id => loc(id)", "responsibility": "Resolver cada ID da rota em uma cidade.", "source": { "file": "dist/app.js", "line": 10, "anchor": "state.route.map(id=>loc(id))" }, "inputs": ["ID de cidade"], "returns": "location", "calls": ["FN-005"], "calledBy": ["FN-009"], "events": [], "dom": [], "stateReads": ["route"], "stateWrites": [], "gamePaths": ["locations"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["navegação"] },
-    { "id": "CB-008", "name": "map.projectRoutePoint", "kind": "arrow", "signature": "city => 'x,y'", "responsibility": "Converter coordenadas percentuais de uma cidade em ponto SVG.", "source": { "file": "dist/app.js", "line": 10, "anchor": ".map(c=>`${c.x*10},${c.y*6.2}`)" }, "inputs": ["location"], "returns": "coordenada SVG", "calls": [], "calledBy": ["FN-009"], "events": [], "dom": ["route-lines polyline"], "stateReads": [], "stateWrites": [], "gamePaths": ["locations[].x", "locations[].y"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "navegação"] },
-    { "id": "CB-009", "name": "place.renderAction", "kind": "arrow", "signature": "action => HTML", "responsibility": "Projetar uma ação do local em botão, respeitando execução e mandado.", "source": { "file": "dist/app.js", "line": 11, "anchor": "l.actions.map(a=>{" }, "inputs": ["action"], "returns": "string HTML", "calls": [], "calledBy": ["FN-010"], "events": [], "dom": ["botão .investigate"], "stateReads": ["actions", "warrant", "finished"], "stateWrites": [], "gamePaths": ["locations[].actions"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "evidências", "dossiê"] },
-    { "id": "CB-010", "name": "place.bindAction", "kind": "arrow", "signature": "button => assignment", "responsibility": "Vincular o clique de cada ação habilitada.", "source": { "file": "dist/app.js", "line": 11, "anchor": "forEach(b=>b.onclick=()=>act" }, "inputs": ["botão investigate"], "returns": "função atribuída", "calls": ["CB-011"], "calledBy": ["FN-010"], "events": ["bind click"], "dom": [".investigate:not(:disabled)"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["atribuição de onclick"], "external": ["NodeList.forEach"], "impactAreas": ["interface", "evidências"] },
-    { "id": "CB-011", "name": "place.onActionClick", "kind": "arrow", "signature": "() => act(button.dataset.action)", "responsibility": "Encaminhar a ação clicada ao motor investigativo.", "source": { "file": "dist/app.js", "line": 11, "anchor": "b.onclick=()=>act(b.dataset.action)" }, "inputs": [], "returns": "void", "calls": ["FN-014"], "calledBy": ["CB-010"], "events": ["click em ação"], "dom": ["data-action"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["execução da ação"], "external": [], "impactAreas": ["interface", "estado", "evidências"] },
-    { "id": "CB-012", "name": "evidence.renderItem", "kind": "arrow", "signature": "evidence => HTML", "responsibility": "Projetar somente uma evidência encontrada em cartão HTML.", "source": { "file": "dist/app.js", "line": 12, "anchor": "found.map(e=>`<article" }, "inputs": ["evidence encontrada"], "returns": "string HTML", "calls": [], "calledBy": ["FN-011"], "events": [], "dom": ["article.evidence.found"], "stateReads": ["evidence"], "stateWrites": [], "gamePaths": ["evidence"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "evidências"] },
-    { "id": "CB-013", "name": "route.renderItem", "kind": "arrow", "signature": "(id, index) => HTML", "responsibility": "Projetar uma etapa da rota em item numerado.", "source": { "file": "dist/app.js", "line": 13, "anchor": "state.route.map((id,i)=>`<div class=\"route-item\">" }, "inputs": ["ID de cidade", "índice"], "returns": "string HTML", "calls": ["FN-005"], "calledBy": ["FN-012"], "events": [], "dom": [".route-item"], "stateReads": ["route"], "stateWrites": [], "gamePaths": ["locations"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "navegação"] },
-    { "id": "CB-014", "name": "travel.confirm", "kind": "arrow", "signature": "() => void", "responsibility": "Consumir o custo e efetivar a viagem confirmada.", "source": { "file": "dist/app.js", "line": 15, "anchor": "$(\"#confirm-travel\").onclick=()=>{" }, "inputs": [], "returns": "void", "calls": ["FN-015", "FN-004", "FN-007"], "calledBy": [], "events": ["click em confirm-travel"], "dom": ["confirm-travel", "travel-dialog"], "stateReads": ["location", "hours", "visited"], "stateWrites": ["location", "route", "visited"], "gamePaths": ["travel"], "storage": ["STORE + metadata.id"], "sideEffects": ["persistência", "fechamento de dialog", "renderização"], "external": [], "impactAreas": ["navegação", "tempo", "estado", "persistência", "interface"] },
-    { "id": "CB-015", "name": "act.findAction", "kind": "arrow", "signature": "action => action.id === id", "responsibility": "Localizar a ação selecionada no local atual.", "source": { "file": "dist/app.js", "line": 16, "anchor": "loc().actions.find(x=>x.id===id)" }, "inputs": ["action"], "returns": "boolean", "calls": [], "calledBy": ["FN-014"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["locations[].actions[].id"], "storage": [], "sideEffects": [], "external": ["Array.find"], "impactAreas": ["dados", "evidências"] },
-    { "id": "CB-016", "name": "act.hasRequiredEvidence", "kind": "arrow", "signature": "id => state.evidence.includes(id)", "responsibility": "Verificar a presença de cada evidência essencial para a prisão.", "source": { "file": "dist/app.js", "line": 16, "anchor": "req.required_evidence.every(id=>state.evidence.includes(id))" }, "inputs": ["ID de evidência"], "returns": "boolean", "calls": [], "calledBy": ["FN-014"], "events": [], "dom": [], "stateReads": ["evidence"], "stateWrites": [], "gamePaths": ["arrest_requirements.required_evidence"], "storage": [], "sideEffects": [], "external": ["Array.every"], "impactAreas": ["evidências", "desfechos"] },
-    { "id": "CB-017", "name": "dossier.renderField", "kind": "arrow", "signature": "field => HTML", "responsibility": "Projetar um campo declarativo do dossiê.", "source": { "file": "dist/app.js", "line": 18, "anchor": "game.dossier.fields.map(x=>`<label>" }, "inputs": ["campo do dossiê"], "returns": "string HTML", "calls": ["CB-018"], "calledBy": ["FN-016"], "events": [], "dom": ["label e select"], "stateReads": [], "stateWrites": [], "gamePaths": ["dossier.fields"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "dossiê"] },
-    { "id": "CB-018", "name": "dossier.renderOption", "kind": "arrow", "signature": "option => HTML", "responsibility": "Projetar uma opção de atributo do dossiê.", "source": { "file": "dist/app.js", "line": 18, "anchor": "x.options.map(o=>`<option>${o}</option>`)" }, "inputs": ["opção"], "returns": "string HTML", "calls": [], "calledBy": ["CB-017"], "events": [], "dom": ["option"], "stateReads": [], "stateWrites": [], "gamePaths": ["dossier.fields[].options"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["interface", "dossiê"] },
-    { "id": "CB-019", "name": "submitDossier.keepChosen", "kind": "arrow", "signature": "([key, value]) => value", "responsibility": "Descartar atributos desconhecidos do cruzamento.", "source": { "file": "dist/app.js", "line": 19, "anchor": "Object.entries(data).filter(([,v])=>v)" }, "inputs": ["par atributo/valor"], "returns": "valor truthy ou falsy", "calls": [], "calledBy": ["FN-017"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": [], "external": ["Array.filter"], "impactAreas": ["dossiê"] },
-    { "id": "CB-020", "name": "submitDossier.matchSuspect", "kind": "arrow", "signature": "suspect => chosen.every(...) ", "responsibility": "Manter suspeitos compatíveis com todos os atributos escolhidos.", "source": { "file": "dist/app.js", "line": 19, "anchor": "game.suspects.filter(s=>chosen.every" }, "inputs": ["suspect"], "returns": "boolean", "calls": ["CB-021"], "calledBy": ["FN-017"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["suspects"], "storage": [], "sideEffects": [], "external": ["Array.filter"], "impactAreas": ["dados", "dossiê"] },
-    { "id": "CB-021", "name": "submitDossier.matchAttribute", "kind": "arrow", "signature": "([key, value]) => suspect[key] === value", "responsibility": "Comparar um atributo escolhido com o registro do suspeito.", "source": { "file": "dist/app.js", "line": 19, "anchor": "chosen.every(([k,v])=>s[k]===v)" }, "inputs": ["par atributo/valor"], "returns": "boolean", "calls": [], "calledBy": ["CB-020"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["suspects[]"], "storage": [], "sideEffects": [], "external": ["Array.every"], "impactAreas": ["dados", "dossiê"] },
-    { "id": "CB-022", "name": "submitDossier.suspectName", "kind": "arrow", "signature": "suspect => suspect.name", "responsibility": "Extrair nomes para a mensagem de múltiplos suspeitos.", "source": { "file": "dist/app.js", "line": 19, "anchor": "matches.map(s=>s.name)" }, "inputs": ["suspect"], "returns": "nome", "calls": [], "calledBy": ["FN-017"], "events": [], "dom": [], "stateReads": [], "stateWrites": [], "gamePaths": ["suspects[].name"], "storage": [], "sideEffects": [], "external": ["Array.map"], "impactAreas": ["dossiê", "interface"] },
-    { "id": "CB-023", "name": "show.continue", "kind": "arrow", "signature": "() => message.close()", "responsibility": "Fechar uma mensagem não final quando o jogador continua.", "source": { "file": "dist/app.js", "line": 21, "anchor": "button.onclick=final?newCase:()=>el.message.close()" }, "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-021"], "events": ["click em continuar"], "dom": ["message-dialog"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["fechamento de dialog"], "external": ["HTMLDialogElement"], "impactAreas": ["interface"] },
-    { "id": "CB-024", "name": "closeAll.closeDialog", "kind": "arrow", "signature": "dialog => dialog.close()", "responsibility": "Fechar individualmente cada diálogo aberto.", "source": { "file": "dist/app.js", "line": 21, "anchor": "forEach(d=>d.close())" }, "inputs": ["dialog"], "returns": "void", "calls": [], "calledBy": ["FN-023"], "events": [], "dom": ["dialog[open]"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["fechamento de dialog"], "external": ["NodeList.forEach", "HTMLDialogElement"], "impactAreas": ["interface"] },
-    { "id": "CB-025", "name": "events.openDossier", "kind": "arrow", "signature": "() => dossier.showModal()", "responsibility": "Abrir o diálogo do dossiê.", "source": { "file": "dist/app.js", "line": 22, "anchor": "$(\"#dossier-button\").onclick=()=>el.dossier.showModal()" }, "inputs": [], "returns": "void", "calls": [], "calledBy": [], "events": ["click em dossier-button"], "dom": ["dossier-button", "dossier-dialog"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["abertura de dialog"], "external": ["HTMLDialogElement"], "impactAreas": ["interface", "dossiê"] },
-    { "id": "CB-026", "name": "events.openNotes", "kind": "arrow", "signature": "() => notes.showModal()", "responsibility": "Abrir o diálogo do caderno.", "source": { "file": "dist/app.js", "line": 22, "anchor": "$(\"#notes-button\").onclick=()=>el.notes.showModal()" }, "inputs": [], "returns": "void", "calls": [], "calledBy": [], "events": ["click em notes-button"], "dom": ["notes-button", "notes-dialog"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["abertura de dialog"], "external": ["HTMLDialogElement"], "impactAreas": ["interface"] },
-    { "id": "CB-027", "name": "events.bindClose", "kind": "arrow", "signature": "button => assignment", "responsibility": "Vincular cada botão declarativo de fechamento ao seu diálogo.", "source": { "file": "dist/app.js", "line": 22, "anchor": "forEach(b=>b.onclick=()=>document.getElementById" }, "inputs": ["botão data-close"], "returns": "função atribuída", "calls": ["CB-028"], "calledBy": [], "events": ["bind click"], "dom": ["[data-close]"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["atribuição de onclick"], "external": ["NodeList.forEach"], "impactAreas": ["interface"] },
-    { "id": "CB-028", "name": "events.closeTarget", "kind": "arrow", "signature": "() => getElementById(button.dataset.close).close()", "responsibility": "Fechar o diálogo indicado pelo atributo data-close.", "source": { "file": "dist/app.js", "line": 22, "anchor": "b.onclick=()=>document.getElementById(b.dataset.close).close()" }, "inputs": [], "returns": "void", "calls": [], "calledBy": ["CB-027"], "events": ["click em data-close"], "dom": ["data-close", "dialog alvo"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["fechamento de dialog"], "external": ["DOM", "HTMLDialogElement"], "impactAreas": ["interface"] },
-    { "id": "CB-029", "name": "events.notebookInput", "kind": "arrow", "signature": "() => void", "responsibility": "Copiar o caderno para state, atualizar contagem e persistir.", "source": { "file": "dist/app.js", "line": 22, "anchor": "el.notebook.oninput=()=>{" }, "inputs": [], "returns": "void", "calls": ["FN-024", "FN-004"], "calledBy": [], "events": ["input no notebook"], "dom": ["notebook", "char-count"], "stateReads": [], "stateWrites": ["notes"], "gamePaths": [], "storage": ["STORE + metadata.id"], "sideEffects": ["persistência", "atualização do DOM"], "external": [], "impactAreas": ["interface", "estado", "persistência"] },
-    { "id": "CB-030", "name": "events.resetCase", "kind": "arrow", "signature": "() => void", "responsibility": "Confirmar e reiniciar toda a investigação atual.", "source": { "file": "dist/app.js", "line": 22, "anchor": "$(\"#reset-button\").onclick=()=>{" }, "inputs": [], "returns": "void", "calls": ["FN-001", "FN-003", "FN-007"], "calledBy": [], "events": ["click em reset-button"], "dom": ["reset-button", "confirm"], "stateReads": [], "stateWrites": ["state completo"], "gamePaths": ["metadata.id"], "storage": ["STORE + metadata.id"], "sideEffects": ["confirmação", "remoção de localStorage", "renderização"], "external": ["confirm", "localStorage"], "impactAreas": ["estado", "persistência", "interface"] },
-    { "id": "CB-031", "name": "events.importJson", "kind": "arrow", "signature": "async event => void", "responsibility": "Ler o arquivo escolhido, decodificar JSON e carregar o novo caso.", "source": { "file": "dist/app.js", "line": 22, "anchor": "$(\"#json-input\").onchange=async e=>{" }, "inputs": ["evento change"], "returns": "Promise<void>", "calls": ["FN-001", "FN-002"], "calledBy": [], "events": ["change em json-input"], "dom": ["json-input"], "stateReads": [], "stateWrites": [], "gamePaths": ["caso importado completo"], "storage": [], "sideEffects": ["leitura de arquivo", "troca de caso", "limpeza do input"], "external": ["File API", "JSON.parse"], "impactAreas": ["dados", "estado", "interface"] },
-    { "id": "CB-032", "name": "scene.resize", "kind": "arrow", "signature": "() => void", "responsibility": "Recalcular câmera e renderer quando a janela muda de tamanho.", "source": { "file": "dist/app.js", "line": 23, "anchor": "addEventListener(\"resize\",()=>{" }, "inputs": [], "returns": "void", "calls": [], "calledBy": ["FN-025"], "events": ["window resize"], "dom": ["scene canvas", "window"], "stateReads": [], "stateWrites": [], "gamePaths": [], "storage": [], "sideEffects": ["atualização de câmera e tamanho WebGL"], "external": ["Three.js", "Window"], "impactAreas": ["Three.js", "interface"] }
+    {
+      "id": "FN-027",
+      "name": "pickScenario",
+      "kind": "function",
+      "signature": "pickScenario(exclude = null)",
+      "responsibility": "Sortear um cenário disponível, excluindo o anterior quando houver alternativa.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 7,
+        "anchor": "function pickScenario(exclude=null)"
+      },
+      "inputs": [
+        "ID opcional a excluir"
+      ],
+      "returns": "ID do cenário ou null",
+      "calls": [],
+      "calledBy": [
+        "FN-002",
+        "FN-003"
+      ],
+      "events": [
+        "primeiro carregamento",
+        "novo caso",
+        "reset"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "scenarios[].id"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "seleção pseudoaleatória"
+      ],
+      "external": [
+        "Math.random",
+        "Math.floor"
+      ],
+      "impactAreas": [
+        "dados",
+        "estado",
+        "navegação"
+      ]
+    },
+    {
+      "id": "FN-028",
+      "name": "scenario",
+      "kind": "function",
+      "signature": "scenario()",
+      "responsibility": "Resolver a configuração da variante persistida no estado atual.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 7,
+        "anchor": "function scenario()"
+      },
+      "inputs": [],
+      "returns": "cenário ativo ou null",
+      "calls": [],
+      "calledBy": [
+        "FN-006",
+        "FN-007",
+        "FN-009",
+        "FN-029"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "scenarios[].id"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "dados",
+        "estado"
+      ]
+    },
+    {
+      "id": "FN-029",
+      "name": "actionData",
+      "kind": "function",
+      "signature": "actionData(action)",
+      "responsibility": "Combinar a ação-base com as substituições do cenário ativo.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 7,
+        "anchor": "function actionData(action)"
+      },
+      "inputs": [
+        "ação-base"
+      ],
+      "returns": "ação efetiva",
+      "calls": [
+        "FN-028"
+      ],
+      "calledBy": [
+        "FN-014",
+        "CB-009"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "scenarios[].action_overrides"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Object.assign"
+      ],
+      "impactAreas": [
+        "dados",
+        "evidências",
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-001",
+      "name": "loadGame.parseResponse",
+      "kind": "arrow",
+      "signature": "response => response.json()",
+      "responsibility": "Decodificar a resposta HTTP do caso como JSON.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 6,
+        "anchor": "fetch(src).then(r=>r.json())"
+      },
+      "inputs": [
+        "Response"
+      ],
+      "returns": "Promise de JSON",
+      "calls": [],
+      "calledBy": [
+        "FN-002"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "consumo do corpo HTTP"
+      ],
+      "external": [
+        "Fetch Response.json"
+      ],
+      "impactAreas": [
+        "dados"
+      ]
+    },
+    {
+      "id": "CB-002",
+      "name": "loc.match",
+      "kind": "arrow",
+      "signature": "location => location.id === id",
+      "responsibility": "Comparar uma cidade com o ID procurado.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 8,
+        "anchor": "game.locations.find(x=>x.id===id)"
+      },
+      "inputs": [
+        "location"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-005"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations[].id"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.find"
+      ],
+      "impactAreas": [
+        "dados",
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-003",
+      "name": "ev.match",
+      "kind": "arrow",
+      "signature": "evidence => evidence.id === id",
+      "responsibility": "Comparar uma evidência com o ID procurado.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 8,
+        "anchor": "game.evidence.find(x=>x.id===id)"
+      },
+      "inputs": [
+        "evidence"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-006"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "evidence[].id"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.find"
+      ],
+      "impactAreas": [
+        "dados",
+        "evidências"
+      ]
+    },
+    {
+      "id": "CB-004",
+      "name": "map.renderCity",
+      "kind": "arrow",
+      "signature": "city => HTML",
+      "responsibility": "Projetar uma cidade conhecida em botão HTML com estado, custo e nome acessível.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": "visible.map(c=>{"
+      },
+      "inputs": [
+        "location conhecida"
+      ],
+      "returns": "string HTML",
+      "calls": [],
+      "calledBy": [
+        "FN-009"
+      ],
+      "events": [],
+      "dom": [
+        "botão .city"
+      ],
+      "stateReads": [
+        "location",
+        "visited",
+        "finished"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations",
+        "navigation",
+        "travel"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação",
+        "tempo"
+      ]
+    },
+    {
+      "id": "CB-005",
+      "name": "map.bindCity",
+      "kind": "arrow",
+      "signature": "button => assignment",
+      "responsibility": "Vincular o clique de cada cidade disponível.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": "forEach(b=>b.onclick=()=>openTravel"
+      },
+      "inputs": [
+        "botão city"
+      ],
+      "returns": "função atribuída",
+      "calls": [
+        "CB-006"
+      ],
+      "calledBy": [
+        "FN-009"
+      ],
+      "events": [
+        "bind click"
+      ],
+      "dom": [
+        ".city:not(:disabled)"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atribuição de onclick"
+      ],
+      "external": [
+        "NodeList.forEach"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-006",
+      "name": "map.onCityClick",
+      "kind": "arrow",
+      "signature": "() => openTravel(button.dataset.city)",
+      "responsibility": "Encaminhar o destino clicado para a confirmação de viagem.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": "b.onclick=()=>openTravel(b.dataset.city)"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-013"
+      ],
+      "calledBy": [
+        "CB-005"
+      ],
+      "events": [
+        "click em cidade"
+      ],
+      "dom": [
+        "data-city"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "abertura de confirmação"
+      ],
+      "external": [],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-007",
+      "name": "map.resolveRouteLocation",
+      "kind": "arrow",
+      "signature": "id => loc(id)",
+      "responsibility": "Resolver cada ID da rota em uma cidade.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": "state.route.map(id=>loc(id))"
+      },
+      "inputs": [
+        "ID de cidade"
+      ],
+      "returns": "location",
+      "calls": [
+        "FN-005"
+      ],
+      "calledBy": [
+        "FN-009"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "route"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-008",
+      "name": "map.projectRoutePoint",
+      "kind": "arrow",
+      "signature": "city => 'x,y'",
+      "responsibility": "Converter coordenadas percentuais de uma cidade em ponto SVG.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 11,
+        "anchor": ".map(c=>`${c.x*10},${c.y*6.2}`)"
+      },
+      "inputs": [
+        "location"
+      ],
+      "returns": "coordenada SVG",
+      "calls": [],
+      "calledBy": [
+        "FN-009"
+      ],
+      "events": [],
+      "dom": [
+        "route-lines polyline"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations[].x",
+        "locations[].y"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-009",
+      "name": "place.renderAction",
+      "kind": "arrow",
+      "signature": "baseAction => HTML",
+      "responsibility": "Aplicar a variante e projetar a ação em botão, respeitando execução e mandado.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 12,
+        "anchor": "l.actions.map(base=>{"
+      },
+      "inputs": [
+        "ação-base"
+      ],
+      "returns": "string HTML",
+      "calls": [
+        "FN-029"
+      ],
+      "calledBy": [
+        "FN-010"
+      ],
+      "events": [],
+      "dom": [
+        "botão .investigate"
+      ],
+      "stateReads": [
+        "actions",
+        "warrant",
+        "finished",
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations[].actions",
+        "scenarios[].action_overrides"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "evidências",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-010",
+      "name": "place.bindAction",
+      "kind": "arrow",
+      "signature": "button => assignment",
+      "responsibility": "Vincular o clique de cada ação habilitada.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 12,
+        "anchor": "forEach(b=>b.onclick=()=>act"
+      },
+      "inputs": [
+        "botão investigate"
+      ],
+      "returns": "função atribuída",
+      "calls": [
+        "CB-011"
+      ],
+      "calledBy": [
+        "FN-010"
+      ],
+      "events": [
+        "bind click"
+      ],
+      "dom": [
+        ".investigate:not(:disabled)"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atribuição de onclick"
+      ],
+      "external": [
+        "NodeList.forEach"
+      ],
+      "impactAreas": [
+        "interface",
+        "evidências"
+      ]
+    },
+    {
+      "id": "CB-011",
+      "name": "place.onActionClick",
+      "kind": "arrow",
+      "signature": "() => act(button.dataset.action)",
+      "responsibility": "Encaminhar a ação clicada ao motor investigativo.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 12,
+        "anchor": "b.onclick=()=>act(b.dataset.action)"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-014"
+      ],
+      "calledBy": [
+        "CB-010"
+      ],
+      "events": [
+        "click em ação"
+      ],
+      "dom": [
+        "data-action"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "execução da ação"
+      ],
+      "external": [],
+      "impactAreas": [
+        "interface",
+        "estado",
+        "evidências"
+      ]
+    },
+    {
+      "id": "CB-012",
+      "name": "evidence.renderItem",
+      "kind": "arrow",
+      "signature": "evidence => HTML",
+      "responsibility": "Projetar somente uma evidência encontrada em cartão HTML.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 13,
+        "anchor": "found.map(e=>`<article"
+      },
+      "inputs": [
+        "evidence encontrada"
+      ],
+      "returns": "string HTML",
+      "calls": [],
+      "calledBy": [
+        "FN-011"
+      ],
+      "events": [],
+      "dom": [
+        "article.evidence.found"
+      ],
+      "stateReads": [
+        "evidence"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "evidence"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "evidências"
+      ]
+    },
+    {
+      "id": "CB-013",
+      "name": "route.renderItem",
+      "kind": "arrow",
+      "signature": "(id, index) => HTML",
+      "responsibility": "Projetar uma etapa da rota em item numerado.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 14,
+        "anchor": "state.route.map((id,i)=>`<div class=\"route-item\">"
+      },
+      "inputs": [
+        "ID de cidade",
+        "índice"
+      ],
+      "returns": "string HTML",
+      "calls": [
+        "FN-005"
+      ],
+      "calledBy": [
+        "FN-012"
+      ],
+      "events": [],
+      "dom": [
+        ".route-item"
+      ],
+      "stateReads": [
+        "route"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
+    },
+    {
+      "id": "CB-014",
+      "name": "travel.confirm",
+      "kind": "arrow",
+      "signature": "() => void",
+      "responsibility": "Consumir o custo e efetivar a viagem confirmada.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 16,
+        "anchor": "$(\"#confirm-travel\").onclick=()=>{"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-015",
+        "FN-004",
+        "FN-007"
+      ],
+      "calledBy": [],
+      "events": [
+        "click em confirm-travel"
+      ],
+      "dom": [
+        "confirm-travel",
+        "travel-dialog"
+      ],
+      "stateReads": [
+        "location",
+        "hours",
+        "visited"
+      ],
+      "stateWrites": [
+        "location",
+        "route",
+        "visited"
+      ],
+      "gamePaths": [
+        "travel"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "persistência",
+        "fechamento de dialog",
+        "renderização"
+      ],
+      "external": [],
+      "impactAreas": [
+        "navegação",
+        "tempo",
+        "estado",
+        "persistência",
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-015",
+      "name": "act.findAction",
+      "kind": "arrow",
+      "signature": "action => action.id === id",
+      "responsibility": "Localizar a ação selecionada no local atual.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 17,
+        "anchor": "loc().actions.find(x=>x.id===id)"
+      },
+      "inputs": [
+        "action"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-014"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations[].actions[].id"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.find"
+      ],
+      "impactAreas": [
+        "dados",
+        "evidências"
+      ]
+    },
+    {
+      "id": "CB-016",
+      "name": "act.hasRequiredEvidence",
+      "kind": "arrow",
+      "signature": "id => state.evidence.includes(id)",
+      "responsibility": "Verificar a presença de cada evidência essencial para a prisão.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 17,
+        "anchor": "req.required_evidence.every(id=>state.evidence.includes(id))"
+      },
+      "inputs": [
+        "ID de evidência"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-014"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "evidence"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "arrest_requirements.required_evidence"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.every"
+      ],
+      "impactAreas": [
+        "evidências",
+        "desfechos"
+      ]
+    },
+    {
+      "id": "CB-017",
+      "name": "dossier.renderField",
+      "kind": "arrow",
+      "signature": "field => HTML",
+      "responsibility": "Projetar um campo declarativo do dossiê.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 19,
+        "anchor": "game.dossier.fields.map(x=>`<label>"
+      },
+      "inputs": [
+        "campo do dossiê"
+      ],
+      "returns": "string HTML",
+      "calls": [
+        "CB-018"
+      ],
+      "calledBy": [
+        "FN-016"
+      ],
+      "events": [],
+      "dom": [
+        "label e select"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "dossier.fields"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-018",
+      "name": "dossier.renderOption",
+      "kind": "arrow",
+      "signature": "option => HTML",
+      "responsibility": "Projetar uma opção de atributo do dossiê.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 19,
+        "anchor": "x.options.map(o=>`<option>${o}</option>`)"
+      },
+      "inputs": [
+        "opção"
+      ],
+      "returns": "string HTML",
+      "calls": [],
+      "calledBy": [
+        "CB-017"
+      ],
+      "events": [],
+      "dom": [
+        "option"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "dossier.fields[].options"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "interface",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-019",
+      "name": "submitDossier.keepChosen",
+      "kind": "arrow",
+      "signature": "([key, value]) => value",
+      "responsibility": "Descartar atributos desconhecidos do cruzamento.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "Object.entries(data).filter(([,v])=>v)"
+      },
+      "inputs": [
+        "par atributo/valor"
+      ],
+      "returns": "valor truthy ou falsy",
+      "calls": [],
+      "calledBy": [
+        "FN-017"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.filter"
+      ],
+      "impactAreas": [
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-020",
+      "name": "submitDossier.matchSuspect",
+      "kind": "arrow",
+      "signature": "suspect => chosen.every(...) ",
+      "responsibility": "Manter suspeitos compatíveis com todos os atributos escolhidos.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "game.suspects.filter(s=>chosen.every"
+      },
+      "inputs": [
+        "suspect"
+      ],
+      "returns": "boolean",
+      "calls": [
+        "CB-021"
+      ],
+      "calledBy": [
+        "FN-017"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "suspects"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.filter"
+      ],
+      "impactAreas": [
+        "dados",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-021",
+      "name": "submitDossier.matchAttribute",
+      "kind": "arrow",
+      "signature": "([key, value]) => suspect[key] === value",
+      "responsibility": "Comparar um atributo escolhido com o registro do suspeito.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "chosen.every(([k,v])=>s[k]===v)"
+      },
+      "inputs": [
+        "par atributo/valor"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "CB-020"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "suspects[]"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.every"
+      ],
+      "impactAreas": [
+        "dados",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-022",
+      "name": "submitDossier.suspectName",
+      "kind": "arrow",
+      "signature": "suspect => suspect.name",
+      "responsibility": "Extrair nomes para a mensagem de múltiplos suspeitos.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "matches.map(s=>s.name)"
+      },
+      "inputs": [
+        "suspect"
+      ],
+      "returns": "nome",
+      "calls": [],
+      "calledBy": [
+        "FN-017"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "suspects[].name"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [
+        "Array.map"
+      ],
+      "impactAreas": [
+        "dossiê",
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-023",
+      "name": "show.continue",
+      "kind": "arrow",
+      "signature": "() => message.close()",
+      "responsibility": "Fechar uma mensagem não final quando o jogador continua.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 22,
+        "anchor": "button.onclick=final?newCase:()=>el.message.close()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-021"
+      ],
+      "events": [
+        "click em continuar"
+      ],
+      "dom": [
+        "message-dialog"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "fechamento de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-024",
+      "name": "closeAll.closeDialog",
+      "kind": "arrow",
+      "signature": "dialog => dialog.close()",
+      "responsibility": "Fechar individualmente cada diálogo aberto.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 22,
+        "anchor": "forEach(d=>d.close())"
+      },
+      "inputs": [
+        "dialog"
+      ],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-023"
+      ],
+      "events": [],
+      "dom": [
+        "dialog[open]"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "fechamento de dialog"
+      ],
+      "external": [
+        "NodeList.forEach",
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-025",
+      "name": "events.openDossier",
+      "kind": "arrow",
+      "signature": "() => dossier.showModal()",
+      "responsibility": "Abrir o diálogo do dossiê.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "$(\"#dossier-button\").onclick=()=>el.dossier.showModal()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-001"
+      ],
+      "calledBy": [],
+      "events": [
+        "click em dossier-button"
+      ],
+      "dom": [
+        "dossier-button",
+        "dossier-dialog"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "abertura de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface",
+        "dossiê"
+      ]
+    },
+    {
+      "id": "CB-026",
+      "name": "events.openNotes",
+      "kind": "arrow",
+      "signature": "() => notes.showModal()",
+      "responsibility": "Abrir o diálogo do caderno.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "$(\"#notes-button\").onclick=()=>el.notes.showModal()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-001"
+      ],
+      "calledBy": [],
+      "events": [
+        "click em notes-button"
+      ],
+      "dom": [
+        "notes-button",
+        "notes-dialog"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "abertura de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-027",
+      "name": "events.bindClose",
+      "kind": "arrow",
+      "signature": "button => assignment",
+      "responsibility": "Vincular cada botão declarativo de fechamento ao seu diálogo.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "forEach(b=>b.onclick=()=>document.getElementById"
+      },
+      "inputs": [
+        "botão data-close"
+      ],
+      "returns": "função atribuída",
+      "calls": [
+        "CB-028"
+      ],
+      "calledBy": [],
+      "events": [
+        "bind click"
+      ],
+      "dom": [
+        "[data-close]"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atribuição de onclick"
+      ],
+      "external": [
+        "NodeList.forEach"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-028",
+      "name": "events.closeTarget",
+      "kind": "arrow",
+      "signature": "() => getElementById(button.dataset.close).close()",
+      "responsibility": "Fechar o diálogo indicado pelo atributo data-close.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "b.onclick=()=>document.getElementById(b.dataset.close).close()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "CB-027"
+      ],
+      "events": [
+        "click em data-close"
+      ],
+      "dom": [
+        "data-close",
+        "dialog alvo"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "fechamento de dialog"
+      ],
+      "external": [
+        "DOM",
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-029",
+      "name": "events.notebookInput",
+      "kind": "arrow",
+      "signature": "() => void",
+      "responsibility": "Copiar o caderno para state, atualizar contagem e persistir.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "el.notebook.oninput=()=>{"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-024",
+        "FN-004"
+      ],
+      "calledBy": [],
+      "events": [
+        "input no notebook"
+      ],
+      "dom": [
+        "notebook",
+        "char-count"
+      ],
+      "stateReads": [],
+      "stateWrites": [
+        "notes"
+      ],
+      "gamePaths": [],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "persistência",
+        "atualização do DOM"
+      ],
+      "external": [],
+      "impactAreas": [
+        "interface",
+        "estado",
+        "persistência"
+      ]
+    },
+    {
+      "id": "CB-030",
+      "name": "events.resetCase",
+      "kind": "arrow",
+      "signature": "() => void",
+      "responsibility": "Confirmar e reiniciar a investigação com outra variante quando possível.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "$(\"#reset-button\").onclick=()=>{if(confirm(\"Reiniciar toda a investigação?\")){const previous=state.scenario;localStorage.removeItem(saveKey()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-001",
+        "FN-003",
+        "FN-004",
+        "FN-007",
+        "FN-031"
+      ],
+      "calledBy": [],
+      "events": [
+        "click em reset-button"
+      ],
+      "dom": [
+        "reset-button",
+        "confirm"
+      ],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [
+        "state completo"
+      ],
+      "gamePaths": [
+        "metadata.id",
+        "scenarios"
+      ],
+      "storage": [
+        "STORE + metadata.id"
+      ],
+      "sideEffects": [
+        "confirmação",
+        "remoção e escrita de localStorage",
+        "sorteio de variante",
+        "renderização"
+      ],
+      "external": [
+        "confirm",
+        "localStorage"
+      ],
+      "impactAreas": [
+        "estado",
+        "persistência",
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-031",
+      "name": "events.importJson",
+      "kind": "arrow",
+      "signature": "async event => void",
+      "responsibility": "Ler o arquivo escolhido, decodificar JSON e carregar o novo caso.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 23,
+        "anchor": "$(\"#json-input\").onchange=async e=>{"
+      },
+      "inputs": [
+        "evento change"
+      ],
+      "returns": "Promise<void>",
+      "calls": [
+        "FN-001",
+        "FN-002"
+      ],
+      "calledBy": [],
+      "events": [
+        "change em json-input"
+      ],
+      "dom": [
+        "json-input"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "caso importado completo"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "leitura de arquivo",
+        "troca de caso",
+        "limpeza do input"
+      ],
+      "external": [
+        "File API",
+        "JSON.parse"
+      ],
+      "impactAreas": [
+        "dados",
+        "estado",
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-032",
+      "name": "scene.resize",
+      "kind": "arrow",
+      "signature": "() => void",
+      "responsibility": "Recalcular câmera e renderer quando a janela muda de tamanho.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 24,
+        "anchor": "addEventListener(\"resize\",()=>{"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [],
+      "calledBy": [
+        "FN-025"
+      ],
+      "events": [
+        "window resize"
+      ],
+      "dom": [
+        "scene canvas",
+        "window"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "atualização de câmera e tamanho WebGL"
+      ],
+      "external": [
+        "Three.js",
+        "Window"
+      ],
+      "impactAreas": [
+        "Three.js",
+        "interface"
+      ]
+    },
+    {
+      "id": "FN-030",
+      "name": "campaignOn",
+      "kind": "function",
+      "signature": "campaignOn()",
+      "responsibility": "Dizer se o caso carregado declara campanha com capítulos.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function campaignOn()"
+      },
+      "inputs": [],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-002",
+        "FN-007",
+        "FN-020",
+        "FN-021",
+        "FN-031",
+        "FN-032",
+        "FN-035"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "campaign.chapters"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "estado",
+        "dados"
+      ]
+    },
+    {
+      "id": "FN-031",
+      "name": "saveKey",
+      "kind": "function",
+      "signature": "saveKey()",
+      "responsibility": "Resolver a chave de localStorage da fase corrente, sufixada pelo capítulo quando há campanha.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function saveKey()"
+      },
+      "inputs": [],
+      "returns": "string",
+      "calls": [
+        "FN-030"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-004",
+        "CB-030"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "metadata.id",
+        "campaign"
+      ],
+      "storage": [
+        "STORE + metadata.id + capítulo"
+      ],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "persistência"
+      ]
+    },
+    {
+      "id": "FN-032",
+      "name": "writeCampaign",
+      "kind": "function",
+      "signature": "writeCampaign()",
+      "responsibility": "Persistir o cursor da campanha (run e índice).",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function writeCampaign()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-030"
+      ],
+      "calledBy": [
+        "FN-020",
+        "FN-033"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "campaign.id"
+      ],
+      "storage": [
+        "CAMPAIGN + campaign.id"
+      ],
+      "sideEffects": [
+        "escrita em localStorage"
+      ],
+      "external": [
+        "localStorage",
+        "JSON.stringify"
+      ],
+      "impactAreas": [
+        "persistência",
+        "estado"
+      ]
+    },
+    {
+      "id": "FN-033",
+      "name": "startCampaign",
+      "kind": "function",
+      "signature": "startCampaign()",
+      "responsibility": "Sortear lieutenants distintos do pool, anexar o chefão e gravar o cursor.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function startCampaign()"
+      },
+      "inputs": [],
+      "returns": "objeto cursor {run, index}",
+      "calls": [
+        "FN-032"
+      ],
+      "calledBy": [
+        "FN-020",
+        "FN-034"
+      ],
+      "events": [
+        "início de campanha",
+        "nova campanha após o chefão"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "campaign.lieutenant_pool",
+        "campaign.lieutenant_chapters",
+        "campaign.boss"
+      ],
+      "storage": [
+        "CAMPAIGN + campaign.id"
+      ],
+      "sideEffects": [
+        "sorteio",
+        "persistência do cursor"
+      ],
+      "external": [
+        "Math.random",
+        "Math.floor"
+      ],
+      "impactAreas": [
+        "estado",
+        "persistência",
+        "dados"
+      ]
+    },
+    {
+      "id": "FN-034",
+      "name": "readCampaign",
+      "kind": "function",
+      "signature": "readCampaign()",
+      "responsibility": "Restaurar o cursor persistido ou iniciar uma campanha nova.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function readCampaign()"
+      },
+      "inputs": [],
+      "returns": "cursor da campanha",
+      "calls": [
+        "FN-033"
+      ],
+      "calledBy": [
+        "FN-002"
+      ],
+      "events": [
+        "carregamento"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "campaign.id"
+      ],
+      "storage": [
+        "CAMPAIGN + campaign.id"
+      ],
+      "sideEffects": [
+        "leitura de localStorage"
+      ],
+      "external": [
+        "localStorage",
+        "JSON.parse"
+      ],
+      "impactAreas": [
+        "persistência",
+        "estado"
+      ]
+    },
+    {
+      "id": "FN-035",
+      "name": "applyChapter",
+      "kind": "function",
+      "signature": "applyChapter()",
+      "responsibility": "Sobrepor culprit, start, briefing, prazo, requisitos e scenarios do capítulo ativo no objeto game.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 5,
+        "anchor": "function applyChapter()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-030"
+      ],
+      "calledBy": [
+        "FN-002",
+        "FN-020"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "campaign.chapters",
+        "culprit",
+        "metadata.start",
+        "metadata.briefing",
+        "metadata.total_hours",
+        "arrest_requirements",
+        "scenarios"
+      ],
+      "storage": [],
+      "sideEffects": [
+        "mutação do objeto game em memória"
+      ],
+      "external": [],
+      "impactAreas": [
+        "dados",
+        "estado",
+        "evidências",
+        "dossiê"
+      ]
+    }
   ]
 }

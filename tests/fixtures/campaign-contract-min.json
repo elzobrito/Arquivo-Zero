@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "id": "fixture-campaign-min",
+    "code": "FX-001",
+    "title": "Fixture de campanha",
+    "briefing": "Caso mínimo para o linter de campanha.",
+    "total_hours": 24,
+    "start": "alpha"
+  },
+  "suspects": [
+    { "id": "lt_a", "name": "Alfa", "specialty": "Redes", "vehicle": "Carro" },
+    { "id": "lt_b", "name": "Beta", "specialty": "Dados", "vehicle": "Onibus" },
+    { "id": "boss_x", "name": "Gama", "specialty": "Social", "vehicle": "Aviao" }
+  ],
+  "dossier": {
+    "fields": [
+      { "id": "name", "label": "Codinome", "options": ["Alfa", "Beta", "Gama"] },
+      { "id": "specialty", "label": "Especialidade", "options": ["Redes", "Dados", "Social"] },
+      { "id": "vehicle", "label": "Meio", "options": ["Carro", "Onibus", "Aviao"] }
+    ]
+  },
+  "evidence": [
+    { "id": "EA1", "title": "Pista Alfa", "text": "Leva ao lieutenant A.", "tag": "id" },
+    { "id": "EB1", "title": "Pista Beta", "text": "Leva ao lieutenant B.", "tag": "id" },
+    { "id": "EX1", "title": "Pista Gama", "text": "Leva ao chefão.", "tag": "id" }
+  ],
+  "locations": [
+    {
+      "id": "alpha",
+      "name": "Alpha",
+      "type": "Início",
+      "x": 20,
+      "y": 30,
+      "coords": "0,0",
+      "description": "Ponto de partida do fixture.",
+      "city_info": { "summary": "Cidade inicial.", "facts": ["Facto 1"] },
+      "actions": [
+        { "id": "alpha_look", "label": "Vistoriar", "cost": 1, "evidence": "EA1", "result": "Uma pista." }
+      ]
+    },
+    {
+      "id": "bravo",
+      "name": "Bravo",
+      "type": "Intermediário",
+      "x": 50,
+      "y": 40,
+      "coords": "1,1",
+      "description": "Cidade intermediária.",
+      "city_info": { "summary": "Cidade Bravo.", "facts": ["Facto 2"] },
+      "actions": [
+        { "id": "bravo_look", "label": "Perguntar", "cost": 1, "result": "Nada admissível." },
+        { "id": "bravo_arrest", "label": "Abordar", "cost": 1, "requires_warrant": true, "arrest": true, "result": "Prisão." }
+      ]
+    },
+    {
+      "id": "charlie",
+      "name": "Charlie",
+      "type": "Destino",
+      "x": 80,
+      "y": 70,
+      "coords": "2,2",
+      "description": "Cidade final possível.",
+      "city_info": { "summary": "Cidade Charlie.", "facts": ["Facto 3"] },
+      "actions": [
+        { "id": "charlie_look", "label": "Perguntar", "cost": 1, "result": "Nada admissível." },
+        { "id": "charlie_arrest", "label": "Abordar", "cost": 1, "requires_warrant": true, "arrest": true, "result": "Prisão." }
+      ]
+    }
+  ],
+  "travel": {
+    "alpha": { "bravo": 2, "charlie": 3 },
+    "bravo": { "alpha": 2, "charlie": 2 },
+    "charlie": { "alpha": 3, "bravo": 2 }
+  },
+  "navigation": {
+    "alpha": ["bravo", "charlie"],
+    "bravo": ["alpha", "charlie"],
+    "charlie": ["alpha", "bravo"]
+  },
+  "campaign": {
+    "id": "fx-gangue",
+    "lieutenant_pool": ["lt_a", "lt_b"],
+    "lieutenant_chapters": 2,
+    "boss": "boss_x",
+    "chapters": {
+      "lt_a": {
+        "culprit": "lt_a",
+        "start": "alpha",
+        "arrest_requirements": { "minimum_evidence": 1, "required_evidence": ["EA1"] },
+        "scenarios": [
+          {
+            "id": "a_bc",
+            "code": "A-1",
+            "route": ["alpha", "bravo", "charlie"],
+            "navigation": {
+              "alpha": ["bravo"],
+              "bravo": ["charlie"],
+              "charlie": ["bravo"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EA1", "result": "Pista do lieutenant A." }
+            }
+          },
+          {
+            "id": "a_cb",
+            "code": "A-2",
+            "route": ["alpha", "charlie", "bravo"],
+            "navigation": {
+              "alpha": ["charlie"],
+              "charlie": ["bravo"],
+              "bravo": ["charlie"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EA1", "result": "Pista do lieutenant A." }
+            }
+          }
+        ]
+      },
+      "lt_b": {
+        "culprit": "lt_b",
+        "start": "alpha",
+        "arrest_requirements": { "minimum_evidence": 1, "required_evidence": ["EB1"] },
+        "scenarios": [
+          {
+            "id": "b_bc",
+            "code": "B-1",
+            "route": ["alpha", "bravo", "charlie"],
+            "navigation": {
+              "alpha": ["bravo"],
+              "bravo": ["charlie"],
+              "charlie": ["bravo"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EB1", "result": "Pista do lieutenant B." }
+            }
+          },
+          {
+            "id": "b_cb",
+            "code": "B-2",
+            "route": ["alpha", "charlie", "bravo"],
+            "navigation": {
+              "alpha": ["charlie"],
+              "charlie": ["bravo"],
+              "bravo": ["charlie"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EB1", "result": "Pista do lieutenant B." }
+            }
+          }
+        ]
+      },
+      "boss_x": {
+        "culprit": "boss_x",
+        "start": "alpha",
+        "arrest_requirements": { "minimum_evidence": 1, "required_evidence": ["EX1"] },
+        "scenarios": [
+          {
+            "id": "x_bc",
+            "code": "X-1",
+            "route": ["alpha", "bravo", "charlie"],
+            "navigation": {
+              "alpha": ["bravo"],
+              "bravo": ["charlie"],
+              "charlie": ["bravo"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EX1", "result": "Pista do chefão." }
+            }
+          },
+          {
+            "id": "x_cb",
+            "code": "X-2",
+            "route": ["alpha", "charlie", "bravo"],
+            "navigation": {
+              "alpha": ["charlie"],
+              "charlie": ["bravo"],
+              "bravo": ["charlie"]
+            },
+            "action_overrides": {
+              "alpha_look": { "evidence": "EX1", "result": "Pista do chefão." }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
