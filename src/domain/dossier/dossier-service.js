@@ -1,0 +1,12 @@
+"use strict";
+
+function filterSuspects(game, chosen) {
+  const pairs = chosen || [];
+  return (game.suspects || []).filter((suspect) => pairs.every(([key, value]) => suspect[key] === value));
+}
+
+function issueWarrant(state, suspectId) {
+  return Object.assign({}, state, { warrant: true, warrantSuspect: suspectId });
+}
+
+module.exports = { filterSuspects, issueWarrant };

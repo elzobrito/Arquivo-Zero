@@ -1,0 +1,13 @@
+{
+  "after_sha256": "c324bb59425958b1e25b600bb762cf8f6d59149c556877643edfc966cfe8560b",
+  "artifact_id": "ART-c324bb59425958b1e25b600bb762cf8f6d59149c556877643edfc966cfe8560b",
+  "artifact_sha256": "b4c3ea10ade162262147be6c94b0548187e355b851d4d4fe3d5938087e25b621",
+  "before_sha256": "c324bb59425958b1e25b600bb762cf8f6d59149c556877643edfc966cfe8560b",
+  "bytes": 1501,
+  "content": "\"use strict\";\n\nfunction evidenceIds(state) {\n  return Array.isArray(state && state.evidence) ? state.evidence.slice() : [];\n}\n\nfunction getById(evidenceId, game) {\n  if (!evidenceId || !game || !Array.isArray(game.evidence)) return null;\n  for (let i = 0; i < game.evidence.length; i += 1) {\n    const item = game.evidence[i];\n    if (item && item.id === evidenceId) return item;\n  }\n  return null;\n}\n\nfunction catalogEvidence(state, evidenceId, game) {\n  const evidence = evidenceIds(state);\n  const record = getById(evidenceId, game);\n  if (!evidenceId || !record) {\n    return { ok: false, record: null, duplicate: false, evidence };\n  }\n  if (evidence.indexOf(evidenceId) !== -1) {\n    return { ok: true, record, duplicate: true, evidence };\n  }\n  return { ok: true, record, duplicate: false, evidence: evidence.concat(evidenceId) };\n}\n\nfunction getDiscovered(state, game) {\n  const have = {};\n  const ids = evidenceIds(state);\n  for (let i = 0; i < ids.length; i += 1) have[ids[i]] = true;\n  const catalog = (game && game.evidence) || [];\n  const found = [];\n  for (let i = 0; i < catalog.length; i += 1) {\n    const item = catalog[i];\n    if (item && have[item.id]) found.push(item);\n  }\n  return found;\n}\n\nfunction isEssential(evidenceId, game) {\n  const required = (game && game.arrest_requirements && game.arrest_requirements.required_evidence) || [];\n  return !!evidenceId && required.indexOf(evidenceId) !== -1;\n}\n\nmodule.exports = { catalogEvidence, getDiscovered, getById, isEssential };\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/evidence/evidence-service.js",
+  "source_path": "src/domain/evidence/evidence-service.js",
+  "ts": "2026-09-16T18:24:30Z"
+}

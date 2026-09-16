@@ -1,0 +1,13 @@
+{
+  "after_sha256": "2ae7f0d7936319223918729a8d7d4939509562e575108564cd388aec035d3797",
+  "artifact_id": "ART-2ae7f0d7936319223918729a8d7d4939509562e575108564cd388aec035d3797",
+  "artifact_sha256": "f5d4ceaf60a572f40798e470cff213ba226fe1a2fbadb624da3d96d4ef290ec6",
+  "before_sha256": "2ae7f0d7936319223918729a8d7d4939509562e575108564cd388aec035d3797",
+  "bytes": 1730,
+  "content": "#!/usr/bin/env node\nimport { createRequire } from \"node:module\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport { readFileSync } from \"node:fs\";\n\nconst root = resolve(dirname(fileURLToPath(import.meta.url)), \"../..\");\nconst require = createRequire(import.meta.url);\nconst { adaptCase, detectVersion } = require(resolve(root, \"src/infrastructure/schema/case-adapter.js\"));\n\nconst errors = [];\nfunction check(label, cond) {\n  if (!cond) errors.push(label);\n}\n\nconst livePath = resolve(root, \"dist/game.json\");\nconst liveRaw = readFileSync(livePath, \"utf8\");\nconst live = JSON.parse(liveRaw);\nconst adapted = adaptCase(live);\ncheck(\"detect 2.x\", detectVersion(live) === \"2.x\");\ncheck(\"warn schemaVersion\", adapted.warnings.some((w) => w.path === \"schemaVersion\"));\ncheck(\"warn evidence\", adapted.warnings.some((w) => /admissibility/.test(w.path)));\ncheck(\"normalized schemaVersion 2.x\", adapted.normalized.schemaVersion === \"2.x\");\ncheck(\"disk unchanged\", readFileSync(livePath, \"utf8\") === liveRaw);\ncheck(\"source evidence not mutated\", live.evidence[0].admissibility === undefined);\ncheck(\"adapted evidence filled\", adapted.normalized.evidence[0].admissibility === \"unknown\");\n\nconst valid = JSON.parse(readFileSync(resolve(root, \"tests/fixtures/schema-3.0-valid.json\"), \"utf8\"));\nconst v3 = adaptCase(valid);\ncheck(\"3.x no adapt\", v3.version === \"3.x\" && v3.warnings.length === 0);\n\nconst linear = { metadata: { id: \"x\" }, locations: [{}], travel: {}, dossier: {} };\ncheck(\"1.x\", adaptCase(linear).version === \"1.x\");\n\nif (errors.length) {\n  console.error(\"CASE_ADAPTER_FAIL\");\n  for (const e of errors) console.error(\"-\", e);\n  process.exit(1);\n}\nconsole.log(\"CASE_ADAPTER_PASS\");\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/schema/case-adapter.test.mjs",
+  "source_path": "tests/schema/case-adapter.test.mjs",
+  "ts": "2026-09-16T16:57:29Z"
+}

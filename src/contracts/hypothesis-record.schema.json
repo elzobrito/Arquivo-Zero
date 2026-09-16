@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/hypothesis-record.schema.json",
+  "title": "HypothesisRecord",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "type",
+    "statement",
+    "supports",
+    "contradictions",
+    "confidence",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "enum": [
+        "authorship",
+        "route",
+        "method",
+        "motive",
+        "link",
+        "timeline"
+      ]
+    },
+    "statement": {
+      "type": "string"
+    },
+    "supports": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "supported",
+        "weakened",
+        "refuted",
+        "inconclusive"
+      ]
+    }
+  }
+}

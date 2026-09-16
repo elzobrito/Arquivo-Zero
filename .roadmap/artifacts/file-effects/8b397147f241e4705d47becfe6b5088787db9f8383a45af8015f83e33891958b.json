@@ -1,0 +1,13 @@
+{
+  "after_sha256": "0eea38c13823bcbba1ebd6593fd749f28cb2d8dc3eeb8c59969d3af4bc9490e6",
+  "artifact_id": "ART-0eea38c13823bcbba1ebd6593fd749f28cb2d8dc3eeb8c59969d3af4bc9490e6",
+  "artifact_sha256": "8b397147f241e4705d47becfe6b5088787db9f8383a45af8015f83e33891958b",
+  "before_sha256": "0eea38c13823bcbba1ebd6593fd749f28cb2d8dc3eeb8c59969d3af4bc9490e6",
+  "bytes": 116,
+  "content": "Reconciliação: ISS-AZ-BRIEFING-WARRANT-20260916 materializado por AZ-HOTFIX-007 (done).\nSem novo efeito em dist/.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-BRIEFING-WARRANT-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-BRIEFING-WARRANT-20260916.txt",
+  "ts": "2026-09-16T17:21:56Z"
+}

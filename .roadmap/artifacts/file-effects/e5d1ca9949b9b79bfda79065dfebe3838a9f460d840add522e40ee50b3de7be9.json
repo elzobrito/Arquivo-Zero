@@ -1,0 +1,13 @@
+{
+  "after_sha256": "f88a62007e755efee9f1f04a0d611d3735520ddfaf9ba38320995ac55289a024",
+  "artifact_id": "ART-f88a62007e755efee9f1f04a0d611d3735520ddfaf9ba38320995ac55289a024",
+  "artifact_sha256": "e5d1ca9949b9b79bfda79065dfebe3838a9f460d840add522e40ee50b3de7be9",
+  "before_sha256": "f88a62007e755efee9f1f04a0d611d3735520ddfaf9ba38320995ac55289a024",
+  "bytes": 1449,
+  "content": "#!/usr/bin/env node\nimport { readFile } from \"node:fs/promises\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\n\nconst root = resolve(dirname(fileURLToPath(import.meta.url)), \"../..\");\nconst app = await readFile(resolve(root, \"dist/app.js\"), \"utf8\");\nconst html = await readFile(resolve(root, \"dist/index.html\"), \"utf8\");\nconst errors = [];\nif (app.includes(\"Reiniciar toda a investigação\")) errors.push(\"copy antigo de reset permanece\");\nfor (const fn of [\"resetChapter\", \"resetCampaign\", \"resetCareer\"]) {\n  if (!app.includes(`function ${fn}()`)) errors.push(`ausente ${fn}`);\n}\nif (!app.includes(\"A campanha e as estrelas são preservadas\")) errors.push(\"capítulo não declara o que preserva\");\nif (!app.includes(\"As estrelas são preservadas\")) errors.push(\"campanha não declara preservação de estrelas\");\nif (!app.includes(\"O capítulo e a campanha atuais permanecem\")) errors.push(\"carreira não declara o que permanece\");\nif (app.includes(\"localStorage.removeItem(CAREER)\") && !app.includes(\"function resetCareer()\")) {\n  errors.push(\"CAREER removido fora de resetCareer\");\n}\nfor (const id of [\"reset-button\", \"reset-campaign-button\", \"reset-career-button\"]) {\n  if (!html.includes(`id=\"${id}\"`)) errors.push(`html sem ${id}`);\n}\nif (errors.length) {\n  console.error(\"AZ-HOTFIX-004 FAIL\");\n  for (const e of errors) console.error(\"-\", e);\n  process.exit(1);\n}\nconsole.log(\"AZ-HOTFIX-004 PASS\");\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/hotfix/az-hotfix-004-reset.test.mjs",
+  "source_path": "tests/hotfix/az-hotfix-004-reset.test.mjs",
+  "ts": "2026-09-16T16:34:05Z"
+}

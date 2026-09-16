@@ -1,0 +1,13 @@
+{
+  "after_sha256": "6110c2356790443538f82f06aac4f61e5d59a657082290184217e2c6ac24a252",
+  "artifact_id": "ART-6110c2356790443538f82f06aac4f61e5d59a657082290184217e2c6ac24a252",
+  "artifact_sha256": "abf6690261d004a15a2f80391617ba29966150039b261a1630e7069a822ab201",
+  "before_sha256": null,
+  "bytes": 720,
+  "content": "# Gap AZ-HYP-004 — hypothesisScore no arrest-validator\n\n**Origem:** crítica Onda 1 P3 (`docs/qa/critica-onda1-arch.md`)  \n**Status:** gap aceito; não alterar o validador na Onda 2  \n\nNa Onda 1, `src/domain/arrest/arrest-validator.js` devolve `hypothesisScore: 0` em todos os ramos, inclusive `APPROVED`. Hipóteses ainda não existem como entidade. O campo já está no contrato `validation-decision.schema.json`.\n\n## Critério a acrescentar em AZ-HYP-004 (catálogo de admissão)\n\n```text\narrest-validator.validateArrest retorna hypothesisScore > 0\nquando existe hipótese de autoria sustentada vinculada ao caso.\n```\n\nNão simplificar vitória para `suspeito correto = APPROVED`. Identificar ≠ provar permanece.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/architecture/az-hyp-004-gap-hypothesis-score.md",
+  "source_path": "docs/architecture/az-hyp-004-gap-hypothesis-score.md",
+  "ts": "2026-09-16T17:19:20Z"
+}

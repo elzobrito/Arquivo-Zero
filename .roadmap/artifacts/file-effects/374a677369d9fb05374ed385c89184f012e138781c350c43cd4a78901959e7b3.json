@@ -1,0 +1,13 @@
+{
+  "after_sha256": "3321dcbc95e798e7dbafc0d4a591eafb1a5eacf3ffbf0870b5e88845eb5fd585",
+  "artifact_id": "ART-3321dcbc95e798e7dbafc0d4a591eafb1a5eacf3ffbf0870b5e88845eb5fd585",
+  "artifact_sha256": "374a677369d9fb05374ed385c89184f012e138781c350c43cd4a78901959e7b3",
+  "before_sha256": "3321dcbc95e798e7dbafc0d4a591eafb1a5eacf3ffbf0870b5e88845eb5fd585",
+  "bytes": 1444,
+  "content": "\"use strict\";\nconst { isUnaffordable, debitHours } = require(\"../time/time-service.js\");\n\nfunction canTravel(state, game, destinationId, navigation) {\n  const from = state.location;\n  const graph = navigation || game.navigation || {};\n  const allowed = graph[from] || [];\n  if (!allowed.includes(destinationId)) return { ok: false, reason: \"not-adjacent\" };\n  const cost = game.travel?.[from]?.[destinationId];\n  if (typeof cost !== \"number\") return { ok: false, reason: \"no-cost\" };\n  if (isUnaffordable(state.hours, cost, false)) return { ok: false, reason: \"unaffordable\" };\n  return { ok: true, cost };\n}\n\nfunction applyTravel(state, game, destinationId, navigation) {\n  const check = canTravel(state, game, destinationId, navigation);\n  if (!check.ok) return { ok: false, newState: state, hoursSpent: 0, reason: check.reason };\n  const debit = debitHours(state, check.cost, false);\n  if (!debit.ok) {\n    return { ok: false, newState: Object.assign({}, state, { hours: 0, finished: true }), hoursSpent: 0, defeat: true, reason: \"timeout\" };\n  }\n  const visited = state.visited.includes(destinationId) ? state.visited.slice() : state.visited.concat(destinationId);\n  return {\n    ok: true,\n    hoursSpent: check.cost,\n    newState: Object.assign({}, state, {\n      hours: debit.hours,\n      location: destinationId,\n      route: state.route.concat(destinationId),\n      visited,\n    }),\n  };\n}\n\nmodule.exports = { canTravel, applyTravel };\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/travel/travel-service.js",
+  "source_path": "src/domain/travel/travel-service.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

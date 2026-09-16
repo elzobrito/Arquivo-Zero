@@ -1,0 +1,13 @@
+{
+  "after_sha256": "6eca3f34a6cc3cca805510ec09e4fb156466f89d3a708a567a4c4aa27fa4fd6d",
+  "artifact_id": "ART-6eca3f34a6cc3cca805510ec09e4fb156466f89d3a708a567a4c4aa27fa4fd6d",
+  "artifact_sha256": "bf2adf0167fa2ab29e20c079c981796aced5a7806814401de411b6904e467a09",
+  "before_sha256": "6eca3f34a6cc3cca805510ec09e4fb156466f89d3a708a567a4c4aa27fa4fd6d",
+  "bytes": 196,
+  "content": "Reconciliação: ISS-AZ-IMPORT-XSS-20260916 já foi materializado por AZ-HOTFIX-003 (done).\nEsta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.\nEscopo: src/hotfix/ apenas.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-IMPORT-XSS-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-IMPORT-XSS-20260916.txt",
+  "ts": "2026-09-16T16:36:00Z"
+}

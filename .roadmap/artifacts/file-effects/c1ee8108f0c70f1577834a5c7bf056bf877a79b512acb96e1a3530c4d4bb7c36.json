@@ -1,0 +1,13 @@
+{
+  "after_sha256": "85da2d3439d72ffc117660c291f5b1432fe8b55f81ccc3f9c5afcb580e4d2042",
+  "artifact_id": "ART-85da2d3439d72ffc117660c291f5b1432fe8b55f81ccc3f9c5afcb580e4d2042",
+  "artifact_sha256": "c1ee8108f0c70f1577834a5c7bf056bf877a79b512acb96e1a3530c4d4bb7c36",
+  "before_sha256": "85da2d3439d72ffc117660c291f5b1432fe8b55f81ccc3f9c5afcb580e4d2042",
+  "bytes": 597,
+  "content": "#!/usr/bin/env node\nimport { readdir } from \"node:fs/promises\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport { spawnSync } from \"node:child_process\";\n\nconst dir = dirname(fileURLToPath(import.meta.url));\nconst files = (await readdir(dir)).filter((f) => f.endsWith(\".test.mjs\")).sort();\nlet failed = 0;\nfor (const file of files) {\n  const result = spawnSync(process.execPath, [resolve(dir, file)], { stdio: \"inherit\" });\n  if (result.status !== 0) failed += 1;\n}\nif (failed) process.exit(1);\nconsole.log(`HOTFIX_SUITE_PASS tests=${files.length}`);\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/hotfix/run-all.mjs",
+  "source_path": "tests/hotfix/run-all.mjs",
+  "ts": "2026-09-16T17:02:29Z"
+}

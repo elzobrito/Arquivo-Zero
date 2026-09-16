@@ -1,0 +1,13 @@
+{
+  "after_sha256": "1729bf27e52f4102742eac9f6be60d26bdece4613f79f1ffc0652ac3fae31d99",
+  "artifact_id": "ART-1729bf27e52f4102742eac9f6be60d26bdece4613f79f1ffc0652ac3fae31d99",
+  "artifact_sha256": "ea188e955379c57ab746b2ab2e0a5d397e881a9c38da6612b20560b3951321be",
+  "before_sha256": "1729bf27e52f4102742eac9f6be60d26bdece4613f79f1ffc0652ac3fae31d99",
+  "bytes": 198,
+  "content": "Reconciliação: ISS-AZ-SCENARIO-DUP-20260916 já foi materializado por AZ-HOTFIX-005 (done).\nEsta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.\nEscopo: src/hotfix/ apenas.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-SCENARIO-DUP-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-SCENARIO-DUP-20260916.txt",
+  "ts": "2026-09-16T16:36:03Z"
+}

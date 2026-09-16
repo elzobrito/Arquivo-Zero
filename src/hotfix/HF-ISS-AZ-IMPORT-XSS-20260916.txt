@@ -1,0 +1,3 @@
+Reconciliação: ISS-AZ-IMPORT-XSS-20260916 já foi materializado por AZ-HOTFIX-003 (done).
+Esta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.
+Escopo: src/hotfix/ apenas.

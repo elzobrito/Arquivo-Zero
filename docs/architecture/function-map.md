@@ -7,13 +7,15 @@ Este documento é a visão humana do mapa canônico
 por `TITO-CAMPAIGN-ENGINE-001`, redesenhada por `TITO-RETRO-UI-001`, ajustada
 por `TITO-MAP-LABEL-ALIGN-001`, corrigida cartograficamente por
 `HF-ISS-MAP-GEOGRAPHIC-FRAME-001` e materializada por
-`TITO-MAP-CARTOGRAPHIC-LABELS-001` e teve o marcador de Recife alinhado por
-`TITO-MAP-RECIFE-MARKER-001`.
+`TITO-MAP-CARTOGRAPHIC-LABELS-001`, teve o marcador de Recife alinhado por
+`TITO-MAP-RECIFE-MARKER-001` e passou a recusar custos sem saldo em
+`AZ-HOTFIX-001` e isolamento de save em `AZ-HOTFIX-002` e sanitização de importação em `AZ-HOTFIX-003` e semântica de reinício em `AZ-HOTFIX-004` e passou a adaptar casos 2.x em `AZ-ARCH-003` e passou a delegar regras de domínio em `AZ-ARCH-004` e consulta a FSM em `AZ-ARCH-005` e passou a catalogar evidência com o caso em `AZ-EVIDENCE-002`. Em `AZ-EVIDENCE-004`, as evidências legadas E01–E08 e E11–E16 passaram a declarar origem desconhecida explicitamente.
+IDs retirados do motor (lógica em `src/domain/**`, não reutilizáveis): `CB-016`, `CB-020`, `CB-021`.
 
-- SHA-256 mapeado: `ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f`
-- Unidades executáveis: **69**
-- Ocorrências de `function`: **34**
-- Arrow functions: **35**
+- SHA-256 mapeado: `8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed`
+- Unidades executáveis: **79**
+- Ocorrências de `function`: **42**
+- Arrow functions: **37**
 - Convenção: `FN-*` identifica funções do motor ou auxiliares; `CB-*` identifica
   callbacks, projeções e manipuladores inline.
 
@@ -60,6 +62,14 @@ dependências detalhados estão no JSON canônico.
 | `FN-033` | `startCampaign` | 5 | Sortear lieutenants e anexar o chefão. |
 | `FN-034` | `readCampaign` | 5 | Restaurar ou iniciar o cursor. |
 | `FN-035` | `applyChapter` | 5 | Sobrepor o capítulo ativo em `game`. |
+| `FN-036` | `isUnaffordable` | 11 | Recusar custo que zere ou estoure o prazo, salvo prisão no limite. |
+| `FN-037` | `isolateSave` | 6 | Isolar save inválido em chave `.invalid` sem logar o conteúdo. |
+| `FN-038` | `restoreState` | 6 | Restaurar save válido ou devolver estado inicial. |
+| `FN-042` | `importCase` | 25 | Validar tamanho e JSON de um caso importado. |
+| `FN-039` | `resetChapter` | 25 | Reiniciar o capítulo, preservando campanha e estrelas. |
+| `FN-040` | `resetCampaign` | 25 | Sortear nova campanha, preservando estrelas. |
+| `FN-041` | `resetCareer` | 25 | Zerar estrelas sem alterar o capítulo. |
+| `FN-043` | `adaptCase` | 8 | Normalizar casos 1.x/2.x em memória com WARN. |
 
 ## Callbacks e manipuladores
 
@@ -80,12 +90,11 @@ dependências detalhados estão no JSON canônico.
 | `CB-013` | `route.renderItem` | 13 | Projetar etapa da rota. |
 | `CB-014` | `travel.confirm` | 15 | Efetivar a viagem confirmada. |
 | `CB-015` | `act.findAction` | 16 | Localizar ação por ID. |
-| `CB-016` | `act.hasRequiredEvidence` | 16 | Verificar evidência essencial. |
+
 | `CB-017` | `dossier.renderField` | 18 | Projetar campo do dossiê. |
 | `CB-018` | `dossier.renderOption` | 18 | Projetar opção do dossiê. |
 | `CB-019` | `submitDossier.keepChosen` | 19 | Descartar atributos desconhecidos. |
-| `CB-020` | `submitDossier.matchSuspect` | 19 | Filtrar suspeitos compatíveis. |
-| `CB-021` | `submitDossier.matchAttribute` | 19 | Comparar cada atributo. |
+
 | `CB-022` | `submitDossier.suspectName` | 19 | Extrair nomes dos resultados. |
 | `CB-023` | `show.continue` | 21 | Fechar mensagem não final. |
 | `CB-024` | `closeAll.closeDialog` | 21 | Fechar cada diálogo aberto. |
@@ -99,6 +108,11 @@ dependências detalhados estão no JSON canônico.
 | `CB-032` | `scene.resize` | 23 | Redimensionar câmera e renderer. |
 | `CB-033` | `events.openMap` | 23 | Abrir a janela retro de mapa e destinos. |
 | `CB-034` | `events.openEvidence` | 23 | Abrir a janela retro de pistas catalogadas. |
+| `CB-035` | `restoreState.locationMatch` | 6 | Confirmar que a cidade persistida existe. |
+| `CB-036` | `restoreState.scenarioMatch` | 6 | Confirmar que o cenário persistido existe. |
+| `CB-037` | `events.resetCampaign` | 26 | Acionar o reinício da campanha. |
+| `CB-038` | `events.resetCareer` | 26 | Acionar o zeramento da carreira. |
+| `CB-039` | `adaptCase.mapEvidence` | 8 | Preencher campos de evidência ausentes em 2.x. |
 
 ## Fluxos principais
 
@@ -151,6 +165,103 @@ mandado
 | Desfechos e carreira | `FN-014`, `FN-015`, `FN-019`–`FN-021`, `CB-016`, `CB-023` |
 | Three.js | `FN-025`, `FN-026`, `CB-032` |
 
+## Impacto de `AZ-EVIDENCE-004`
+
+`AZ-EVIDENCE-004`: migração de **14 registros** (`E01`–`E08`, `E11`–`E16`).
+`E09` e `E10` nunca foram definidos nem referenciados no workspace.
+`ISS-AZ-EVIDENCE-COUNT-20260916` foi fechado como lacuna de numeração sem
+impacto funcional. `admissibility`, `quality` e `integrity` permanecem como
+defaults do adaptador em memória (`case-adapter.js`).
+
+- Impacto direto: `FN-043` e `CB-039` preservam `evidence[].source: null` ao
+  adaptar o caso 2.x; `FN-006` devolve o registro efetivo com esse campo.
+- Impacto indireto: `FN-002` carrega o catálogo migrado; `FN-011`, `CB-012` e
+  `FN-014` continuam consumindo apenas os campos e IDs que já usavam.
+- JSON: E01–E08 e E11–E16 preservam IDs, títulos, textos e tags e recebem apenas
+  `source: null`. E09/E10, método, local, suspeito e autoria não são inventados.
+- Estado e persistência: `state.evidence` continua armazenando somente IDs; saves
+  e chaves de `localStorage` não mudam.
+- DOM e eventos: nenhum seletor, callback, marcação ou evento muda; a origem não
+  é exibida pelo quadro legado.
+- Efeitos colaterais: não há nova I/O nem política de mandado ou prisão.
+  `admissibility`, `quality` e `integrity` permanecem ausentes no JSON e recebem
+  defaults de incerteza apenas em memória pelo adaptador.
+
+## Impacto de `AZ-TERR-002`
+
+`AZ-TERR-002`: campos `territory` e `asset` adicionados às cinco locations atuais.
+Assets referenciados de `dist/assets/cities/`. Nenhuma função criada ou
+modificada; motor intacto.
+
+- Impacto direto: `FN-002` carrega os novos campos junto ao caso e `FN-043`
+  preserva propriedades adicionais durante a normalização em memória.
+- Impacto indireto: `FN-005`, `FN-009`, `FN-012`, `FN-013` e `FN-014` continuam
+  consumindo os IDs, posições, ações e rotas existentes sem mudança de fluxo.
+- JSON: somente `locations[].territory` e `locations[].asset` foram adicionados;
+  IDs, nomes, coordenadas, ações, viagem, navegação e cenários permanecem iguais.
+- Estado e persistência: nenhum campo de estado ou chave de save foi criado.
+- DOM e eventos: nenhum seletor, callback, marcação ou evento foi alterado.
+- Efeitos colaterais: nenhuma nova I/O e nenhum carregamento de arte foi ligado
+  ao motor nesta tarefa de conteúdo.
+
+## Impacto de `AZ-TERR-003`
+
+`AZ-TERR-003`: catálogo de 27 UFs criado em
+`content/territories/brazil-states.json`. Assets referenciados de
+`dist/assets/cities/` (27 WEBPs) e `dist/assets/ui/brasil-map.webp`;
+`investigativeAttributes` inicializados como arrays vazios. Nenhuma função
+ou callback foi criado ou modificado.
+
+- Impacto direto no motor atual: nenhum; o catálogo ainda não é importado por
+  `dist/app.js` nem pelos módulos existentes.
+- Impacto indireto futuro: fonte de dados prevista para o repositório territorial
+  de `AZ-TERR-004`, sem criar antecipadamente funções ou callbacks.
+- JSON: arquivo dedicado com 27 `StateRecord`; `dist/game.json` permanece fora
+  do boundary desta tarefa.
+- Estado, persistência, DOM e eventos: nenhuma mudança.
+- Efeitos colaterais: nenhuma I/O adicional em runtime até a integração futura.
+
+## Impacto de `AZ-HOTFIX-008`
+
+`AZ-HOTFIX-008`: no cenário `byte_planalto` (`B-23`), a ação existente
+`sp_cafe` passa a conceder `E12` e seu resultado indica Brasília. A correção
+remove a circularidade em que a evidência que apontava o DF só era obtida após
+a chegada ao DF. Nenhuma pista, cenário, rota, função ou callback foi criado.
+
+- Impacto direto: `FN-029` (`actionData`) aplica o override corrigido e `FN-014`
+  (`act`) cataloga `E12`, consome o tempo e exibe o novo resultado; `FN-006`
+  (`ev`) resolve o texto de `E12` no quadro de pistas.
+- Impacto indireto: `FN-011` atualiza a lista de evidências e `FN-016` reflete a
+  contagem no dossiê; `CB-011` continua disparando a mesma ação existente.
+- JSON: somente `campaign.chapters.byte.scenarios[byte_planalto].action_overrides.sp_cafe`
+  muda; IDs, locations, `travel`, `navigation`, ações-base e demais cenários
+  permanecem iguais.
+- Estado e persistência: `state.evidence` recebe o ID já existente `E12` e
+  `state.actions` registra `sp_cafe` pelo fluxo atual; o formato do save não muda.
+- DOM e eventos: o diálogo existente passa de “PISTA INCONCLUSIVA” para
+  “EVIDÊNCIA E12” e mostra Brasília; nenhum seletor ou listener muda.
+- Efeitos colaterais: nenhuma nova I/O ou integração externa.
+
+## Impacto de `AZ-HOTFIX-009`
+
+`AZ-HOTFIX-009`: alinha a navegação dos cinco cenários em que `re_terminal`
+concede `E05`. Recife passa a oferecer Brasília; onde faltava, Brasília passa a
+oferecer Porto Alegre, mantendo coerência com `E07`. Nenhuma rota canônica,
+pista, ação, função ou callback foi criada ou alterada.
+
+- Impacto direto: `FN-009` (`map`) inclui Brasília entre os destinos visíveis e
+  habilitados em Recife; `FN-013` (`openTravel`) apresenta o custo existente.
+- Impacto indireto: `FN-029` mantém o override efetivo de `re_terminal`,
+  `FN-014` cataloga E05 pelo fluxo atual e `FN-026`/`CB-014` aplicam a viagem
+  após confirmação.
+- JSON: mudam apenas arrays de `scenario.navigation` em `byte_litoral`,
+  `byte_planalto`, `null_amazonia`, `vertice_rio` e `vertice_litoral`.
+- Estado e persistência: o formato do save não muda; uma viagem confirmada usa
+  os mesmos campos `location`, `visited`, `route` e `hours`.
+- DOM e eventos: o mapa existente renderiza o botão de Brasília; nenhum seletor
+  ou listener muda.
+- Efeitos colaterais: nenhuma nova I/O ou integração externa.
+
 ## Regra para alterações futuras
 
 Toda tarefa que altere o motor ou seus contratos deve registrar no ESAA:
@@ -176,5 +287,5 @@ jq empty dist/game.json
 
 O verificador confere IDs únicos, campos obrigatórios, referências entre IDs,
 âncoras e linhas atuais, presença de cada ID nesta visão humana, SHA-256 da
-fonte, objeto `inventory` e paridade entre as 34 ocorrências de `function`, as
-35 arrow functions e as 69 entradas do mapa.
+fonte, objeto `inventory` e paridade entre as 42 ocorrências de `function`, as
+37 arrow functions e as 79 entradas do mapa.

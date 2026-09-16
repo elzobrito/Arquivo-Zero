@@ -1,0 +1,13 @@
+{
+  "after_sha256": "7e8c0e194bee24184b3cb8963059c03b3cd69011bc97a403935909b2f3b98f9f",
+  "artifact_id": "ART-7e8c0e194bee24184b3cb8963059c03b3cd69011bc97a403935909b2f3b98f9f",
+  "artifact_sha256": "ba5cb8303d989bf8269be12c7de8704a346dfce124b9a7bac3f75135bf314a9a",
+  "before_sha256": null,
+  "bytes": 1846,
+  "content": "# AZ-QA-002-BROWSER — Clique real pós-ESM\n\n**Data:** 2026-09-16  \n**URL:** http://127.0.0.1:8765/ (python -m http.server -d dist)  \n**Caso vivo:** AZ-2026-041 · NULL · U-11  \n\n## Resultado\n\nESM carrega no Chromium. Módulos `dist/modules/*.js` retornaram HTTP 200. `game.json` carregou. Adaptador emitiu WARN de `schemaVersion` e `admissibility` no console — nenhum erro de import.\n\nOs 7 passos da crítica:\n\n| # | Passo | Resultado |\n|---:|---|---|\n| 1 | Carregar dist/game.json | PASS — título, briefing, São Paulo, 56h no start; depois sessão em Manaus 8h |\n| 2 | Investigar e registrar evidência | PASS — 5 catalogadas; ações de Manaus concluídas |\n| 3 | Submeter dossiê após investigação | PASS — \"MANDADO APROVADO / Mandado contra Null\" |\n| 4 | Prisão correta + prova suficiente | **NÃO EXECUTADO** — Porto Alegre 10h desabilitado com 8h |\n| 5 | Prisão correta + prova insuficiente | **NÃO EXECUTADO** (mesmo bloqueio de deslocamento) |\n| 6 | Prisão com mandado errado | **NÃO EXECUTADO** |\n| 7 | BRIEFING → WARRANT via UI | PASS — dossiê com \"Banco de dados\" no início: \"PROCEDIMENTO INVÁLIDO / Mandado recusado / Investigue ao menos um local...\" |\n\nExtra: mapa em Manaus mostra SP 9h, Recife 8h e POA 10h **disabled** com 8h restantes (AZ-HOTFIX-001 visível).\n\n## Rede (scripts)\n\n`app.js`, `modules/time-service.js`, `travel-service.js`, `evidence-service.js`, `dossier-service.js`, `arrest-validator.js`, `state-machine.js`, `game.json` — 200.\n\nHouve um 404 residual (favicon ou similar); não impediu o jogo.\n\n## Residual\n\nPassos 4–6 de prisão **não** foram clicados. `validateArrest` cobre esses ramos em Node (`tests/domain/run-all.mjs`). Isso **não** substitui o clique. AZ-VSLICE-001 deve esperar uma sessão com prazo suficiente para chegar a Porto Alegre.\n\nAZ-QA-002 permanece done.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/qa/az-qa-002-browser.md",
+  "source_path": "docs/qa/az-qa-002-browser.md",
+  "ts": "2026-09-16T17:26:34Z"
+}

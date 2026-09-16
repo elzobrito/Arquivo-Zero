@@ -1,0 +1,13 @@
+{
+  "after_sha256": "e679a8262a781949bac54ff9359a00df1853008a5f03fb763541b5853f452ec2",
+  "artifact_id": "ART-e679a8262a781949bac54ff9359a00df1853008a5f03fb763541b5853f452ec2",
+  "artifact_sha256": "444b5dbb1c31c8f6937bd0248b65a358f68b15afb77612f14552e8dfa5eb7cdc",
+  "before_sha256": "e679a8262a781949bac54ff9359a00df1853008a5f03fb763541b5853f452ec2",
+  "bytes": 1001,
+  "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"$id\": \"https://arquivo-zero.local/schemas/evidence-record.schema.json\",\n  \"title\": \"EvidenceRecord\",\n  \"type\": \"object\",\n  \"additionalProperties\": true,\n  \"required\": [\n    \"id\",\n    \"title\",\n    \"text\",\n    \"tag\"\n  ],\n  \"properties\": {\n    \"id\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"text\": {\n      \"type\": \"string\"\n    },\n    \"tag\": {\n      \"type\": \"string\"\n    },\n    \"source\": {\n      \"type\": [\n        \"string\",\n        \"null\"\n      ]\n    },\n    \"admissibility\": {\n      \"enum\": [\n        \"admissible\",\n        \"inadmissible\",\n        \"unknown\"\n      ]\n    },\n    \"quality\": {\n      \"anyOf\": [\n        {\n          \"type\": \"number\",\n          \"minimum\": 0,\n          \"maximum\": 1\n        },\n        {\n          \"type\": \"null\"\n        }\n      ]\n    },\n    \"integrity\": {\n      \"enum\": [\n        \"verified\",\n        \"unverified\",\n        \"compromised\"\n      ]\n    }\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/architecture/schemas/evidence-record.schema.json",
+  "source_path": "docs/architecture/schemas/evidence-record.schema.json",
+  "ts": "2026-09-16T16:54:04Z"
+}

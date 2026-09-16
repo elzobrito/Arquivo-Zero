@@ -1,0 +1,13 @@
+{
+  "after_sha256": "a70206f1de1f30d01e895308fdc979f6d2ba235c3102b2898a75e12fd363bfd3",
+  "artifact_id": "ART-a70206f1de1f30d01e895308fdc979f6d2ba235c3102b2898a75e12fd363bfd3",
+  "artifact_sha256": "2fa864234f9baa3c3327cad338566d6b261eb7e8b4bf3ae2b3c982d6679969f5",
+  "before_sha256": "a70206f1de1f30d01e895308fdc979f6d2ba235c3102b2898a75e12fd363bfd3",
+  "bytes": 682,
+  "content": "ISS-AZ-EVIDENCE-LEGACY-TEST-20260916\n\nO teste do adaptador permanece correto e não foi alterado.\n\nA migração AZ-EVIDENCE-004 foi restringida ao dado justificável pelo conteúdo\nlegado: source: null. Os campos admissibility, quality e integrity continuam\nausentes em dist/game.json e recebem defaults de incerteza somente em memória\npelo adaptador 2.x. Assim, o teste continua cobrindo WARN, não mutação da fonte\ne preenchimento do objeto normalizado.\n\nVerificações:\n- node tests/schema/case-adapter.test.mjs -> CASE_ADAPTER_PASS\n- node scripts/validate-case.mjs dist/game.json -> SCHEMA_WARN version=2.x\n- node scripts/verify-random-scenarios.mjs -> RANDOM_SCENARIOS_PASS\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916.txt",
+  "ts": "2026-09-16T18:27:40Z"
+}

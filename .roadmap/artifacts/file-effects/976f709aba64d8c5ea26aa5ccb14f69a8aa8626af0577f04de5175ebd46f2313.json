@@ -1,0 +1,13 @@
+{
+  "after_sha256": "d159ccb86c2de559b05f86e08d3027bb8e0aaf816d69d97ad99f2f9281a80bcf",
+  "artifact_id": "ART-d159ccb86c2de559b05f86e08d3027bb8e0aaf816d69d97ad99f2f9281a80bcf",
+  "artifact_sha256": "976f709aba64d8c5ea26aa5ccb14f69a8aa8626af0577f04de5175ebd46f2313",
+  "before_sha256": "d159ccb86c2de559b05f86e08d3027bb8e0aaf816d69d97ad99f2f9281a80bcf",
+  "bytes": 893,
+  "content": "#!/usr/bin/env node\nimport { readFile } from \"node:fs/promises\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\n\nconst root = resolve(dirname(fileURLToPath(import.meta.url)), \"../..\");\nconst src = await readFile(resolve(root, \"dist/app.js\"), \"utf8\");\nconst errors = [];\nfor (const [label, snippet] of [\n  [\"isolateSave\", \"function isolateSave(reason)\"],\n  [\"chave .invalid\", \".invalid\"],\n  [\"restoreState\", \"function restoreState()\"],\n  [\"loadGame usa restoreState\", \"state=restoreState()\"],\n  [\"guarda de render\", 'if(!current){isolateSave(\"render\")'],\n  [\"sem logar payload\", \"console.info(\\\"AZ: save isolado\\\"\"],\n]) {\n  if (!src.includes(snippet)) errors.push(`ausente: ${label}`);\n}\nif (errors.length) {\n  console.error(\"AZ-HOTFIX-002 FAIL\");\n  for (const e of errors) console.error(\"-\", e);\n  process.exit(1);\n}\nconsole.log(\"AZ-HOTFIX-002 PASS\");\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/hotfix/az-hotfix-002-save.test.mjs",
+  "source_path": "tests/hotfix/az-hotfix-002-save.test.mjs",
+  "ts": "2026-09-16T16:30:57Z"
+}

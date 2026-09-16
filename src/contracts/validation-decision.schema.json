@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/validation-decision.schema.json",
+  "title": "ValidationDecision",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "decision",
+    "suspect",
+    "evidenceScore",
+    "procedureScore",
+    "hypothesisScore",
+    "reasons"
+  ],
+  "properties": {
+    "decision": {
+      "enum": [
+        "APPROVED",
+        "DENIED",
+        "INCONCLUSIVE"
+      ]
+    },
+    "suspect": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidenceScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "procedureScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "hypothesisScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

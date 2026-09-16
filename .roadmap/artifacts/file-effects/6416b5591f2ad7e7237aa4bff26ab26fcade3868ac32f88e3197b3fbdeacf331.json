@@ -1,0 +1,13 @@
+{
+  "after_sha256": "7db877ff1b6c8b89af5e2fb530feab10f0e89aadecbcf08e8d9a3f0d593aaeb6",
+  "artifact_id": "ART-7db877ff1b6c8b89af5e2fb530feab10f0e89aadecbcf08e8d9a3f0d593aaeb6",
+  "artifact_sha256": "6416b5591f2ad7e7237aa4bff26ab26fcade3868ac32f88e3197b3fbdeacf331",
+  "before_sha256": "7db877ff1b6c8b89af5e2fb530feab10f0e89aadecbcf08e8d9a3f0d593aaeb6",
+  "bytes": 198,
+  "content": "Reconciliação: ISS-AZ-INVALID-SAVE-20260916 já foi materializado por AZ-HOTFIX-002 (done).\nEsta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.\nEscopo: src/hotfix/ apenas.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-INVALID-SAVE-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-INVALID-SAVE-20260916.txt",
+  "ts": "2026-09-16T16:35:59Z"
+}

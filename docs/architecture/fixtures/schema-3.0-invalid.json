@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "3.0",
+  "metadata": {
+    "code": "FX-30",
+    "title": "Fixture 3.0 inválido — ausência de metadata.id",
+    "briefing": "Caso mínimo do esquema 3.0.",
+    "start": "alpha",
+    "total_hours": 12
+  },
+  "culprit": "alvo",
+  "suspects": [
+    {
+      "id": "alvo",
+      "name": "Alvo",
+      "specialty": "Redes",
+      "vehicle": "Carro"
+    },
+    {
+      "id": "outro",
+      "name": "Outro",
+      "specialty": "Dados",
+      "vehicle": "Onibus"
+    }
+  ],
+  "dossier": {
+    "fields": [
+      {
+        "id": "name",
+        "label": "Nome",
+        "options": [
+          "Alvo",
+          "Outro"
+        ]
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "title": "Pista",
+      "text": "Uma evidência.",
+      "tag": "id",
+      "source": null,
+      "admissibility": "unknown",
+      "quality": null,
+      "integrity": "unverified"
+    }
+  ],
+  "locations": [
+    {
+      "id": "alpha",
+      "name": "Alpha",
+      "type": "Início",
+      "x": 20,
+      "y": 30,
+      "coords": "0,0",
+      "description": "Partida.",
+      "actions": [
+        {
+          "id": "look",
+          "label": "Olhar",
+          "cost": 1,
+          "evidence": "E1",
+          "result": "Achou."
+        },
+        {
+          "id": "arrest",
+          "label": "Abordar",
+          "cost": 1,
+          "requires_warrant": true,
+          "arrest": true,
+          "result": "Prisão."
+        }
+      ]
+    }
+  ],
+  "travel": {
+    "alpha": {}
+  },
+  "navigation": {
+    "alpha": []
+  },
+  "arrest_requirements": {
+    "minimum_evidence": 1,
+    "required_evidence": [
+      "E1"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "s1",
+      "code": "S-1",
+      "route": [
+        "alpha"
+      ],
+      "navigation": {
+        "alpha": []
+      }
+    }
+  ],
+  "ending": {
+    "win_title": "Vitória",
+    "win_text": "Ok.",
+    "lose_title": "Derrota",
+    "lose_text": "Não."
+  }
+}

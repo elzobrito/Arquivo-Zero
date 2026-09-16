@@ -1,0 +1,13 @@
+{
+  "after_sha256": "6e703c5f6c08b153d19c12611edf8581f4e4a858b69523786ea0a6ed93f8beb4",
+  "artifact_id": "ART-6e703c5f6c08b153d19c12611edf8581f4e4a858b69523786ea0a6ed93f8beb4",
+  "artifact_sha256": "3e98c30468c02596c97d867b3ad2a5931b41feb962a8fb4fde24272016eba587",
+  "before_sha256": "6e703c5f6c08b153d19c12611edf8581f4e4a858b69523786ea0a6ed93f8beb4",
+  "bytes": 201,
+  "content": "Reconciliação: ISS-AZ-RESET-SEMANTICS-20260916 já foi materializado por AZ-HOTFIX-004 (done).\nEsta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.\nEscopo: src/hotfix/ apenas.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-RESET-SEMANTICS-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-RESET-SEMANTICS-20260916.txt",
+  "ts": "2026-09-16T16:36:01Z"
+}

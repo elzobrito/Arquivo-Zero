@@ -1,0 +1,13 @@
+{
+  "after_sha256": "9bd7b753a21273dd72ac5669671fe24c98d149278b39d68220d3e2a1b1a6fd8c",
+  "artifact_id": "ART-9bd7b753a21273dd72ac5669671fe24c98d149278b39d68220d3e2a1b1a6fd8c",
+  "artifact_sha256": "cad4c16496b71dafd7a063ddc4f23bd57929bf70349a71571df52019e778f00f",
+  "before_sha256": "9bd7b753a21273dd72ac5669671fe24c98d149278b39d68220d3e2a1b1a6fd8c",
+  "bytes": 1322,
+  "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"$id\": \"https://arquivo-zero.local/schemas/investigation-report.schema.json\",\n  \"title\": \"InvestigationReport\",\n  \"type\": \"object\",\n  \"additionalProperties\": true,\n  \"required\": [\n    \"caseId\",\n    \"facts\",\n    \"timeline\",\n    \"route\",\n    \"hypotheses\",\n    \"validations\",\n    \"conclusion\",\n    \"limitations\"\n  ],\n  \"properties\": {\n    \"caseId\": {\n      \"type\": \"string\"\n    },\n    \"facts\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"timeline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\n          \"timestamp\",\n          \"event\"\n        ],\n        \"properties\": {\n          \"timestamp\": {\n            \"type\": [\n              \"string\",\n              \"null\"\n            ]\n          },\n          \"event\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    },\n    \"route\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"hypotheses\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"validations\": {\n      \"type\": \"array\"\n    },\n    \"conclusion\": {\n      \"type\": \"string\"\n    },\n    \"limitations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/contracts/investigation-report.schema.json",
+  "source_path": "src/contracts/investigation-report.schema.json",
+  "ts": "2026-09-16T16:56:02Z"
+}

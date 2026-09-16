@@ -1,0 +1,13 @@
+{
+  "after_sha256": "4435ff4c5d298f8b8977cf6aed3b59eb85be7330b75a00a5528ede29e03905d3",
+  "artifact_id": "ART-4435ff4c5d298f8b8977cf6aed3b59eb85be7330b75a00a5528ede29e03905d3",
+  "artifact_sha256": "8e9a60193f51344c6d9334f0079658a0114d034e3bc37d06de8beace38bb02c2",
+  "before_sha256": "4435ff4c5d298f8b8977cf6aed3b59eb85be7330b75a00a5528ede29e03905d3",
+  "bytes": 200,
+  "content": "Reconciliação: ISS-AZ-TRAVEL-BALANCE-20260916 já foi materializado por AZ-HOTFIX-001 (done).\nEsta tarefa auto-gerada por issue.report→hotfix.create não altera dist/.\nEscopo: src/hotfix/ apenas.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-TRAVEL-BALANCE-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-TRAVEL-BALANCE-20260916.txt",
+  "ts": "2026-09-16T16:35:58Z"
+}

@@ -1,0 +1,13 @@
+{
+  "after_sha256": "bbd4d3fb6701ed31e4f35fa78eb7c1a4178b9868ae88d84f36c7386146f667f4",
+  "artifact_id": "ART-bbd4d3fb6701ed31e4f35fa78eb7c1a4178b9868ae88d84f36c7386146f667f4",
+  "artifact_sha256": "d326061eba255a1ba7700f7e4daf97f4ccb9bbd424161aa07b509dc340fc8ea8",
+  "before_sha256": "bbd4d3fb6701ed31e4f35fa78eb7c1a4178b9868ae88d84f36c7386146f667f4",
+  "bytes": 995,
+  "content": "export function validateArrest(state, game) {\n  const req = game.arrest_requirements || { minimum_evidence: 0, required_evidence: [] };\n  const suspect = state.warrantSuspect || null;\n  if (suspect !== game.culprit) {\n    return {\n      decision: \"DENIED\",\n      suspect,\n      evidenceScore: 0,\n      procedureScore: state.warrant ? 1 : 0,\n      hypothesisScore: 0,\n      reasons: [\"wrong_warrant\"],\n    };\n  }\n  const hasAmount = (state.evidence || []).length >= (req.minimum_evidence || 0);\n  const hasEssentials = (req.required_evidence || []).every((id) => (state.evidence || []).includes(id));\n  if (!hasAmount || !hasEssentials) {\n    return {\n      decision: \"DENIED\",\n      suspect,\n      evidenceScore: 0,\n      procedureScore: 1,\n      hypothesisScore: 0,\n      reasons: [\"insufficient_evidence\"],\n    };\n  }\n  return {\n    decision: \"APPROVED\",\n    suspect,\n    evidenceScore: 1,\n    procedureScore: 1,\n    hypothesisScore: 0,\n    reasons: [\"warrant_minimum_and_essentials\"],\n  };\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/arrest-validator.js",
+  "source_path": "dist/modules/arrest-validator.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

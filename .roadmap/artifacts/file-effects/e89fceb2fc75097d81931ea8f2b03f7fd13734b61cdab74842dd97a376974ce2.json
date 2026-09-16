@@ -1,0 +1,13 @@
+{
+  "after_sha256": "2d3e507406f2fc03cfe3af487eebc01ffb9c5a7ad448d2517cb146a2421687eb",
+  "artifact_id": "ART-2d3e507406f2fc03cfe3af487eebc01ffb9c5a7ad448d2517cb146a2421687eb",
+  "artifact_sha256": "e89fceb2fc75097d81931ea8f2b03f7fd13734b61cdab74842dd97a376974ce2",
+  "before_sha256": "2d3e507406f2fc03cfe3af487eebc01ffb9c5a7ad448d2517cb146a2421687eb",
+  "bytes": 338,
+  "content": "Reconciliação: ISS-AZ-CLUE-DF-NAV-20260916 materializado por AZ-HOTFIX-009 (done).\nSem novo efeito em dist/.\n\nRecife oferece Brasília e Brasília oferece Porto Alegre nos cenários em que\nre_terminal concede E05 (B-17, B-23, U-11, V-08, V-14). Navegador: NULL · U-11,\nPericiar terminal → E05; VIAJAR mostra Brasília 5h habilitada.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/hotfix/HF-ISS-AZ-CLUE-DF-NAV-20260916.txt",
+  "source_path": "src/hotfix/HF-ISS-AZ-CLUE-DF-NAV-20260916.txt",
+  "ts": "2026-09-16T19:46:46Z"
+}

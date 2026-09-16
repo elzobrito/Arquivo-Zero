@@ -1,0 +1,13 @@
+{
+  "after_sha256": "71767c6b3de2fece7372fb45c752040d83e90ddde7af564e10f5882612379483",
+  "artifact_id": "ART-71767c6b3de2fece7372fb45c752040d83e90ddde7af564e10f5882612379483",
+  "artifact_sha256": "69ae81583c1d65539e1c0643e09d705cab92d6d6882ca5acec548b374204f37a",
+  "before_sha256": "71767c6b3de2fece7372fb45c752040d83e90ddde7af564e10f5882612379483",
+  "bytes": 1865,
+  "content": "export const STATES = {\n  BRIEFING: \"BRIEFING\",\n  INVESTIGATING: \"INVESTIGATING\",\n  WARRANT_ISSUED: \"WARRANT_ISSUED\",\n  ARREST_ATTEMPTED: \"ARREST_ATTEMPTED\",\n  CASE_WON: \"CASE_WON\",\n  CASE_LOST_TIME: \"CASE_LOST_TIME\",\n  CASE_LOST_WARRANT: \"CASE_LOST_WARRANT\",\n};\n\nconst TRANSITIONS = {\n  BRIEFING: { ACTION: \"INVESTIGATING\", TRAVEL: \"INVESTIGATING\", TIMEOUT: \"CASE_LOST_TIME\" },\n  INVESTIGATING: { ACTION: \"INVESTIGATING\", TRAVEL: \"INVESTIGATING\", WARRANT: \"WARRANT_ISSUED\", TIMEOUT: \"CASE_LOST_TIME\" },\n  WARRANT_ISSUED: { ACTION: \"WARRANT_ISSUED\", TRAVEL: \"WARRANT_ISSUED\", ARREST: \"ARREST_ATTEMPTED\", ARREST_VALID: \"CASE_WON\", ARREST_INVALID: \"CASE_LOST_WARRANT\", TIMEOUT: \"CASE_LOST_TIME\" },\n  ARREST_ATTEMPTED: { ARREST_VALID: \"CASE_WON\", ARREST_INVALID: \"CASE_LOST_WARRANT\" },\n  CASE_WON: {},\n  CASE_LOST_TIME: {},\n  CASE_LOST_WARRANT: {},\n};\n\nexport function getCurrentState(state) {\n  if (state.finished && state.rewarded) return STATES.CASE_WON;\n  if (state.finished && !state.warrant) return STATES.CASE_LOST_TIME;\n  if (state.finished) return STATES.CASE_LOST_WARRANT;\n  if (state.warrant) return STATES.WARRANT_ISSUED;\n  if ((state.actions || []).length > 0 || (state.route || []).length > 1) return STATES.INVESTIGATING;\n  return STATES.BRIEFING;\n}\n\nexport function transition(state, event) {\n  const from = typeof state === \"string\" ? state : getCurrentState(state);\n  const table = TRANSITIONS[from] || {};\n  const to = table[event];\n  if (!to) {\n    return { ok: false, newState: from, reason: `Transição inválida ${from} + ${event}` };\n  }\n  return { ok: true, newState: to, reason: null };\n}\n\nexport function isTerminal(caseState) {\n  return caseState === STATES.CASE_WON || caseState === STATES.CASE_LOST_TIME || caseState === STATES.CASE_LOST_WARRANT;\n}\n\nexport function canArrest(caseState) {\n  return caseState === STATES.WARRANT_ISSUED;\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/state-machine.js",
+  "source_path": "dist/modules/state-machine.js",
+  "ts": "2026-09-16T17:20:50Z"
+}

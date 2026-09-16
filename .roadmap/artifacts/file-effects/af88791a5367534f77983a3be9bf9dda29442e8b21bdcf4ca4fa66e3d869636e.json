@@ -1,0 +1,13 @@
+{
+  "after_sha256": "33aee8706d7a8ae429fc6153e645480496aa46d517f7453184adfd62bdf15af1",
+  "artifact_id": "ART-33aee8706d7a8ae429fc6153e645480496aa46d517f7453184adfd62bdf15af1",
+  "artifact_sha256": "af88791a5367534f77983a3be9bf9dda29442e8b21bdcf4ca4fa66e3d869636e",
+  "before_sha256": "33aee8706d7a8ae429fc6153e645480496aa46d517f7453184adfd62bdf15af1",
+  "bytes": 1438,
+  "content": "export function getById(evidenceId, game) {\n  if (!evidenceId || !game || !Array.isArray(game.evidence)) return null;\n  for (let i = 0; i < game.evidence.length; i += 1) {\n    const item = game.evidence[i];\n    if (item && item.id === evidenceId) return item;\n  }\n  return null;\n}\n\nfunction evidenceIds(state) {\n  return Array.isArray(state && state.evidence) ? state.evidence.slice() : [];\n}\n\nexport function catalogEvidence(state, evidenceId, game) {\n  const evidence = evidenceIds(state);\n  const record = getById(evidenceId, game);\n  if (!evidenceId || !record) {\n    return { ok: false, record: null, duplicate: false, evidence };\n  }\n  if (evidence.indexOf(evidenceId) !== -1) {\n    return { ok: true, record, duplicate: true, evidence };\n  }\n  return { ok: true, record, duplicate: false, evidence: evidence.concat(evidenceId) };\n}\n\nexport function getDiscovered(state, game) {\n  const have = {};\n  const ids = evidenceIds(state);\n  for (let i = 0; i < ids.length; i += 1) have[ids[i]] = true;\n  const catalog = (game && game.evidence) || [];\n  const found = [];\n  for (let i = 0; i < catalog.length; i += 1) {\n    const item = catalog[i];\n    if (item && have[item.id]) found.push(item);\n  }\n  return found;\n}\n\nexport function isEssential(evidenceId, game) {\n  const required = (game && game.arrest_requirements && game.arrest_requirements.required_evidence) || [];\n  return !!evidenceId && required.indexOf(evidenceId) !== -1;\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/evidence-service.js",
+  "source_path": "dist/modules/evidence-service.js",
+  "ts": "2026-09-16T18:24:30Z"
+}

@@ -1,0 +1,13 @@
+{
+  "after_sha256": "55310afdae0b5e4ecc74e36c6ed8c1cf95ffcc61683dae294788b965d743c01f",
+  "artifact_id": "ART-55310afdae0b5e4ecc74e36c6ed8c1cf95ffcc61683dae294788b965d743c01f",
+  "artifact_sha256": "48d1eb5dfa2f4594084b4dc5b19beb4b1731bb2d19e55e50cf42d6f866bbce69",
+  "before_sha256": "55310afdae0b5e4ecc74e36c6ed8c1cf95ffcc61683dae294788b965d743c01f",
+  "bytes": 1479,
+  "content": "\"use strict\";\n\nfunction detectVersion(raw) {\n  const declared = raw && raw.schemaVersion;\n  if (typeof declared === \"string\") {\n    if (declared.startsWith(\"3\")) return \"3.x\";\n    if (declared.startsWith(\"2\")) return \"2.x\";\n    if (declared.startsWith(\"1\")) return \"1.x\";\n  }\n  if (raw && raw.campaign) return \"2.x\";\n  return \"1.x\";\n}\n\nfunction adaptCase(raw) {\n  const warnings = [];\n  if (!raw || typeof raw !== \"object\" || Array.isArray(raw)) {\n    return { normalized: raw, warnings, version: null };\n  }\n  const version = detectVersion(raw);\n  const normalized = Object.assign({}, raw);\n  if (version === \"3.x\") {\n    return { normalized, warnings, version };\n  }\n  if (!raw.schemaVersion) {\n    warnings.push({ path: \"schemaVersion\", message: `Ausente; tratado como ${version}` });\n  }\n  normalized.schemaVersion = version === \"1.x\" ? \"1.x\" : \"2.x\";\n  normalized.evidence = (raw.evidence || []).map((item, index) => {\n    if (!item || typeof item !== \"object\") return item;\n    if (item.admissibility != null && item.integrity != null && item.quality !== undefined) return item;\n    const id = item.id || String(index);\n    if (item.admissibility == null) {\n      warnings.push({ path: `evidence.${id}.admissibility`, message: \"Ausente; preenchido com unknown\" });\n    }\n    return Object.assign({ admissibility: \"unknown\", quality: null, integrity: \"unverified\" }, item);\n  });\n  return { normalized, warnings, version };\n}\n\nmodule.exports = { adaptCase, detectVersion };\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/infrastructure/schema/case-adapter.js",
+  "source_path": "src/infrastructure/schema/case-adapter.js",
+  "ts": "2026-09-16T16:57:29Z"
+}

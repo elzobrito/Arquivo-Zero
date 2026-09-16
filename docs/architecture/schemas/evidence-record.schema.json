@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/evidence-record.schema.json",
+  "title": "EvidenceRecord",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "title",
+    "text",
+    "tag"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "string"
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admissibility": {
+      "enum": [
+        "admissible",
+        "inadmissible",
+        "unknown"
+      ]
+    },
+    "quality": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "integrity": {
+      "enum": [
+        "verified",
+        "unverified",
+        "compromised"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "after_sha256": "cd425c9ac12140c5e5d438bc5739f30212716fb5305b3f8a96c225bf56d74a35",
+  "artifact_id": "ART-cd425c9ac12140c5e5d438bc5739f30212716fb5305b3f8a96c225bf56d74a35",
+  "artifact_sha256": "bc8808fe7c988f5592b00b0cb2b25f7b27c5b9bb0aec1ffda8f868d3e397f4af",
+  "before_sha256": "cd425c9ac12140c5e5d438bc5739f30212716fb5305b3f8a96c225bf56d74a35",
+  "bytes": 563,
+  "content": "\"use strict\";\n\nfunction isUnaffordable(currentHours, cost, allowZero) {\n  const n = Number(cost);\n  const remaining = currentHours - n;\n  return !Number.isFinite(n) || n < 0 || remaining < 0 || remaining === 0 && !allowZero;\n}\n\nfunction debitHours(state, cost, allowZero) {\n  if (isUnaffordable(state.hours, cost, allowZero)) {\n    return { ok: false, remaining: 0, defeat: true, hours: 0 };\n  }\n  const remaining = state.hours - Number(cost);\n  return { ok: true, remaining, defeat: false, hours: remaining };\n}\n\nmodule.exports = { isUnaffordable, debitHours };\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/time/time-service.js",
+  "source_path": "src/domain/time/time-service.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

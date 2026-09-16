@@ -1,0 +1,14 @@
+ISS-AZ-EVIDENCE-LEGACY-TEST-20260916
+
+O teste do adaptador permanece correto e não foi alterado.
+
+A migração AZ-EVIDENCE-004 foi restringida ao dado justificável pelo conteúdo
+legado: source: null. Os campos admissibility, quality e integrity continuam
+ausentes em dist/game.json e recebem defaults de incerteza somente em memória
+pelo adaptador 2.x. Assim, o teste continua cobrindo WARN, não mutação da fonte
+e preenchimento do objeto normalizado.
+
+Verificações:
+- node tests/schema/case-adapter.test.mjs -> CASE_ADAPTER_PASS
+- node scripts/validate-case.mjs dist/game.json -> SCHEMA_WARN version=2.x
+- node scripts/verify-random-scenarios.mjs -> RANDOM_SCENARIOS_PASS

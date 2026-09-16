@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/constraint-evaluation.schema.json",
+  "title": "ConstraintEvaluation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "constraintId",
+    "candidateId",
+    "result",
+    "explanation"
+  ],
+  "properties": {
+    "constraintId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidateId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result": {
+      "enum": [
+        "MATCH",
+        "NO_MATCH",
+        "UNKNOWN"
+      ]
+    },
+    "explanation": {
+      "type": "string"
+    }
+  }
+}

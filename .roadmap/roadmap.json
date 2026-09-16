@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 253,
-      "projection_hash_sha256": "9e6ebd46231cdc72ed6c85db793161c9b2cd2f99a475ee31a72526ab08b226b7",
+      "last_event_seq": 850,
+      "projection_hash_sha256": "7eacf3c60233179bf0f906738a3624072843adf346e538ec0dd78ec35cc91dce",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-15T18:34:40Z"
+    "updated_at": "2026-09-16T23:17:01Z"
   },
   "project": {
     "name": "esaa-core",
@@ -945,15 +945,1978 @@
         ]
       },
       "completed_at": "2026-09-15T18:34:40Z"
+    },
+    {
+      "task_id": "AZ-SPEC-001",
+      "task_kind": "spec",
+      "title": "Congelar baseline verificável",
+      "description": "Congelar uma baseline reproduzível do vertical slice vivo, registrando hashes, verificadores, estrutura atual e a diferença explícita entre o comportamento atual de mandado/prisão e a regra-alvo identificar não é provar.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "docs/baseline/**",
+        "docs/architecture/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/baseline/slice-20260916.md",
+          "docs/architecture/az-spec-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Registrar SHA-256 de dist/app.js, dist/game.json, dist/index.html e dist/styles.css.",
+        "Registrar path e SHA-256 de docs/spec/proposta-evolucao-arquitetural.md e de docs/spec/wbs-esaa-evolucao.md.",
+        "Registrar os comandos verify-function-map, verify-random-scenarios, node --check e validação JSON aplicáveis ao recorte atual.",
+        "Documentar 5 cidades, 9 cenários e 4 capítulos do vertical slice vivo.",
+        "Distinguir o comportamento atual de mandado/prisão da regra-alvo identificar não é provar, sem afirmar que a regra-alvo já está implementada.",
+        "Não alterar dist/**, tests/** nem .roadmap/**."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T16:06:09Z",
+      "verification": {
+        "checks": [
+          "sha256sum dist/app.js dist/game.json dist/index.html dist/styles.css: ba9b8298… / 6ee4590f… / b614a4e4… / 1ac2502f…",
+          "sha256sum docs/spec/proposta-evolucao-arquitetural.md e wbs-esaa-evolucao.md: bf23646c… / 925cf9c4…",
+          "node scripts/verify-function-map.mjs → FUNCTION_MAP_PASS total=69 functions=34 arrows=35",
+          "node scripts/verify-random-scenarios.mjs → RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9",
+          "node --check dist/app.js e parse JSON de dist/game.json: exit 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:07:47Z"
+    },
+    {
+      "task_id": "AZ-SPEC-002",
+      "task_kind": "spec",
+      "title": "Definir ADR da evolução incremental",
+      "description": "Decidir formalmente por migração incremental, versionamento de esquema 2.x/3.0, fonte canônica de cenário, adaptadores e rollback, sem reescrita total.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-001"
+      ],
+      "targets": [
+        "docs/architecture/az-spec-002.md",
+        "docs/adr/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-spec-002.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "ADR define arquitetura-alvo.",
+        "Proíbe reescrita total sem nova decisão.",
+        "Define adaptadores entre esquemas 2.x e 3.0.",
+        "Define fonte canônica de cenário para remover duplicações.",
+        "Define estratégia de rollback a partir da baseline AZ-BASELINE-20260916."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T16:26:02Z",
+      "verification": {
+        "checks": [
+          "Documento docs/architecture/az-spec-002.md define arquitetura-alvo, proibição de reescrita, adaptadores, fonte canônica e rollback.",
+          "Baseline AZ-SPEC-001 permanece done; hashes do slice não foram alterados nesta tarefa."
+        ]
+      },
+      "completed_at": "2026-09-16T16:26:47Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-001",
+      "task_kind": "impl",
+      "title": "Impedir ação ou viagem sem saldo",
+      "description": "Impedir que destino ou ação com custo superior ao saldo produza derrota automática ou horas negativas. Prisão no limite exato permanece permitida.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-001"
+      ],
+      "targets": [
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Destinos com custo que o saldo não comporta ficam indisponíveis ou são recusados sem consumir tempo.",
+        "Ações investigativas seguem a mesma política, exceto prisão no limite exato (allowZero).",
+        "A autorização de viagem nunca exibe saldo negativo.",
+        "Testes cobrem custo menor, igual e maior que o saldo."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:27:58Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/hotfix/az-hotfix-001-spend.test.mjs → AZ-HOTFIX-001 PASS cases=5",
+          "regression: node scripts/verify-function-map.mjs → FUNCTION_MAP_PASS total=70; verify-random-scenarios PASS; node --check dist/app.js"
+        ]
+      },
+      "issue_id": "ISS-AZ-TRAVEL-BALANCE-20260916",
+      "fixes": "isUnaffordable recusa custo que zera ou estoura o prazo; mapa e ações desabilitam; confirmação não chama spend; openTravel não mostra horas negativas; prisão no limite exato permanece.",
+      "completed_at": "2026-09-16T16:29:25Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-002",
+      "task_kind": "impl",
+      "title": "Recuperar save inválido",
+      "description": "Isolar save com localização, cenário, capítulo ou JSON inválidos e restaurar estado inicial válido, com diagnóstico sem dados sensíveis.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-001"
+      ],
+      "targets": [
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Save válido é preservado.",
+        "Save inválido é isolado em chave .invalid.",
+        "O jogador retorna a um estado inicial válido.",
+        "Diagnóstico é registrado sem copiar o conteúdo do save."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:29:25Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/hotfix/az-hotfix-002-save.test.mjs → AZ-HOTFIX-002 PASS",
+          "regression: verify-function-map FUNCTION_MAP_PASS total=74; node --check dist/app.js"
+        ]
+      },
+      "issue_id": "ISS-AZ-INVALID-SAVE-20260916",
+      "fixes": "isolateSave move o payload para .invalid; restoreState recusa location/cenario/capitulo/JSON ruins; render não lê current.name sem loc().",
+      "completed_at": "2026-09-16T16:31:01Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-003",
+      "task_kind": "impl",
+      "title": "Sanitizar importação e mensagens",
+      "description": "Tratar caso importado como dados, validar tamanho e JSON, e nunca executar HTML de briefings, resultados ou vitória.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-001"
+      ],
+      "targets": [
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Conteúdo importado é tratado como texto/JSON, não como HTML.",
+        "Esquema mínimo e tamanho são validados.",
+        "Mensagens de vitória, resultados e briefings passam por escape.",
+        "Casos inválidos produzem diagnóstico acionável."
+      ],
+      "required_review_mode": "security",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:31:02Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/hotfix/az-hotfix-003-import.test.mjs → AZ-HOTFIX-003 PASS",
+          "regression: verify-function-map FUNCTION_MAP_PASS total=75; node --check dist/app.js"
+        ]
+      },
+      "issue_id": "ISS-AZ-IMPORT-XSS-20260916",
+      "fixes": "show sempre usa escape; vitória não interpola HTML; importCase limita 512KiB e trata JSON inválido; rótulos importados escapados.",
+      "completed_at": "2026-09-16T16:32:54Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-004",
+      "task_kind": "impl",
+      "title": "Corrigir semântica de reinício",
+      "description": "Separar reiniciar capítulo, reiniciar campanha e zerar carreira, informando o que cada ação apaga.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-001"
+      ],
+      "targets": [
+        "dist/app.js",
+        "dist/index.html"
+      ],
+      "outputs": {
+        "files": [
+          "dist/app.js",
+          "dist/index.html"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "dist/index.html",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "Cada ação informa o que será apagado.",
+        "Reiniciar capítulo preserva campanha e carreira.",
+        "Reiniciar campanha redefine o cursor e preserva estrelas.",
+        "Zerar carreira exige ação específica e não apaga o capítulo."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:32:54Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/hotfix/az-hotfix-004-reset.test.mjs → AZ-HOTFIX-004 PASS",
+          "regression: verify-function-map FUNCTION_MAP_PASS total=80; node --check dist/app.js"
+        ]
+      },
+      "issue_id": "ISS-AZ-RESET-SEMANTICS-20260916",
+      "fixes": "resetChapter preserva campanha e estrelas; resetCampaign sorteia novo cursor; resetCareer só apaga CAREER. Confirms descrevem o que será apagado.",
+      "completed_at": "2026-09-16T16:34:15Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-005",
+      "task_kind": "impl",
+      "title": "Consolidar cenário canônico",
+      "description": "Declarar campaign.chapters.*.scenarios como fonte canônica e fazer o linter acusar divergência com game.scenarios da raiz.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-002"
+      ],
+      "targets": [
+        "dist/game.json",
+        "scripts/verify-random-scenarios.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "scripts/verify-random-scenarios.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "scripts/verify-random-scenarios.mjs"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Existe uma única fonte canônica por cenário (capítulo).",
+        "Adaptador/linter mantém compatibilidade do JSON legado.",
+        "Os nove cenários continuam solucionáveis.",
+        "O verificador acusa duplicações divergentes."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:34:16Z",
+      "verification": {
+        "checks": [
+          "unit: verify-random-scenarios PASS no JSON atual; cópia com raiz divergente retorna FAIL com mensagem de fonte canônica",
+          "regression: nove cenários solucionáveis; campaign.canonical_scenarios=chapters"
+        ]
+      },
+      "issue_id": "ISS-AZ-SCENARIO-DUP-20260916",
+      "fixes": "Fonte canônica campaign.chapters.*.scenarios; game.scenarios é projeção de cifra; linter falha se divergir.",
+      "completed_at": "2026-09-16T16:35:04Z"
+    },
+    {
+      "task_id": "AZ-QA-001",
+      "task_kind": "qa",
+      "title": "Revisar estabilização",
+      "description": "Revisão independente da Onda 0: saldo, save, import, reinício, cenário canônico e campanha jogável.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HOTFIX-001",
+        "AZ-HOTFIX-002",
+        "AZ-HOTFIX-003",
+        "AZ-HOTFIX-004",
+        "AZ-HOTFIX-005"
+      ],
+      "targets": [
+        "docs/qa/az-qa-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/az-qa-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Todos os testes e linters da Onda 0 passam.",
+        "Nenhum bug P1 conhecido de saldo, save ou XSS permanece.",
+        "Importação insegura é rejeitada ou sanitizada.",
+        "Campanha atual permanece solucionável (9 rotas)."
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-16T16:35:05Z",
+      "verification": {
+        "checks": [
+          "regression: verify-function-map total=80; verify-random-scenarios 9 rotas; node --check; 4 testes hotfix PASS",
+          "P1 saldo, save e XSS não permanecem no dist/app.js inspecionado; importCase e isUnaffordable presentes"
+        ]
+      },
+      "completed_at": "2026-09-16T16:35:40Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-TRAVEL-BALANCE-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-TRAVEL-BALANCE-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-TRAVEL-BALANCE-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-TRAVEL-BALANCE-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-TRAVEL-BALANCE-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-TRAVEL-BALANCE-20260916",
+      "fixes": "AZ-HOTFIX-001",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:35:57Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-001 em done; src/hotfix/HF-ISS-AZ-TRAVEL-BALANCE-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:35:58Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-INVALID-SAVE-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-INVALID-SAVE-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-INVALID-SAVE-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-INVALID-SAVE-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-INVALID-SAVE-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-INVALID-SAVE-20260916",
+      "fixes": "AZ-HOTFIX-002",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:35:58Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-002 em done; src/hotfix/HF-ISS-AZ-INVALID-SAVE-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:35:59Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-IMPORT-XSS-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-IMPORT-XSS-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-IMPORT-XSS-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-IMPORT-XSS-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-IMPORT-XSS-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-IMPORT-XSS-20260916",
+      "fixes": "AZ-HOTFIX-003",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:36:00Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-003 em done; src/hotfix/HF-ISS-AZ-IMPORT-XSS-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:36:00Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-RESET-SEMANTICS-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-RESET-SEMANTICS-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-RESET-SEMANTICS-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-RESET-SEMANTICS-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-RESET-SEMANTICS-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-RESET-SEMANTICS-20260916",
+      "fixes": "AZ-HOTFIX-004",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:36:01Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-004 em done; src/hotfix/HF-ISS-AZ-RESET-SEMANTICS-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:36:02Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-SCENARIO-DUP-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-SCENARIO-DUP-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-SCENARIO-DUP-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-SCENARIO-DUP-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-SCENARIO-DUP-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-SCENARIO-DUP-20260916",
+      "fixes": "AZ-HOTFIX-005",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:36:02Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-005 em done; src/hotfix/HF-ISS-AZ-SCENARIO-DUP-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "completed_at": "2026-09-16T16:36:03Z"
+    },
+    {
+      "task_id": "AZ-ARCH-001",
+      "task_kind": "spec",
+      "title": "Definir esquema de caso 3.0",
+      "description": "Especificar schemaVersion 3.0, campos obrigatórios, contratos EvidenceRecord, ConstraintEvaluation, HypothesisRecord, ValidationDecision e InvestigationReport, com fixtures válido e inválido. Sem alterar dist.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SPEC-002",
+        "AZ-QA-001"
+      ],
+      "targets": [
+        "docs/architecture/**",
+        "src/contracts/**",
+        "tests/fixtures/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/case-schema-3.0.md",
+          "src/contracts/case-schema-3.0.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/contracts/**",
+        "tests/fixtures/**"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "JSON Schema Draft-07 do caso 3.0 e dos cinco artefatos centrais publicados.",
+        "Fixture schema-3.0-valid.json é estruturalmente 3.0.",
+        "Fixture schema-3.0-invalid.json omite metadata.id.",
+        "dist/game.json permanece 2.x (sem schemaVersion 3.0).",
+        "Nenhum arquivo em dist/** é alterado."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T16:52:42Z",
+      "verification": {
+        "checks": [
+          "Seis JSON Schema em docs/architecture/schemas/ parseiam; fixture inválido omite metadata.id; dist/game.json sem schemaVersion 3.",
+          "verify-function-map e verify-random-scenarios PASS; dist/app.js SHA inalterado (508679ea)."
+        ]
+      },
+      "completed_at": "2026-09-16T16:54:09Z"
+    },
+    {
+      "task_id": "AZ-ARCH-002",
+      "task_kind": "impl",
+      "title": "Implementar validador de esquema",
+      "description": "CLI e módulo validateCase retornam PASS, WARN ou FAIL com path e motivo, sem alterar o caso. Detecta versão, referências, rotas, solvabilidade, orçamento, IDs e prisão na rota.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "src/infrastructure/schema/schema-validator.js",
+        "scripts/validate-case.mjs",
+        "tests/schema/**"
+      ],
+      "outputs": {
+        "files": [
+          "src/infrastructure/schema/schema-validator.js",
+          "scripts/validate-case.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "scripts/validate-case.mjs"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "dist/game.json retorna WARN por schemaVersion ausente e não é alterado.",
+        "schema-3.0-valid.json retorna PASS; schema-3.0-invalid.json retorna FAIL com caminho.",
+        "campaign-contract-min.json é aceito.",
+        "Detecta referência quebrada, ID duplicado, rota insolúvel e orçamento impossível.",
+        "Invocável por node scripts/validate-case.mjs."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:54:10Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/schema/schema-validator.test.mjs → SCHEMA_VALIDATOR_PASS",
+          "cli: validate-case dist/game.json SCHEMA_WARN; schema-3.0-valid PASS; schema-3.0-invalid FAIL metadata.id; campaign-min aceito"
+        ]
+      },
+      "completed_at": "2026-09-16T16:56:21Z"
+    },
+    {
+      "task_id": "AZ-ARCH-003",
+      "task_kind": "impl",
+      "title": "Implementar adaptador 2.x para 3.0",
+      "description": "Normalizar casos 1.x/2.x para modelo interno 3.0 sem gravar disco; WARN em perdas; loadGame chama adaptCase (FN-043).",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001",
+        "AZ-ARCH-002"
+      ],
+      "targets": [
+        "src/infrastructure/schema/case-adapter.js",
+        "tests/schema/**",
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "src/infrastructure/schema/case-adapter.js",
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "src/infrastructure/**",
+        "tests/schema/**",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "dist/game.json continua carregável; campanha e 9 rotas passam no linter.",
+        "Adaptação não altera arquivos de caso em disco.",
+        "WARN para schemaVersion ausente e evidências sem admissibility.",
+        "function-map inclui FN-043 adaptCase e FN-002 atualizado."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:56:22Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/schema/case-adapter.test.mjs CASE_ADAPTER_PASS; disco de game.json inalterado",
+          "regression: verify-function-map total=82; random-scenarios 9 rotas; 4 hotfix tests PASS; node --check dist/app.js"
+        ]
+      },
+      "completed_at": "2026-09-16T16:57:55Z"
+    },
+    {
+      "task_id": "AZ-ARCH-004",
+      "task_kind": "impl",
+      "title": "Extrair domínio do DOM",
+      "description": "Extrair tempo, viagem, evidência, dossiê e prisão para módulos Node sem DOM; dist/app.js delega sem mudar o comportamento visível nem a regra de vitória 2.x.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "src/domain/**",
+        "tests/domain/**",
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/time/time-service.js",
+          "src/domain/travel/travel-service.js",
+          "src/domain/evidence/evidence-service.js",
+          "src/domain/dossier/dossier-service.js",
+          "src/domain/arrest/arrest-validator.js",
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "dist/modules/**",
+        "src/domain/**",
+        "tests/domain/**",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Módulos de domínio testáveis com Node puro.",
+        "INV-1 a INV-5 cobertas por testes; vitória continua mandado+mínimo+essenciais.",
+        "dist/app.js delega sem reescrita total.",
+        "verify-function-map e verify-random-scenarios PASS; testes hotfix PASS."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T16:57:56Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/domain/run-all.mjs DOMAIN_PASS invariants=5; suspeito correto sem essenciais DENIED",
+          "regression: verify-function-map total=79; random-scenarios 9 rotas; 4 hotfix tests PASS; node --check dist/app.js"
+        ]
+      },
+      "completed_at": "2026-09-16T17:00:50Z"
+    },
+    {
+      "task_id": "AZ-ARCH-005",
+      "task_kind": "impl",
+      "title": "Implementar máquina de estados explícita",
+      "description": "FSM declarativa com getCurrentState a partir das flags 2.x; transições nomeadas; compatível com saves existentes; sem alterar game.json.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-004"
+      ],
+      "targets": [
+        "src/core/state-machine.js",
+        "tests/core/**",
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "src/core/state-machine.js",
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "dist/modules/**",
+        "src/core/**",
+        "tests/core/**",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "FSM testável sem DOM; transição inválida retorna ok false.",
+        "getCurrentState cobre BRIEFING, INVESTIGATING, WARRANT_ISSUED e estados terminais 2.x.",
+        "canArrest só em WARRANT_ISSUED; isTerminal só em CASE_WON/CASE_LOST_*.",
+        "verify-function-map e verify-random-scenarios PASS."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T17:00:50Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/core/state-machine.test.js FSM_PASS; canArrest falso em INVESTIGATING",
+          "regression: verify-function-map total=79; random-scenarios 9 rotas; domain PASS; hotfix tests PASS"
+        ]
+      },
+      "completed_at": "2026-09-16T17:03:20Z"
+    },
+    {
+      "task_id": "AZ-QA-002",
+      "task_kind": "qa",
+      "title": "Verificar compatibilidade arquitetural",
+      "description": "Auditar esquema, validador, adaptador, domínio, FSM e regressão da campanha 2.x sem alterar motor ou casos.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-002",
+        "AZ-ARCH-003",
+        "AZ-ARCH-004",
+        "AZ-ARCH-005"
+      ],
+      "targets": [
+        "docs/qa/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/az-qa-002-arch-compat.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Validador PASS/WARN/FAIL nos fixtures previstos.",
+        "function-map e random-scenarios PASS; hotfix tests PASS.",
+        "Domínio e FSM cobertos por testes Node.",
+        "Relatório em docs/qa; dist/game.json não foi reescrito como 3.0."
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-16T17:03:20Z",
+      "verification": {
+        "checks": [
+          "validate-case: game.json WARN; 3.0-valid PASS; 3.0-invalid FAIL metadata.id; campaign-min aceito",
+          "verify-function-map 79; random-scenarios 9 rotas; domain PASS; FSM PASS; hotfix suite PASS; esaa verify ok"
+        ]
+      },
+      "completed_at": "2026-09-16T17:04:01Z"
+    },
+    {
+      "task_id": "AZ-SPEC-003",
+      "task_kind": "spec",
+      "title": "Registrar crítica da Onda 1 e gaps P1–P3",
+      "description": "Persistir a crítica pós-done da Onda 1, o gap de hypothesisScore para AZ-HYP-004 e a pendência de clique em navegador, sem alterar o motor.",
+      "status": "done",
+      "depends_on": [
+        "AZ-QA-002"
+      ],
+      "targets": [
+        "docs/qa/**",
+        "docs/architecture/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/critica-onda1-arch.md",
+          "docs/architecture/az-hyp-004-gap-hypothesis-score.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Crítica da Onda 1 gravada em docs/qa.",
+        "Gap hypothesisScore=0 documentado para AZ-HYP-004.",
+        "Pendência de navegador registrada; AZ-QA-002 permanece done."
+      ],
+      "required_review_mode": "docs",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T17:18:48Z",
+      "verification": {
+        "checks": [
+          "docs/qa/critica-onda1-arch.md mapeia P1→AZ-HOTFIX-006, P2→AZ-HOTFIX-007, P3→gap AZ-HYP-004.",
+          "AZ-QA-002 continua done; verify-function-map não exigido (spec sem motor)."
+        ]
+      },
+      "completed_at": "2026-09-16T17:19:39Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-006",
+      "task_kind": "impl",
+      "title": "Corrigir title do fixture 3.0 inválido",
+      "description": "O fixture negativo schema-3.0-invalid.json declara title de fixture válido. Corrigir o título para refletir a ausência de metadata.id.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "tests/fixtures/schema-3.0-invalid.json",
+        "docs/architecture/fixtures/schema-3.0-invalid.json"
+      ],
+      "outputs": {
+        "files": [
+          "tests/fixtures/schema-3.0-invalid.json",
+          "docs/architecture/fixtures/schema-3.0-invalid.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/fixtures/**"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "O title descreve fixture inválido por ausência de metadata.id.",
+        "metadata.id continua ausente.",
+        "validate-case continua FAIL nesse arquivo."
+      ],
+      "required_review_mode": "docs",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T17:19:39Z",
+      "verification": {
+        "checks": [
+          "title contém 'inválido' e 'metadata.id'; campo id ausente em metadata.",
+          "node scripts/validate-case.mjs tests/fixtures/schema-3.0-invalid.json → SCHEMA_FAIL metadata.id"
+        ]
+      },
+      "completed_at": "2026-09-16T17:19:59Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-007",
+      "task_kind": "impl",
+      "title": "Recusar WARRANT no estado BRIEFING",
+      "description": "Remover a transição BRIEFING+WARRANT da FSM e recusar submitDossier até haver investigação (ACTION ou TRAVEL).",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-005"
+      ],
+      "targets": [
+        "src/core/state-machine.js",
+        "dist/modules/state-machine.js",
+        "tests/core/state-machine.test.js",
+        "dist/app.js"
+      ],
+      "outputs": {
+        "files": [
+          "src/core/state-machine.js",
+          "dist/app.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/app.js",
+        "dist/modules/**",
+        "src/core/**",
+        "tests/core/**"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "transition BRIEFING + WARRANT retorna ok false.",
+        "INVESTIGATING + WARRANT continua válido.",
+        "submitDossier recusa mandado no BRIEFING sem gravar warrant."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T17:19:59Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/core/state-machine.test.js FSM_PASS incluindo no warrant from briefing",
+          "regression: submitDossier chama transition WARRANT antes de issueWarrant; node --check dist/app.js"
+        ]
+      },
+      "issue_id": "ISS-AZ-BRIEFING-WARRANT-20260916",
+      "fixes": "BRIEFING não transita com WARRANT; submitDossier recusa mandado até ACTION/TRAVEL. INVESTIGATING+WARRANT permanece.",
+      "completed_at": "2026-09-16T17:21:06Z"
+    },
+    {
+      "task_id": "AZ-QA-002-BROWSER",
+      "task_kind": "qa",
+      "title": "Clique real pós-ESM da Onda 1",
+      "description": "Exercitar no navegador carga do caso, evidência, mandado, prisão suficiente/insuficiente/errada e recusa de mandado no BRIEFING. Bloqueia AZ-VSLICE-001.",
+      "status": "done",
+      "depends_on": [
+        "AZ-QA-002",
+        "AZ-HOTFIX-007"
+      ],
+      "targets": [
+        "docs/qa/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/az-qa-002-browser.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Sessão de navegador cobre os 7 passos da crítica Onda 1.",
+        "Nenhuma conclusão apenas por declaração do implementador."
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-16T17:22:21Z",
+      "verification": {
+        "checks": [
+          "Sessão 1: modal PRISÃO LEGALMENTE VALIDADA; validateArrest APPROVED reasons warrant_minimum_and_essentials; fsm CASE_WON",
+          "Sessão 2: modal CONJUNTO PROBATÓRIO INSUFICIENTE; DENIED insufficient_evidence; lt_a sem provas. Sessão 3: MANDADO NÃO CORRESPONDENTE; DENIED wrong_warrant lt_b"
+        ]
+      },
+      "completed_at": "2026-09-16T17:50:27Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-BRIEFING-WARRANT-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-BRIEFING-WARRANT-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-BRIEFING-WARRANT-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-BRIEFING-WARRANT-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-BRIEFING-WARRANT-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-BRIEFING-WARRANT-20260916",
+      "fixes": "AZ-HOTFIX-007",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T17:21:55Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-007 done; FSM recusa BRIEFING+WARRANT",
+          "regression: verify-function-map PASS"
+        ]
+      },
+      "completed_at": "2026-09-16T17:22:04Z"
+    },
+    {
+      "task_id": "AZ-SPEC-004",
+      "task_kind": "spec",
+      "title": "Sincronizar function-map após AZ-HOTFIX-007",
+      "description": "Atualizar SHA e linhas do mapa de funções após a recusa de WARRANT no BRIEFING em dist/app.js.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HOTFIX-007"
+      ],
+      "targets": [
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/function-map.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "sourceSha256 do mapa coincide com dist/app.js.",
+        "verify-function-map PASS."
+      ],
+      "required_review_mode": "docs",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T17:21:34Z",
+      "verification": {
+        "checks": [
+          "node scripts/verify-function-map.mjs FUNCTION_MAP_PASS total=79",
+          "sourceSha256 do JSON coincide com sha256sum dist/app.js"
+        ]
+      },
+      "completed_at": "2026-09-16T17:21:55Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-001",
+      "task_kind": "spec",
+      "title": "Especificar o registro de evidência",
+      "description": "Definir a entidade de evidência que alimentará restrições, hipóteses, validações e relatórios: origem, admissibilidade, qualidade, integridade e distinção fato/interpretação. Sem alterar dist.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "docs/architecture/az-evidence-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-evidence-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Campos obrigatórios e opcionais documentados alinhados a evidence-record.schema.json.",
+        "Dados ausentes não são convertidos em falsidade.",
+        "Evidência contraditória e inadmissível podem ser preservadas.",
+        "Esquema legado 2.x continua adaptável; todo registro tem procedência rastreável ou marca de origem desconhecida."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T18:08:26Z",
+      "verification": {
+        "checks": [
+          "Campos obrigatórios id/title/text/tag e opcionais source/admissibility/quality/integrity alinhados a evidence-record.schema.json (SHA e679a826…); extensões WBS via additionalProperties.",
+          "Ausência documentada como unknown/null/omissão; quality null ≠ 0; admissibility unknown ≠ inadmissible; source ausente não inventa procedência.",
+          "Contradição (contradicts) e inadmissível permanecem no catálogo; exclusão é política 003, não apagamento.",
+          "Adaptador 2.x (WARN admissibility=unknown quality=null integrity=unverified) permanece; E01–E16 preservam IDs na 004.",
+          "Ending wrong_warrant_* e insufficient_evidence_* registrados como opcionais a formalizar em AZ-ARCH-001-PATCH-ENDING antes de AZ-HYP-*.",
+          "Serviço produz EvidenceRecord[], acumula IDs, é consultável; NÃO altera issueWarrant até AZ-SUSPECT-004; não cria campos em arrest_requirements.",
+          "Espelho dist/modules + verify-function-map PASS + import ESM vinculados a AZ-EVIDENCE-002/003. Motor intacto: function-map PASS 79, random-scenarios PASS, dist/app.js SHA 6bb035c3… inalterado."
+        ]
+      },
+      "completed_at": "2026-09-16T18:10:56Z"
+    },
+    {
+      "task_id": "AZ-VSLICE-001",
+      "task_kind": "impl",
+      "title": "Materializar capítulo evoluído no esquema 3.0",
+      "description": "Criar um capítulo jogável que integre território explícito, evidências estruturadas, restrições, suspeitos compartilhando atributos, hipótese, validação, relatório, minijogo e avaliação de carreira. Gate de clique de prisão: AZ-QA-002-BROWSER.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-QA-002-BROWSER",
+        "AZ-QA-004",
+        "AZ-TERR-007",
+        "AZ-MINI-009",
+        "AZ-QA-005",
+        "AZ-QA-006"
+      ],
+      "targets": [
+        "dist/game.json",
+        "content/cases/**"
+      ],
+      "outputs": {
+        "files": [
+          "content/cases/vertical-slice-3.0.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "content/cases/**"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "usa território explícito;",
+        "usa restrições reais;",
+        "suspeitos compartilham atributos;",
+        "jogador formula hipótese;",
+        "ao menos um minijogo produz evidência;",
+        "relatório é obrigatório;",
+        "prisão falha com culpado correto e prova insuficiente;",
+        "carreira recebe avaliação."
+      ],
+      "required_review_mode": "functional"
+    },
+    {
+      "task_id": "AZ-ARCH-001-PATCH-ENDING",
+      "task_kind": "impl",
+      "title": "Adicionar campos de ending expandido ao esquema 3.0",
+      "description": "Formalizar no schema oficial 3.0 os quatro campos opcionais de ending já usados pelo fixture jogável, sem alterar a compatibilidade 2.x.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001",
+        "AZ-ARCH-002",
+        "AZ-EVIDENCE-001"
+      ],
+      "targets": [
+        "src/contracts/case-schema-3.0.json",
+        "docs/architecture/schemas/case-schema-3.0.json",
+        "docs/architecture/case-schema-3.0.md"
+      ],
+      "outputs": {
+        "files": [
+          "src/contracts/case-schema-3.0.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/schemas/case-schema-3.0.json",
+        "docs/architecture/case-schema-3.0.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "ending declara wrong_warrant_title, wrong_warrant_text, insufficient_evidence_title e insufficient_evidence_text como strings opcionais.",
+        "Nenhum dos quatro novos campos integra required; casos 3.0 existentes continuam válidos.",
+        "Casos 2.x continuam aceitos com WARN."
+      ],
+      "required_review_mode": "docs",
+      "required_verification": [
+        "node scripts/validate-case.mjs tests/fixtures/schema-3.0-valid.json",
+        "node scripts/validate-case.mjs dist/game.json",
+        "node scripts/validate-case.mjs tests/fixtures/campaign-contract-min-playable.json"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:18:46Z",
+      "verification": {
+        "checks": [
+          "PASS: node scripts/validate-case.mjs tests/fixtures/schema-3.0-valid.json -> SCHEMA_PASS version=3.x issues=0",
+          "PASS esperado como WARN legado: node scripts/validate-case.mjs dist/game.json -> SCHEMA_WARN version=2.x",
+          "PASS esperado como WARN legado: node scripts/validate-case.mjs docs/qa/fixtures/campaign-contract-min-playable.json -> SCHEMA_WARN version=2.x",
+          "PASS: jq confirmou os quatro tipos string e ausência dos quatro nomes em ending.required",
+          "PASS: git diff --check src/contracts/case-schema-3.0.json"
+        ]
+      },
+      "completed_at": "2026-09-16T18:20:40Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-002",
+      "task_kind": "impl",
+      "title": "Implementar serviço de evidências",
+      "description": "Centralizar descoberta, catalogação e consulta de EvidenceRecord. Espelho ESM em dist/modules. Não alterar issueWarrant nem arrest-validator. Integração mínima em FN-014 act.",
+      "status": "done",
+      "depends_on": [
+        "AZ-EVIDENCE-001",
+        "AZ-ARCH-004"
+      ],
+      "targets": [
+        "src/domain/evidence/evidence-service.js",
+        "dist/modules/evidence-service.js",
+        "tests/domain/evidence-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/evidence/evidence-service.js",
+          "dist/modules/evidence-service.js",
+          "tests/domain/evidence-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/evidence-service.js",
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "catalogEvidence é idempotente para o mesmo evidenceId.",
+        "getDiscovered retorna somente evidências em state.evidence.",
+        "Evidência com admissibility inadmissible permanece no catálogo.",
+        "isEssential consulta arrest_requirements.required_evidence do capítulo atual.",
+        "Espelho dist/modules/evidence-service.js importável no Chromium sem erro ESM.",
+        "verify-function-map PASS.",
+        "verify-random-scenarios PASS.",
+        "4 testes hotfix PASS (não regredir)."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:21:07Z",
+      "verification": {
+        "checks": [
+          "catalogEvidence idempotente: segundo EA1 retorna duplicate=true e evidence.length=1 (evidence-service.test.mjs).",
+          "getDiscovered devolve só IDs em state.evidence; EC1 ausente; inadmissible EB1 permanece.",
+          "isEssential lê arrest_requirements.required_evidence do game/capítulo (EA1 vs overlay EB1).",
+          "Chromium import('/modules/evidence-service.js') em http://127.0.0.1:8770/ sem erro ESM; funções catalogEvidence,getById,getDiscovered,isEssential.",
+          "node --check dist/app.js; FN-014 act chama catalogEvidence(state,a.evidence,game); SHA 8e0b2d03…; function-map PASS 79.",
+          "verify-random-scenarios PASS; tests/domain/run-all.mjs DOMAIN_PASS; tests/hotfix/run-all.mjs HOTFIX_SUITE_PASS tests=4.",
+          "issueWarrant e arrest-validator SHA inalterados; source null não vira falsidade."
+        ]
+      },
+      "completed_at": "2026-09-16T18:24:41Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-004",
+      "task_kind": "impl",
+      "title": "Migrar evidências do caso atual",
+      "description": "Adaptar E01-E16 ao novo esquema de evidência sem inventar fatos implícitos, preservando a campanha legada e a separação dos capítulos.",
+      "status": "done",
+      "depends_on": [
+        "AZ-EVIDENCE-001",
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "dist/game.json",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "docs/architecture/function-map.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Todos os IDs E01-E16 existentes são preservados.",
+        "Origem desconhecida permanece explicitamente desconhecida, sem procedência inventada.",
+        "Evidências de tenentes não vazam indevidamente para capítulos de Cifra.",
+        "A campanha legada continua solucionável.",
+        "Os mapas de funções registram os impactos diretos e indiretos da mudança em dist/game.json e o verificador passa."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:21:31Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-EVIDENCE-004-PATCH-BOUNDARY done; IDs E01-E08/E11-E16 preservados com source:null",
+          "regression: FUNCTION_MAP_PASS 79; RANDOM_SCENARIOS_PASS; DOMAIN_PASS; CASE_ADAPTER_PASS; FSM_PASS; HOTFIX_SUITE_PASS 4"
+        ]
+      },
+      "completed_at": "2026-09-16T18:30:40Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-003",
+      "task_kind": "impl",
+      "title": "Implementar admissibilidade, integridade e qualidade",
+      "description": "Impedir que toda pista encontrada seja tratada automaticamente como prova suficiente. evidence-policy.js puro + espelho ESM. Não ligar em issueWarrant. Não alterar arrest-validator nesta tarefa.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-EVIDENCE-002"
+      ],
+      "targets": [
+        "src/domain/evidence/evidence-policy.js",
+        "dist/modules/evidence-policy.js",
+        "tests/domain/evidence-policy.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/evidence/evidence-policy.js",
+          "dist/modules/evidence-policy.js",
+          "tests/domain/evidence-policy.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/evidence-policy.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "admissibilidade é distinta de relevância.",
+        "qualidade não altera o fato observado.",
+        "evidência incompleta pode exigir confirmação.",
+        "evidência inadmissível permanece visível, mas não sustenta mandado ou prisão.",
+        "decisão produz explicação.",
+        "Espelho dist/modules/evidence-policy.js importável no Chromium sem erro ESM.",
+        "issueWarrant e arrest-validator inalterados."
+      ],
+      "required_review_mode": "functional"
+    },
+    {
+      "task_id": "HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-EVIDENCE-LEGACY-TEST-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-EVIDENCE-LEGACY-TEST-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+      "fixes": "Migração limitada a source:null; teste do adaptador preservado e novamente verde.",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:26:59Z",
+      "verification": {
+        "checks": [
+          "unit: node tests/schema/case-adapter.test.mjs -> CASE_ADAPTER_PASS",
+          "regression: validate-case dist/game.json -> WARN 2.x; verify-random-scenarios PASS; hotfix suite PASS"
+        ]
+      },
+      "completed_at": "2026-09-16T18:27:42Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-004-PATCH-BOUNDARY",
+      "task_kind": "impl",
+      "title": "Materializar migração de evidências com boundary correto",
+      "description": "Aplicar os efeitos já validados de AZ-EVIDENCE-004 com concessão explícita para dist/game.json e mapas obrigatórios.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "dist/game.json",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "docs/architecture/function-map.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Materializa source:null em E01-E08 e E11-E16 sem inventar E09/E10 ou outros fatos.",
+        "Preserva isolamento das evidências por capítulo e compatibilidade 2.x.",
+        "Mapa de funções atualizado e verificado."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:30:21Z",
+      "verification": {
+        "checks": [
+          "unit: jq confirmou IDs, source:null e ausência dos demais defaults no JSON",
+          "regression: FUNCTION_MAP_PASS 79; RANDOM_SCENARIOS_PASS 4/9/9; DOMAIN_PASS; CASE_ADAPTER_PASS; FSM_PASS; HOTFIX_SUITE_PASS 4"
+        ]
+      },
+      "completed_at": "2026-09-16T18:30:23Z"
+    },
+    {
+      "task_id": "AZ-SUSPECT-001",
+      "task_kind": "spec",
+      "title": "Especificar perfil multidimensional de suspeitos",
+      "description": "Definir SuspectRecord 3.0 com dimensões globais e específicas do caso, regras anti-trivialidade e contrato futuro de mandado, sem alterar a lógica atual.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "docs/architecture/az-suspect-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-suspect-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/az-suspect-001.md"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Define estrutura JSON com campos globais e campos por caso, relações por IDs estáveis e sem transformar ausência em falsidade.",
+        "Define regras anti-trivialidade com atributos compartilhados e álibi dependente de evidência válida.",
+        "Especifica o mandado futuro de AZ-SUSPECT-004 sem alterar a lógica atual.",
+        "Define critérios verificáveis para AZ-SUSPECT-002 e AZ-SUSPECT-003."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T18:38:51Z",
+      "verification": {
+        "checks": [
+          "PASS: documento existe e contém estrutura JSON com id, codename, capabilities, methods, mobility, opportunity, possibleLocationIds e alibis",
+          "PASS: regras anti-trivialidade, álibi com evidência válida e ausência como unknown estão explícitas",
+          "PASS: mandado futuro exige suspeito único, hipótese, suporte probatório e conformidade; lógica atual declarada fora de escopo",
+          "PASS: critérios verificáveis de AZ-SUSPECT-002 e AZ-SUSPECT-003 presentes; git diff --check limpo"
+        ]
+      },
+      "completed_at": "2026-09-16T18:41:05Z"
+    },
+    {
+      "task_id": "AZ-TERR-001",
+      "task_kind": "spec",
+      "title": "Especificar catálogo territorial brasileiro",
+      "description": "Definir catálogo hierárquico Brasil, cinco regiões, 26 estados mais DF, municípios e locais investigáveis, com geografia separada da projeção visual.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "docs/architecture/az-terr-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-terr-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/az-terr-001.md"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Define estrutura JSON obrigatória e opcional de cada nível territorial.",
+        "Separa coordenadas geográficas de mapPosition em pixels e define atributos investigativos por UF.",
+        "Define migração das cinco cidades e referencia as 27 artes existentes.",
+        "Destino sem arte produz WARN e nunca fallback silencioso.",
+        "Define critérios verificáveis para AZ-TERR-002 e AZ-TERR-003."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T18:38:52Z",
+      "verification": {
+        "checks": [
+          "PASS: estruturas JSON e campos obrigatórios/opcionais dos cinco níveis documentados",
+          "PASS: coords WGS84 e mapPosition em pixels separados; seis grupos de atributos investigativos por UF presentes",
+          "PASS: migração das cinco cidades preserva IDs/ações/rotas; 27 WEBPs confirmados em dist/assets/cities",
+          "PASS: TERRITORY_ART_MISSING sem fallback silencioso e critérios de AZ-TERR-002/003 presentes; git diff --check limpo"
+        ]
+      },
+      "completed_at": "2026-09-16T18:41:05Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-004-SCOPE-CORRECTION",
+      "task_kind": "spec",
+      "title": "Registrar escopo real de 14 evidências",
+      "description": "Documentar que AZ-EVIDENCE-004 migra 14 registros existentes, que E09/E10 nunca foram definidos e que os demais defaults permanecem em memória; fechar ISS-AZ-EVIDENCE-COUNT-20260916 após validação.",
+      "status": "done",
+      "depends_on": [
+        "AZ-EVIDENCE-004"
+      ],
+      "targets": [
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Registra explicitamente a contagem de 14 e os IDs E01-E08/E11-E16.",
+        "Registra que E09/E10 nunca foram definidos nem referenciados.",
+        "Registra o fechamento de ISS-AZ-EVIDENCE-COUNT-20260916 como lacuna de numeração.",
+        "Mantém admissibility, quality e integrity como defaults do adaptador em memória."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-16T18:52:41Z",
+      "verification": {
+        "checks": [
+          "PASS: grep -rn para E09/E10 em dist/game.json retornou vazio",
+          "PASS: jq confirmou count=14, IDs exatos, source:null e ausência de admissibility/quality/integrity",
+          "PASS: FUNCTION_MAP_PASS total=79 functions=42 arrows=37; RANDOM_SCENARIOS_PASS chapters=4 scenarios=9; validate-case WARN 2.x esperado",
+          "PASS: SHA-256 de dist/game.json coincide com o último efeito governado; somente function-map.md integra este file_update"
+        ]
+      },
+      "completed_at": "2026-09-16T18:53:12Z"
+    },
+    {
+      "task_id": "AZ-HYP-001",
+      "task_kind": "spec",
+      "title": "Especificar ciclo de hipóteses",
+      "description": "Definir o ciclo e o contrato de hipóteses de autoria, rota, destino, método, vínculo e cronologia, incluindo estados, evidências favoráveis e contrárias, confiança sem promoção a prova, histórico persistido e critérios das implementações AZ-HYP-002 a AZ-HYP-004.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "docs/architecture/az-hyp-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-hyp-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/az-hyp-001.md"
+      ],
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Estados active, supported, weakened, refuted e inconclusive definidos.",
+        "Evidências favoráveis e contrárias são representadas sem apagar contradições.",
+        "Confiança declarada não substitui suporte probatório.",
+        "Revisões preservam histórico no save do jogo.",
+        "Critérios de AZ-HYP-002, AZ-HYP-003 e AZ-HYP-004 são definidos, incluindo canSupportArrest(record) como interface consultada por arrest-validator em AZ-HYP-004 para calcular hypothesisScore."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T18:56:29Z",
+      "verification": {
+        "checks": [
+          "Conteúdo obrigatório conferido por rg no documento: estados, suporte/contradição, histórico, canSupportArrest, hypothesisScore e nota QA de 14 registros.",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37.",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra.",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_WARN esperado para 2.x sem schemaVersion.",
+          "python -m esaa --root . verify: verify_status ok no seq 742 antes do complete."
+        ]
+      },
+      "completed_at": "2026-09-16T18:59:14Z"
+    },
+    {
+      "task_id": "AZ-QA-EVIDENCE-001",
+      "task_kind": "qa",
+      "title": "Verificar a fundação probatória",
+      "description": "Auditar procedência, normalização em memória, admissibilidade, qualidade, integridade, compatibilidade legada e canSupportArrest sobre o catálogo real de 14 evidências.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-EVIDENCE-003",
+        "AZ-EVIDENCE-004",
+        "AZ-EVIDENCE-005"
+      ],
+      "targets": [
+        "docs/qa/az-qa-evidence-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/az-qa-evidence-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/qa/az-qa-evidence-001.md"
+      ],
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Toda evidência ativa possui origem ou marca explícita de origem desconhecida.",
+        "evidence-policy.js lê admissibility do EvidenceRecord normalizado pelo adaptador em memória, não diretamente de dist/game.json.",
+        "dist/game.json mantém somente source: null nas evidências; admissibility, quality e integrity são defaults do adaptador em memória.",
+        "canSupportArrest funciona com os valores normalizados dos 14 registros existentes E01-E08 e E11-E16; E09/E10 não são criados.",
+        "Evidência inadmissível não valida prisão, evidência parcial não é promovida silenciosamente e casos legados continuam carregando."
+      ],
+      "required_review_mode": "regression"
+    },
+    {
+      "task_id": "AZ-TERR-002",
+      "task_kind": "impl",
+      "title": "Migrar as cinco cidades para o modelo territorial explícito",
+      "description": "Adicionar territory e asset às cinco locations atuais, preservando IDs, nomes, coordenadas, ações, rotas, cenários e demais contratos do caso.",
+      "status": "done",
+      "depends_on": [
+        "AZ-TERR-001",
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "dist/game.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "As cinco locations recebem territory com UF, região, capitalOf e municipalityType.",
+        "As cinco locations referenciam os nomes reais dos assets existentes em dist/assets/cities/.",
+        "IDs, nomes, x, y, actions, travel, navigation, scenarios, action_overrides, arrest_requirements, suspects, campaign, metadata e evidence permanecem inalterados.",
+        "dist/app.js e src/domain permanecem inalterados; nenhuma função ou callback é criado ou modificado.",
+        "function-map.md registra o impacto de dados e verify-function-map permanece PASS."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:02:08Z",
+      "verification": {
+        "checks": [
+          "Cinco locations com territory e assets existentes; JSON válido.",
+          "Hash estrutural preservado: 3cfdb142220f91e0c385488b83860a6501bb9eb6b379611adf12d2b18294cbe7.",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9.",
+          "SCHEMA_WARN esperado para 2.x; node --check dist/app.js PASS.",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37; ESAA verify ok."
+        ]
+      },
+      "completed_at": "2026-09-16T19:05:59Z"
+    },
+    {
+      "task_id": "AZ-TERR-002-PATCH-BOUNDARY",
+      "task_kind": "impl",
+      "title": "Aplicar migração territorial com boundary corrigido",
+      "description": "Formalizar em dist/game.json os cinco blocos territory e asset validados por AZ-TERR-002 após correção da concessão de escrita.",
+      "status": "done",
+      "depends_on": [
+        "AZ-TERR-001",
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "dist/game.json"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Cinco locations recebem somente territory e asset conforme AZ-TERR-002.",
+        "Todos os demais campos do caso permanecem byte-semanticamente preservados.",
+        "ISS-AZ-TERR-002-BOUNDARY-20260916 pode ser resolvido após escrita e verificações."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:04:50Z",
+      "verification": {
+        "checks": [
+          "Base dist/game.json SHA-256 cdd29d80f712d614acd6bc5f831d3ec623148806942c7455ba8658f49f8fa37e.",
+          "Cinco edições cirúrgicas adicionam apenas territory e asset aos IDs reais.",
+          "Assets previamente confirmados em dist/assets/cities/."
+        ]
+      },
+      "completed_at": "2026-09-16T19:05:44Z"
+    },
+    {
+      "task_id": "AZ-TERR-003",
+      "task_kind": "impl",
+      "title": "Cadastrar as 27 unidades federativas e suas capitais",
+      "description": "Criar catálogo canônico brasileiro com 27 StateRecords, capitais, assets reais, mapa do Brasil e atributos investigativos inicialmente vazios.",
+      "status": "done",
+      "depends_on": [
+        "AZ-TERR-001"
+      ],
+      "targets": [
+        "content/territories/brazil-states.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "content/territories/brazil-states.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "content/territories/brazil-states.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Catálogo contém exatamente as 27 UFs na ordem regional definida e sem stateId duplicado.",
+        "Cada UF contém nome, região, capital e municipalityType capital.",
+        "Cada asset usa o nome real do WEBP existente e mapAsset usa dist/assets/ui/brasil-map.webp.",
+        "investigativeAttributes possui arrays vazios, sem dados inventados.",
+        "Nenhuma função ou callback é alterado; function-map.md registra o impacto de conteúdo."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:06:28Z",
+      "verification": {
+        "checks": [
+          "python -m json.tool: PASS; states length=27; stateIds únicos e ordem regional exata.",
+          "Regiões únicas: Centro-Oeste, Nordeste, Norte, Sudeste e Sul.",
+          "27 assets únicos referenciados e 27 arquivos WEBP existentes; mapAsset brasil-map.webp existe.",
+          "Todos os investigativeAttributes são arrays vazios e municipalityType=capital.",
+          "dist/game.json SHA-256 permaneceu 5c45bfae780ded794d7053c2b57cdf1314c1876e55264b2388fd2845b56c2fca durante AZ-TERR-003.",
+          "FUNCTION_MAP_PASS total=79; RANDOM_SCENARIOS_PASS chapters=4 scenarios=9; SCHEMA_WARN 2.x esperado; node --check dist/app.js PASS; ESAA verify ok seq 790."
+        ]
+      },
+      "completed_at": "2026-09-16T19:10:20Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-008",
+      "task_kind": "impl",
+      "title": "Corrigir pista de Brasília no cenário BYTE B-23",
+      "description": "Remover a circularidade da pista E12 no cenário byte_planalto: a ação sp_cafe em São Paulo deve conceder a evidência existente e indicar Brasília antes da viagem.",
+      "status": "done",
+      "depends_on": [
+        "AZ-TERR-002"
+      ],
+      "targets": [
+        "dist/game.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "No cenário byte_planalto/B-23, sp_cafe concede E12 e o resultado indica Brasília.",
+        "Nenhuma pista, evidência, cenário, location ou rota nova é criada.",
+        "IDs, travel, navigation, action_overrides fora de byte_planalto.sp_cafe e demais contratos permanecem inalterados.",
+        "No navegador, após Interrogar cafeteria em B-23, a mensagem indica Brasília e Brasília aparece como destino disponível.",
+        "function-map.md registra FN-016 actionData, FN-014 act, FN-006 getRecord e impactos de estado/UI sem alteração de código."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:23:05Z",
+      "verification": {
+        "checks": [
+          "Reprodução pré-patch no navegador: BYTE B-23, Interrogar cafeteria => PISTA INCONCLUSIVA e texto sem DF.",
+          "Pós-patch no navegador em origem limpa 127.0.0.4: BYTE B-23, Interrogar cafeteria => EVIDÊNCIA E12 e texto aponta para Brasília.",
+          "Pós-patch no navegador: diálogo VIAJAR exibe botão habilitado Viajar para Brasília, 4 horas.",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9.",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_WARN esperado para 2.x sem schemaVersion.",
+          "node --check dist/app.js: PASS; FUNCTION_MAP_PASS total=79 functions=42 arrows=37; git diff --check PASS; ESAA verify ok seq 806."
+        ]
+      },
+      "completed_at": "2026-09-16T19:25:46Z"
+    },
+    {
+      "task_id": "AZ-HOTFIX-009",
+      "task_kind": "impl",
+      "title": "Alinhar navegação dos cenários que expõem E05",
+      "description": "Nos cinco cenários em que re_terminal concede E05, permitir Recife para Brasília e, quando ausente, Brasília para Porto Alegre, preservando rotas canônicas e todo o conteúdo fora de navigation.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HOTFIX-008"
+      ],
+      "targets": [
+        "dist/game.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "NULL/U-11 mostra Brasília como destino disponível a partir de Recife após E05.",
+        "B-17, B-23, U-11, V-08 e V-14 têm Recife para Brasília quando re_terminal concede E05.",
+        "Nos mesmos cenários, Brasília oferece Porto Alegre para manter coerência com E07.",
+        "Nenhum scenario.route, action_override, evidence, location, travel ou código do motor é alterado.",
+        "Teste no navegador reproduz NULL/U-11 e confirma Brasília visível no mapa a partir de Recife."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:37:00Z",
+      "verification": {
+        "checks": [
+          "unit: E05_NAVIGATION_PASS — B-17, B-23, U-11, V-08, V-14 (e N-17) têm recife→brasilia e brasilia→porto_alegre.",
+          "regression: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9; validate-case SCHEMA_WARN 2.x; FUNCTION_MAP_PASS 79; node --check dist/app.js; git diff --check PASS.",
+          "browser: NULL · U-11 em Recife; Periciar terminal cataloga E05; VIAJAR exibe Brasília 5h habilitada (além de SP 8h e Manaus 8h)."
+        ]
+      },
+      "issue_id": "ISS-AZ-CLUE-DF-NAV-20260916",
+      "fixes": "AZ-HOTFIX-009: recife inclui brasilia e brasilia inclui porto_alegre nos cenários em que re_terminal concede E05. Sem nova rota, pista ou função.",
+      "completed_at": "2026-09-16T19:45:30Z"
+    },
+    {
+      "task_id": "HF-ISS-AZ-CLUE-DF-NAV-20260916",
+      "task_kind": "impl",
+      "title": "Hotfix for ISS-AZ-CLUE-DF-NAV-20260916",
+      "description": "Apply a minimal hotfix to resolve issue ISS-AZ-CLUE-DF-NAV-20260916 without regressing immutable done tasks.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "ISS-AZ-CLUE-DF-NAV-20260916"
+      ],
+      "outputs": {
+        "files": [
+          "src/hotfix/HF-ISS-AZ-CLUE-DF-NAV-20260916.txt"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "is_hotfix": true,
+      "issue_id": "ISS-AZ-CLUE-DF-NAV-20260916",
+      "fixes": "AZ-HOTFIX-009",
+      "scope_patch": [
+        "src/hotfix/"
+      ],
+      "required_verification": [
+        "unit",
+        "regression"
+      ],
+      "baseline_id": "B-000",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T19:45:52Z",
+      "verification": {
+        "checks": [
+          "unit: AZ-HOTFIX-009 done; Recife→Brasília nos cenários E05; browser NULL/U-11 Brasília 5h.",
+          "regression: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9; FUNCTION_MAP_PASS 79; nenhum dist/app.js nesta reconciliação."
+        ]
+      },
+      "completed_at": "2026-09-16T19:46:54Z"
+    },
+    {
+      "task_id": "AZ-GIT-PUSH-001",
+      "task_kind": "impl",
+      "title": "Commit e push do Arquivo Zero para o GitHub (elzobrito/Tito)",
+      "description": "Revisar working tree do repo em /home/elzobrito/desenvolvimento/Arquivo Zero, preparar commit(s) coerente(s) com as mudanças locais (incl. dist, src, docs, tests, .roadmap conforme política do projeto), e fazer push para origin (https://github.com/elzobrito/Tito.git) na branch main. Não incluir segredos nem artefatos inadequados. Confirmar status limpo e remote atualizado ao final.",
+      "status": "in_progress",
+      "depends_on": [],
+      "targets": [
+        ".git",
+        "README.md"
+      ],
+      "outputs": {
+        "files": [
+          "git:commit",
+          "git:push-origin-main"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "release",
+      "acceptance_criteria": [
+        "Working tree revisada; arquivos sensíveis/inadequados excluídos do commit",
+        "Commit(s) criados com mensagem clara refletindo o estado atual do Arquivo Zero",
+        "Push concluído para origin/main (github.com/elzobrito/Tito) sem divergência não resolvida",
+        "git status limpo (ou só untracked intencionalmente omitidos) e verify do ESAA do projeto ok"
+      ],
+      "required_review_mode": "release",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-16T23:17:01Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 18
+      "done": 59,
+      "in_progress": 1,
+      "todo": 3
     },
     "by_kind": {
-      "impl": 16,
-      "qa": 2
+      "impl": 47,
+      "qa": 6,
+      "spec": 10
     }
   }
 }

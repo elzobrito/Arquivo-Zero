@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "generatedForTask": "TITO-FUNCTION-MAP-001",
-  "lastUpdatedForTask": "TITO-MAP-RECIFE-MARKER-001",
+  "lastUpdatedForTask": "AZ-EVIDENCE-004",
   "source": "dist/app.js",
-  "sourceSha256": "ba9b829894c99d51dcf68bb2484f7315c14a4477e1873ea00ba16854d75a390f",
+  "sourceSha256": "8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
   "inventory": {
-    "total": 69,
-    "functions": 34,
-    "arrows": 35
+    "total": 79,
+    "functions": 42,
+    "arrows": 37
   },
   "idPolicy": "IDs FN-* e CB-* são permanentes e não podem ser reutilizados após remoção.",
   "functions": [
@@ -19,7 +19,7 @@
       "responsibility": "Resolver o primeiro elemento DOM correspondente a um seletor CSS.",
       "source": {
         "file": "dist/app.js",
-        "line": 1,
+        "line": 7,
         "anchor": "const $=s=>document.querySelector(s)"
       },
       "inputs": [
@@ -65,7 +65,7 @@
       "responsibility": "Carregar, validar e ativar um caso, restaurando ou criando a partida e migrando estados sem cenário.",
       "source": {
         "file": "dist/app.js",
-        "line": 6,
+        "line": 15,
         "anchor": "async function loadGame(src=\"game.json?v=campaign-001\")"
       },
       "inputs": [
@@ -82,10 +82,13 @@
         "FN-030",
         "FN-034",
         "FN-035",
-        "FN-031"
+        "FN-031",
+        "FN-038",
+        "FN-043"
       ],
       "calledBy": [
-        "CB-031"
+        "CB-031",
+        "FN-042"
       ],
       "events": [
         "inicialização",
@@ -105,7 +108,8 @@
         "locations",
         "travel",
         "dossier",
-        "scenarios"
+        "scenarios",
+        "evidence[].source"
       ],
       "storage": [
         "STORE + metadata.id"
@@ -137,7 +141,7 @@
       "responsibility": "Criar o estado inicial da partida com um cenário sorteado diferente do anterior quando possível.",
       "source": {
         "file": "dist/app.js",
-        "line": 7,
+        "line": 16,
         "anchor": "function fresh(previousScenario=null)"
       },
       "inputs": [
@@ -150,7 +154,10 @@
       "calledBy": [
         "FN-002",
         "FN-020",
-        "CB-030"
+        "CB-030",
+        "FN-038",
+        "FN-039",
+        "FN-040"
       ],
       "events": [
         "novo caso",
@@ -184,7 +191,7 @@
       "responsibility": "Persistir o estado atual da investigação sob a chave específica do caso.",
       "source": {
         "file": "dist/app.js",
-        "line": 8,
+        "line": 17,
         "anchor": "function save(){localStorage.setItem(saveKey()"
       },
       "inputs": [],
@@ -200,7 +207,9 @@
         "FN-020",
         "CB-014",
         "CB-029",
-        "CB-030"
+        "CB-030",
+        "FN-039",
+        "FN-040"
       ],
       "events": [],
       "dom": [],
@@ -234,7 +243,7 @@
       "responsibility": "Localizar uma cidade do caso pelo identificador.",
       "source": {
         "file": "dist/app.js",
-        "line": 8,
+        "line": 17,
         "anchor": "function loc(id=state.location)"
       },
       "inputs": [
@@ -277,7 +286,7 @@
       "responsibility": "Resolver uma evidência pelo identificador, aplicando o texto da variante ativa.",
       "source": {
         "file": "dist/app.js",
-        "line": 8,
+        "line": 17,
         "anchor": "function ev(id)"
       },
       "inputs": [
@@ -300,7 +309,8 @@
       "stateWrites": [],
       "gamePaths": [
         "evidence",
-        "scenarios[].evidence_overrides"
+        "scenarios[].evidence_overrides",
+        "evidence[].source"
       ],
       "storage": [],
       "sideEffects": [],
@@ -318,7 +328,7 @@
       "responsibility": "Sincronizar toda a interface com game e state, incluindo a arte contextual da cidade atual.",
       "source": {
         "file": "dist/app.js",
-        "line": 9,
+        "line": 18,
         "anchor": "function render()"
       },
       "inputs": [],
@@ -334,7 +344,8 @@
         "FN-011",
         "FN-012",
         "FN-016",
-        "FN-030"
+        "FN-030",
+        "FN-037"
       ],
       "calledBy": [
         "FN-002",
@@ -343,7 +354,9 @@
         "FN-017",
         "FN-020",
         "CB-014",
-        "CB-030"
+        "CB-030",
+        "FN-039",
+        "FN-040"
       ],
       "events": [
         "qualquer transição de estado"
@@ -389,7 +402,7 @@
       "responsibility": "Renderizar horas restantes, barra proporcional e alerta de prazo.",
       "source": {
         "file": "dist/app.js",
-        "line": 10,
+        "line": 19,
         "anchor": "function clock()"
       },
       "inputs": [],
@@ -432,7 +445,7 @@
       "responsibility": "Renderizar somente a cidade atual, visitadas e destinos diretamente acessíveis, projetando marcador clicável, nomes, custos e linha da rota a partir das coordenadas cartográficas de cada capital.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": "function map()"
       },
       "inputs": [],
@@ -442,7 +455,8 @@
         "CB-004",
         "CB-005",
         "CB-007",
-        "CB-008"
+        "CB-008",
+        "FN-036"
       ],
       "calledBy": [
         "FN-007"
@@ -496,7 +510,7 @@
       "responsibility": "Renderizar o local atual, seu contexto cultural/geográfico e suas ações investigativas disponíveis.",
       "source": {
         "file": "dist/app.js",
-        "line": 12,
+        "line": 22,
         "anchor": "function place()"
       },
       "inputs": [],
@@ -505,7 +519,8 @@
         "FN-005",
         "FN-022",
         "CB-009",
-        "CB-010"
+        "CB-010",
+        "FN-036"
       ],
       "calledBy": [
         "FN-007"
@@ -556,7 +571,7 @@
       "responsibility": "Renderizar somente evidências já encontradas ou um estado vazio, sem expor o inventário oculto.",
       "source": {
         "file": "dist/app.js",
-        "line": 13,
+        "line": 23,
         "anchor": "function evidence()"
       },
       "inputs": [],
@@ -600,7 +615,7 @@
       "responsibility": "Renderizar a quantidade já visitada, sem total antecipado, e o histórico textual da rota.",
       "source": {
         "file": "dist/app.js",
-        "line": 14,
+        "line": 24,
         "anchor": "function route()"
       },
       "inputs": [],
@@ -645,7 +660,7 @@
       "responsibility": "Preparar e abrir a confirmação de uma viagem.",
       "source": {
         "file": "dist/app.js",
-        "line": 15,
+        "line": 25,
         "anchor": "function openTravel(id)"
       },
       "inputs": [
@@ -654,7 +669,8 @@
       "returns": "void",
       "calls": [
         "FN-001",
-        "FN-005"
+        "FN-005",
+        "FN-036"
       ],
       "calledBy": [
         "CB-006"
@@ -699,7 +715,7 @@
       "responsibility": "Executar a versão efetiva de uma ação investigativa e decidir evidência, prisão ou liberação.",
       "source": {
         "file": "dist/app.js",
-        "line": 17,
+        "line": 27,
         "anchor": "function act(id)"
       },
       "inputs": [
@@ -713,10 +729,10 @@
         "FN-015",
         "FN-004",
         "FN-007",
-        "CB-016",
         "FN-019",
         "FN-021",
-        "FN-006"
+        "FN-006",
+        "FN-036"
       ],
       "calledBy": [
         "CB-011"
@@ -772,7 +788,7 @@
       "responsibility": "Consumir o orçamento de horas ou encerrar a partida por prazo.",
       "source": {
         "file": "dist/app.js",
-        "line": 18,
+        "line": 28,
         "anchor": "function spend(h,allowZero=false)"
       },
       "inputs": [
@@ -827,7 +843,7 @@
       "responsibility": "Renderizar formulário e situação do mandado sem revelar totais internos de suspeitos ou provas exigidas.",
       "source": {
         "file": "dist/app.js",
-        "line": 19,
+        "line": 29,
         "anchor": "function dossier()"
       },
       "inputs": [],
@@ -878,7 +894,7 @@
       "responsibility": "Cruzar atributos do formulário com suspeitos e emitir mandado apenas para correspondência única.",
       "source": {
         "file": "dist/app.js",
-        "line": 20,
+        "line": 30,
         "anchor": "function submitDossier(e)"
       },
       "inputs": [
@@ -887,7 +903,6 @@
       "returns": "void",
       "calls": [
         "CB-019",
-        "CB-020",
         "CB-022",
         "FN-004",
         "FN-007",
@@ -939,7 +954,7 @@
       "responsibility": "Ler e renderizar as estrelas acumuladas da carreira.",
       "source": {
         "file": "dist/app.js",
-        "line": 21,
+        "line": 31,
         "anchor": "function career()"
       },
       "inputs": [],
@@ -948,7 +963,8 @@
         "FN-001"
       ],
       "calledBy": [
-        "FN-007"
+        "FN-007",
+        "FN-041"
       ],
       "events": [],
       "dom": [
@@ -980,7 +996,7 @@
       "responsibility": "Conceder uma única estrela para a vitória da partida.",
       "source": {
         "file": "dist/app.js",
-        "line": 21,
+        "line": 31,
         "anchor": "function awardStar()"
       },
       "inputs": [],
@@ -1023,7 +1039,7 @@
       "responsibility": "Reiniciar a partida preservando a carreira e evitando repetir imediatamente a variante.",
       "source": {
         "file": "dist/app.js",
-        "line": 21,
+        "line": 31,
         "anchor": "function newCase()"
       },
       "inputs": [],
@@ -1084,7 +1100,7 @@
       "responsibility": "Configurar e abrir o diálogo genérico de mensagem ou desfecho.",
       "source": {
         "file": "dist/app.js",
-        "line": 22,
+        "line": 32,
         "anchor": "function show(k,t,c,html=false,final=false)"
       },
       "inputs": [
@@ -1106,7 +1122,8 @@
         "FN-002",
         "FN-014",
         "FN-015",
-        "FN-017"
+        "FN-017",
+        "FN-042"
       ],
       "events": [
         "click em continuar ou novo caso"
@@ -1142,7 +1159,7 @@
       "responsibility": "Escapar texto não confiável usando serialização segura pelo DOM.",
       "source": {
         "file": "dist/app.js",
-        "line": 22,
+        "line": 32,
         "anchor": "function escape(v)"
       },
       "inputs": [
@@ -1181,7 +1198,7 @@
       "responsibility": "Fechar todos os diálogos atualmente abertos.",
       "source": {
         "file": "dist/app.js",
-        "line": 22,
+        "line": 32,
         "anchor": "function closeAll()"
       },
       "inputs": [],
@@ -1220,7 +1237,7 @@
       "responsibility": "Atualizar a contagem de caracteres do caderno.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "function chars()"
       },
       "inputs": [],
@@ -1259,7 +1276,7 @@
       "responsibility": "Inicializar a ambientação Three.js opcional e resiliente a falhas.",
       "source": {
         "file": "dist/app.js",
-        "line": 24,
+        "line": 38,
         "anchor": "async function scene()"
       },
       "inputs": [],
@@ -1304,7 +1321,7 @@
       "responsibility": "Avançar a rotação do globo, renderizar o frame e reagendar o loop.",
       "source": {
         "file": "dist/app.js",
-        "line": 24,
+        "line": 38,
         "anchor": "(function a(){"
       },
       "inputs": [],
@@ -1348,7 +1365,7 @@
       "responsibility": "Sortear um cenário disponível, excluindo o anterior quando houver alternativa.",
       "source": {
         "file": "dist/app.js",
-        "line": 7,
+        "line": 16,
         "anchor": "function pickScenario(exclude=null)"
       },
       "inputs": [
@@ -1393,7 +1410,7 @@
       "responsibility": "Resolver a configuração da variante persistida no estado atual.",
       "source": {
         "file": "dist/app.js",
-        "line": 7,
+        "line": 16,
         "anchor": "function scenario()"
       },
       "inputs": [],
@@ -1430,7 +1447,7 @@
       "responsibility": "Combinar a ação-base com as substituições do cenário ativo.",
       "source": {
         "file": "dist/app.js",
-        "line": 7,
+        "line": 16,
         "anchor": "function actionData(action)"
       },
       "inputs": [
@@ -1472,7 +1489,7 @@
       "responsibility": "Decodificar a resposta HTTP do caso como JSON.",
       "source": {
         "file": "dist/app.js",
-        "line": 6,
+        "line": 15,
         "anchor": "fetch(src).then(r=>r.json())"
       },
       "inputs": [
@@ -1507,7 +1524,7 @@
       "responsibility": "Comparar uma cidade com o ID procurado.",
       "source": {
         "file": "dist/app.js",
-        "line": 8,
+        "line": 17,
         "anchor": "game.locations.find(x=>x.id===id)"
       },
       "inputs": [
@@ -1543,7 +1560,7 @@
       "responsibility": "Comparar uma evidência com o ID procurado.",
       "source": {
         "file": "dist/app.js",
-        "line": 8,
+        "line": 17,
         "anchor": "game.evidence.find(x=>x.id===id)"
       },
       "inputs": [
@@ -1579,7 +1596,7 @@
       "responsibility": "Projetar uma cidade conhecida em botão HTML acessível, usando locations[].x/y para coincidir área clicável e marcador com a posição geográfica.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": "visible.map(c=>{"
       },
       "inputs": [
@@ -1624,7 +1641,7 @@
       "responsibility": "Vincular o clique de cada cidade disponível.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": "forEach(b=>b.onclick=()=>openTravel"
       },
       "inputs": [
@@ -1666,7 +1683,7 @@
       "responsibility": "Encaminhar o destino clicado para a confirmação de viagem.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": "b.onclick=()=>openTravel(b.dataset.city)"
       },
       "inputs": [],
@@ -1704,7 +1721,7 @@
       "responsibility": "Resolver cada ID da rota em uma cidade.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": "state.route.map(id=>loc(id))"
       },
       "inputs": [
@@ -1743,7 +1760,7 @@
       "responsibility": "Converter as mesmas coordenadas percentuais do marcador clicável em ponto SVG, mantendo o término da rota coincidente.",
       "source": {
         "file": "dist/app.js",
-        "line": 11,
+        "line": 21,
         "anchor": ".map(c=>`${c.x*10},${c.y*6.2}`)"
       },
       "inputs": [
@@ -1782,7 +1799,7 @@
       "responsibility": "Aplicar a variante e projetar a ação em botão, respeitando execução e mandado.",
       "source": {
         "file": "dist/app.js",
-        "line": 12,
+        "line": 22,
         "anchor": "l.actions.map(base=>{"
       },
       "inputs": [
@@ -1829,7 +1846,7 @@
       "responsibility": "Vincular o clique de cada ação habilitada.",
       "source": {
         "file": "dist/app.js",
-        "line": 12,
+        "line": 22,
         "anchor": "forEach(b=>b.onclick=()=>act"
       },
       "inputs": [
@@ -1871,7 +1888,7 @@
       "responsibility": "Encaminhar a ação clicada ao motor investigativo.",
       "source": {
         "file": "dist/app.js",
-        "line": 12,
+        "line": 22,
         "anchor": "b.onclick=()=>act(b.dataset.action)"
       },
       "inputs": [],
@@ -1910,7 +1927,7 @@
       "responsibility": "Projetar somente uma evidência encontrada em cartão HTML.",
       "source": {
         "file": "dist/app.js",
-        "line": 13,
+        "line": 23,
         "anchor": "found.map(e=>`<article"
       },
       "inputs": [
@@ -1950,7 +1967,7 @@
       "responsibility": "Projetar uma etapa da rota em item numerado.",
       "source": {
         "file": "dist/app.js",
-        "line": 14,
+        "line": 24,
         "anchor": "state.route.map((id,i)=>`<div class=\"route-item\">"
       },
       "inputs": [
@@ -1993,7 +2010,7 @@
       "responsibility": "Consumir o custo e efetivar a viagem confirmada.",
       "source": {
         "file": "dist/app.js",
-        "line": 16,
+        "line": 26,
         "anchor": "$(\"#confirm-travel\").onclick=()=>{"
       },
       "inputs": [],
@@ -2002,7 +2019,8 @@
         "FN-001",
         "FN-015",
         "FN-004",
-        "FN-007"
+        "FN-007",
+        "FN-036"
       ],
       "calledBy": [],
       "events": [
@@ -2051,7 +2069,7 @@
       "responsibility": "Localizar a ação selecionada no local atual.",
       "source": {
         "file": "dist/app.js",
-        "line": 17,
+        "line": 27,
         "anchor": "loc().actions.find(x=>x.id===id)"
       },
       "inputs": [
@@ -2080,44 +2098,6 @@
       ]
     },
     {
-      "id": "CB-016",
-      "name": "act.hasRequiredEvidence",
-      "kind": "arrow",
-      "signature": "id => state.evidence.includes(id)",
-      "responsibility": "Verificar a presença de cada evidência essencial para a prisão.",
-      "source": {
-        "file": "dist/app.js",
-        "line": 17,
-        "anchor": "req.required_evidence.every(id=>state.evidence.includes(id))"
-      },
-      "inputs": [
-        "ID de evidência"
-      ],
-      "returns": "boolean",
-      "calls": [],
-      "calledBy": [
-        "FN-014"
-      ],
-      "events": [],
-      "dom": [],
-      "stateReads": [
-        "evidence"
-      ],
-      "stateWrites": [],
-      "gamePaths": [
-        "arrest_requirements.required_evidence"
-      ],
-      "storage": [],
-      "sideEffects": [],
-      "external": [
-        "Array.every"
-      ],
-      "impactAreas": [
-        "evidências",
-        "desfechos"
-      ]
-    },
-    {
       "id": "CB-017",
       "name": "dossier.renderField",
       "kind": "arrow",
@@ -2125,7 +2105,7 @@
       "responsibility": "Projetar um campo declarativo do dossiê.",
       "source": {
         "file": "dist/app.js",
-        "line": 19,
+        "line": 29,
         "anchor": "game.dossier.fields.map(x=>`<label>"
       },
       "inputs": [
@@ -2165,7 +2145,7 @@
       "responsibility": "Projetar uma opção de atributo do dossiê.",
       "source": {
         "file": "dist/app.js",
-        "line": 19,
+        "line": 29,
         "anchor": "x.options.map(o=>`<option>${o}</option>`)"
       },
       "inputs": [
@@ -2203,7 +2183,7 @@
       "responsibility": "Descartar atributos desconhecidos do cruzamento.",
       "source": {
         "file": "dist/app.js",
-        "line": 20,
+        "line": 30,
         "anchor": "Object.entries(data).filter(([,v])=>v)"
       },
       "inputs": [
@@ -2229,80 +2209,6 @@
       ]
     },
     {
-      "id": "CB-020",
-      "name": "submitDossier.matchSuspect",
-      "kind": "arrow",
-      "signature": "suspect => chosen.every(...) ",
-      "responsibility": "Manter suspeitos compatíveis com todos os atributos escolhidos.",
-      "source": {
-        "file": "dist/app.js",
-        "line": 20,
-        "anchor": "game.suspects.filter(s=>chosen.every"
-      },
-      "inputs": [
-        "suspect"
-      ],
-      "returns": "boolean",
-      "calls": [
-        "CB-021"
-      ],
-      "calledBy": [
-        "FN-017"
-      ],
-      "events": [],
-      "dom": [],
-      "stateReads": [],
-      "stateWrites": [],
-      "gamePaths": [
-        "suspects"
-      ],
-      "storage": [],
-      "sideEffects": [],
-      "external": [
-        "Array.filter"
-      ],
-      "impactAreas": [
-        "dados",
-        "dossiê"
-      ]
-    },
-    {
-      "id": "CB-021",
-      "name": "submitDossier.matchAttribute",
-      "kind": "arrow",
-      "signature": "([key, value]) => suspect[key] === value",
-      "responsibility": "Comparar um atributo escolhido com o registro do suspeito.",
-      "source": {
-        "file": "dist/app.js",
-        "line": 20,
-        "anchor": "chosen.every(([k,v])=>s[k]===v)"
-      },
-      "inputs": [
-        "par atributo/valor"
-      ],
-      "returns": "boolean",
-      "calls": [],
-      "calledBy": [
-        "CB-020"
-      ],
-      "events": [],
-      "dom": [],
-      "stateReads": [],
-      "stateWrites": [],
-      "gamePaths": [
-        "suspects[]"
-      ],
-      "storage": [],
-      "sideEffects": [],
-      "external": [
-        "Array.every"
-      ],
-      "impactAreas": [
-        "dados",
-        "dossiê"
-      ]
-    },
-    {
       "id": "CB-022",
       "name": "submitDossier.suspectName",
       "kind": "arrow",
@@ -2310,7 +2216,7 @@
       "responsibility": "Extrair nomes para a mensagem de múltiplos suspeitos.",
       "source": {
         "file": "dist/app.js",
-        "line": 20,
+        "line": 30,
         "anchor": "matches.map(s=>s.name)"
       },
       "inputs": [
@@ -2346,7 +2252,7 @@
       "responsibility": "Fechar uma mensagem não final quando o jogador continua.",
       "source": {
         "file": "dist/app.js",
-        "line": 22,
+        "line": 32,
         "anchor": "button.onclick=final?newCase:()=>el.message.close()"
       },
       "inputs": [],
@@ -2383,7 +2289,7 @@
       "responsibility": "Fechar individualmente cada diálogo aberto.",
       "source": {
         "file": "dist/app.js",
-        "line": 22,
+        "line": 32,
         "anchor": "forEach(d=>d.close())"
       },
       "inputs": [
@@ -2421,7 +2327,7 @@
       "responsibility": "Abrir o diálogo do dossiê.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "$(\"#dossier-button\").onclick=()=>el.dossier.showModal()"
       },
       "inputs": [],
@@ -2460,7 +2366,7 @@
       "responsibility": "Abrir o diálogo do caderno.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "$(\"#notes-button\").onclick=()=>el.notes.showModal()"
       },
       "inputs": [],
@@ -2498,7 +2404,7 @@
       "responsibility": "Vincular cada botão declarativo de fechamento ao seu diálogo.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "forEach(b=>b.onclick=()=>document.getElementById"
       },
       "inputs": [
@@ -2537,7 +2443,7 @@
       "responsibility": "Fechar o diálogo indicado pelo atributo data-close.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "b.onclick=()=>document.getElementById(b.dataset.close).close()"
       },
       "inputs": [],
@@ -2576,7 +2482,7 @@
       "responsibility": "Copiar o caderno para state, atualizar contagem e persistir.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
+        "line": 33,
         "anchor": "el.notebook.oninput=()=>{"
       },
       "inputs": [],
@@ -2617,15 +2523,16 @@
       "name": "events.resetCase",
       "kind": "arrow",
       "signature": "() => void",
-      "responsibility": "Confirmar e reiniciar a investigação com outra variante quando possível.",
+      "responsibility": "Acionar o reinício do capítulo.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
-        "anchor": "$(\"#reset-button\").onclick=()=>{if(confirm(\"Reiniciar toda a investigação?\")){const previous=state.scenario;localStorage.removeItem(saveKey()"
+        "line": 33,
+        "anchor": "$(\"#reset-button\").onclick=()=>resetChapter()"
       },
       "inputs": [],
       "returns": "void",
       "calls": [
+        "FN-039",
         "FN-001",
         "FN-003",
         "FN-004",
@@ -2677,8 +2584,8 @@
       "responsibility": "Ler o arquivo escolhido, decodificar JSON e carregar o novo caso.",
       "source": {
         "file": "dist/app.js",
-        "line": 23,
-        "anchor": "$(\"#json-input\").onchange=async e=>{"
+        "line": 33,
+        "anchor": "$(\"#json-input\").onchange=e=>{importCase"
       },
       "inputs": [
         "evento change"
@@ -2686,7 +2593,8 @@
       "returns": "Promise<void>",
       "calls": [
         "FN-001",
-        "FN-002"
+        "FN-002",
+        "FN-042"
       ],
       "calledBy": [],
       "events": [
@@ -2724,7 +2632,7 @@
       "responsibility": "Recalcular câmera e renderer quando a janela muda de tamanho.",
       "source": {
         "file": "dist/app.js",
-        "line": 24,
+        "line": 38,
         "anchor": "addEventListener(\"resize\",()=>{"
       },
       "inputs": [],
@@ -2762,20 +2670,38 @@
       "kind": "arrow",
       "signature": "() => mapDialog.showModal()",
       "responsibility": "Abrir a janela retro de mapa e destinos disponíveis.",
-      "source": {"file": "dist/app.js", "line": 23, "anchor": "$(\"#map-button\").onclick=()=>$(\"#map-dialog\").showModal()"},
+      "source": {
+        "file": "dist/app.js",
+        "line": 33,
+        "anchor": "$(\"#map-button\").onclick=()=>$(\"#map-dialog\").showModal()"
+      },
       "inputs": [],
       "returns": "void",
-      "calls": ["FN-001"],
+      "calls": [
+        "FN-001"
+      ],
       "calledBy": [],
-      "events": ["click em map-button"],
-      "dom": ["map-button", "map-dialog"],
+      "events": [
+        "click em map-button"
+      ],
+      "dom": [
+        "map-button",
+        "map-dialog"
+      ],
       "stateReads": [],
       "stateWrites": [],
       "gamePaths": [],
       "storage": [],
-      "sideEffects": ["abertura de dialog"],
-      "external": ["HTMLDialogElement"],
-      "impactAreas": ["interface", "navegação"]
+      "sideEffects": [
+        "abertura de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface",
+        "navegação"
+      ]
     },
     {
       "id": "CB-034",
@@ -2783,20 +2709,42 @@
       "kind": "arrow",
       "signature": "() => evidenceDialog.showModal()",
       "responsibility": "Abrir a janela retro com apenas as pistas já catalogadas.",
-      "source": {"file": "dist/app.js", "line": 23, "anchor": "$(\"#evidence-button\").onclick=()=>$(\"#evidence-dialog\").showModal()"},
+      "source": {
+        "file": "dist/app.js",
+        "line": 33,
+        "anchor": "$(\"#evidence-button\").onclick=()=>$(\"#evidence-dialog\").showModal()"
+      },
       "inputs": [],
       "returns": "void",
-      "calls": ["FN-001"],
+      "calls": [
+        "FN-001"
+      ],
       "calledBy": [],
-      "events": ["click em evidence-button"],
-      "dom": ["evidence-button", "evidence-dialog"],
-      "stateReads": ["evidence"],
+      "events": [
+        "click em evidence-button"
+      ],
+      "dom": [
+        "evidence-button",
+        "evidence-dialog"
+      ],
+      "stateReads": [
+        "evidence"
+      ],
       "stateWrites": [],
-      "gamePaths": ["evidence"],
+      "gamePaths": [
+        "evidence"
+      ],
       "storage": [],
-      "sideEffects": ["abertura de dialog"],
-      "external": ["HTMLDialogElement"],
-      "impactAreas": ["interface", "evidências"]
+      "sideEffects": [
+        "abertura de dialog"
+      ],
+      "external": [
+        "HTMLDialogElement"
+      ],
+      "impactAreas": [
+        "interface",
+        "evidências"
+      ]
     },
     {
       "id": "FN-030",
@@ -2806,7 +2754,7 @@
       "responsibility": "Dizer se o caso carregado declara campanha com capítulos.",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function campaignOn()"
       },
       "inputs": [],
@@ -2819,7 +2767,9 @@
         "FN-021",
         "FN-031",
         "FN-032",
-        "FN-035"
+        "FN-035",
+        "FN-038",
+        "FN-040"
       ],
       "events": [],
       "dom": [],
@@ -2844,7 +2794,7 @@
       "responsibility": "Resolver a chave de localStorage da fase corrente, sufixada pelo capítulo quando há campanha.",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function saveKey()"
       },
       "inputs": [],
@@ -2855,7 +2805,11 @@
       "calledBy": [
         "FN-002",
         "FN-004",
-        "CB-030"
+        "CB-030",
+        "FN-037",
+        "FN-038",
+        "FN-039",
+        "FN-040"
       ],
       "events": [],
       "dom": [],
@@ -2882,7 +2836,7 @@
       "responsibility": "Persistir o cursor da campanha (run e índice).",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function writeCampaign()"
       },
       "inputs": [],
@@ -2924,7 +2878,7 @@
       "responsibility": "Sortear lieutenants distintos do pool, anexar o chefão e gravar o cursor.",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function startCampaign()"
       },
       "inputs": [],
@@ -2934,7 +2888,9 @@
       ],
       "calledBy": [
         "FN-020",
-        "FN-034"
+        "FN-034",
+        "FN-038",
+        "FN-040"
       ],
       "events": [
         "início de campanha",
@@ -2973,7 +2929,7 @@
       "responsibility": "Restaurar o cursor persistido ou iniciar uma campanha nova.",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function readCampaign()"
       },
       "inputs": [],
@@ -3016,7 +2972,7 @@
       "responsibility": "Sobrepor culprit, start, briefing, prazo, requisitos e scenarios do capítulo ativo no objeto game.",
       "source": {
         "file": "dist/app.js",
-        "line": 5,
+        "line": 11,
         "anchor": "function applyChapter()"
       },
       "inputs": [],
@@ -3026,7 +2982,9 @@
       ],
       "calledBy": [
         "FN-002",
-        "FN-020"
+        "FN-020",
+        "FN-038",
+        "FN-040"
       ],
       "events": [],
       "dom": [],
@@ -3051,6 +3009,527 @@
         "estado",
         "evidências",
         "dossiê"
+      ]
+    },
+    {
+      "id": "FN-036",
+      "name": "isUnaffordable",
+      "kind": "function",
+      "signature": "isUnaffordable(cost, allowZero = false)",
+      "responsibility": "Recusar custo que deixaria o saldo negativo ou zerado, exceto prisão no limite exato.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 20,
+        "anchor": "function isUnaffordable(cost,allowZero=false)"
+      },
+      "inputs": [
+        "custo em horas",
+        "allowZero"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-009",
+        "FN-010",
+        "FN-013",
+        "FN-014",
+        "CB-014"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "hours"
+      ],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "tempo",
+        "navegação"
+      ]
+    },
+    {
+      "id": "FN-037",
+      "name": "isolateSave",
+      "kind": "function",
+      "signature": "isolateSave(reason)",
+      "responsibility": "Mover save inválido para chave .invalid e remover a chave ativa, sem logar o conteúdo.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 12,
+        "anchor": "function isolateSave(reason)"
+      },
+      "inputs": [
+        "reason"
+      ],
+      "returns": "void",
+      "calls": [
+        "FN-031"
+      ],
+      "calledBy": [
+        "FN-038",
+        "FN-007"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [
+        "STORE + .invalid"
+      ],
+      "sideEffects": [
+        "localStorage isolate"
+      ],
+      "external": [
+        "localStorage"
+      ],
+      "impactAreas": [
+        "persistência"
+      ]
+    },
+    {
+      "id": "FN-038",
+      "name": "restoreState",
+      "kind": "function",
+      "signature": "restoreState()",
+      "responsibility": "Restaurar save válido ou devolver estado inicial após isolar JSON, localização, cenário ou capítulo inválidos.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 13,
+        "anchor": "function restoreState()"
+      },
+      "inputs": [],
+      "returns": "state",
+      "calls": [
+        "FN-031",
+        "FN-037",
+        "FN-003",
+        "FN-033",
+        "FN-035",
+        "FN-030",
+        "CB-035",
+        "CB-036"
+      ],
+      "calledBy": [
+        "FN-002"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [
+        "state"
+      ],
+      "gamePaths": [
+        "locations",
+        "scenarios",
+        "campaign.chapters"
+      ],
+      "storage": [
+        "STORE"
+      ],
+      "sideEffects": [
+        "leitura localStorage"
+      ],
+      "external": [
+        "localStorage",
+        "JSON"
+      ],
+      "impactAreas": [
+        "persistência",
+        "estado"
+      ]
+    },
+    {
+      "id": "CB-035",
+      "name": "restoreState.locationMatch",
+      "kind": "arrow",
+      "signature": "location => location.id === parsed.location",
+      "responsibility": "Confirmar que a cidade persistida existe no caso.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 13,
+        "anchor": "game.locations.some(x=>x.id===parsed.location)"
+      },
+      "inputs": [
+        "location"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-038"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "locations"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "persistência"
+      ]
+    },
+    {
+      "id": "CB-036",
+      "name": "restoreState.scenarioMatch",
+      "kind": "arrow",
+      "signature": "scenario => scenario.id === parsed.scenario",
+      "responsibility": "Confirmar que o cenário persistido existe no capítulo ativo.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 13,
+        "anchor": "game.scenarios.some(s=>s.id===parsed.scenario)"
+      },
+      "inputs": [
+        "scenario"
+      ],
+      "returns": "boolean",
+      "calls": [],
+      "calledBy": [
+        "FN-038"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [],
+      "gamePaths": [
+        "scenarios"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "persistência"
+      ]
+    },
+    {
+      "id": "FN-042",
+      "name": "importCase",
+      "kind": "function",
+      "signature": "async importCase(file)",
+      "responsibility": "Validar tamanho e JSON de um caso importado e carregá-lo como dados.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 37,
+        "anchor": "async function importCase(file)"
+      },
+      "inputs": [
+        "File"
+      ],
+      "returns": "Promise<void>",
+      "calls": [
+        "FN-021",
+        "FN-002"
+      ],
+      "calledBy": [
+        "CB-031"
+      ],
+      "events": [
+        "change em json-input"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [
+        "parse JSON",
+        "loadGame"
+      ],
+      "external": [
+        "File API",
+        "JSON"
+      ],
+      "impactAreas": [
+        "dados",
+        "segurança"
+      ]
+    },
+    {
+      "id": "FN-039",
+      "name": "resetChapter",
+      "kind": "function",
+      "signature": "resetChapter()",
+      "responsibility": "Reiniciar o capítulo atual preservando campanha e estrelas.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 34,
+        "anchor": "function resetChapter()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-031",
+        "FN-003",
+        "FN-004",
+        "FN-007"
+      ],
+      "calledBy": [
+        "CB-030"
+      ],
+      "events": [
+        "click em reset-button"
+      ],
+      "dom": [],
+      "stateReads": [
+        "scenario"
+      ],
+      "stateWrites": [
+        "state"
+      ],
+      "gamePaths": [],
+      "storage": [
+        "saveKey"
+      ],
+      "sideEffects": [
+        "confirm",
+        "fresh"
+      ],
+      "external": [],
+      "impactAreas": [
+        "estado",
+        "persistência"
+      ]
+    },
+    {
+      "id": "FN-040",
+      "name": "resetCampaign",
+      "kind": "function",
+      "signature": "resetCampaign()",
+      "responsibility": "Sortear nova campanha e apagar o capítulo, preservando estrelas.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 35,
+        "anchor": "function resetCampaign()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-031",
+        "FN-030",
+        "FN-033",
+        "FN-035",
+        "FN-003",
+        "FN-004",
+        "FN-007"
+      ],
+      "calledBy": [
+        "CB-037"
+      ],
+      "events": [
+        "click em reset-campaign-button"
+      ],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [
+        "state",
+        "campaign"
+      ],
+      "gamePaths": [
+        "campaign"
+      ],
+      "storage": [
+        "CAMPAIGN",
+        "saveKey"
+      ],
+      "sideEffects": [
+        "confirm",
+        "startCampaign"
+      ],
+      "external": [],
+      "impactAreas": [
+        "estado",
+        "persistência"
+      ]
+    },
+    {
+      "id": "FN-041",
+      "name": "resetCareer",
+      "kind": "function",
+      "signature": "resetCareer()",
+      "responsibility": "Apagar estrelas sem alterar capítulo ou campanha.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 36,
+        "anchor": "function resetCareer()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-018"
+      ],
+      "calledBy": [
+        "CB-038"
+      ],
+      "events": [
+        "click em reset-career-button"
+      ],
+      "dom": [
+        "career-stars"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [
+        "CAREER"
+      ],
+      "sideEffects": [
+        "confirm",
+        "removeItem CAREER"
+      ],
+      "external": [
+        "localStorage"
+      ],
+      "impactAreas": [
+        "carreira"
+      ]
+    },
+    {
+      "id": "CB-037",
+      "name": "events.resetCampaign",
+      "kind": "arrow",
+      "signature": "() => resetCampaign()",
+      "responsibility": "Acionar o reinício da campanha.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 33,
+        "anchor": "$(\"#reset-campaign-button\").onclick=()=>resetCampaign()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-040"
+      ],
+      "calledBy": [],
+      "events": [
+        "click"
+      ],
+      "dom": [
+        "reset-campaign-button"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "CB-038",
+      "name": "events.resetCareer",
+      "kind": "arrow",
+      "signature": "() => resetCareer()",
+      "responsibility": "Acionar o zeramento da carreira.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 33,
+        "anchor": "$(\"#reset-career-button\").onclick=()=>resetCareer()"
+      },
+      "inputs": [],
+      "returns": "void",
+      "calls": [
+        "FN-041"
+      ],
+      "calledBy": [],
+      "events": [
+        "click"
+      ],
+      "dom": [
+        "reset-career-button"
+      ],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "interface"
+      ]
+    },
+    {
+      "id": "FN-043",
+      "name": "adaptCase",
+      "kind": "function",
+      "signature": "adaptCase(raw)",
+      "responsibility": "Normalizar casos 1.x/2.x para o modelo interno 3.0 em memória, preservando origem desconhecida explícita e emitindo WARN sem gravar disco.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 14,
+        "anchor": "function adaptCase(raw)"
+      },
+      "inputs": [
+        "objeto de caso"
+      ],
+      "returns": "{normalized, warnings, version}",
+      "calls": [
+        "CB-039"
+      ],
+      "calledBy": [
+        "FN-002"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "schemaVersion",
+        "evidence",
+        "evidence[].source",
+        "campaign"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "dados",
+        "compatibilidade"
+      ]
+    },
+    {
+      "id": "CB-039",
+      "name": "adaptCase.mapEvidence",
+      "kind": "arrow",
+      "signature": "(item, index) => evidence",
+      "responsibility": "Preservar source explícito e preencher admissibility/quality/integrity ausentes em evidências 2.x.",
+      "source": {
+        "file": "dist/app.js",
+        "line": 14,
+        "anchor": "normalized.evidence=(raw.evidence||[]).map((item,index)=>{"
+      },
+      "inputs": [
+        "evidence",
+        "index"
+      ],
+      "returns": "evidence",
+      "calls": [],
+      "calledBy": [
+        "FN-043"
+      ],
+      "events": [],
+      "dom": [],
+      "stateReads": [],
+      "stateWrites": [],
+      "gamePaths": [
+        "evidence",
+        "evidence[].source"
+      ],
+      "storage": [],
+      "sideEffects": [],
+      "external": [],
+      "impactAreas": [
+        "dados"
       ]
     }
   ]

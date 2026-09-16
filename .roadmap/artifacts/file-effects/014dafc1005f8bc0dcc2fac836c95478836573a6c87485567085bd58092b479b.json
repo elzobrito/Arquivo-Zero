@@ -1,0 +1,13 @@
+{
+  "after_sha256": "f7fc620d992bd6c438b6722d62cc0f083bb030175015d14efc1ed66e988530ae",
+  "artifact_id": "ART-f7fc620d992bd6c438b6722d62cc0f083bb030175015d14efc1ed66e988530ae",
+  "artifact_sha256": "014dafc1005f8bc0dcc2fac836c95478836573a6c87485567085bd58092b479b",
+  "before_sha256": "f7fc620d992bd6c438b6722d62cc0f083bb030175015d14efc1ed66e988530ae",
+  "bytes": 1031,
+  "content": "#!/usr/bin/env node\nimport { readFile } from \"node:fs/promises\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\n\nconst root = resolve(dirname(fileURLToPath(import.meta.url)), \"../..\");\nconst src = await readFile(resolve(root, \"dist/app.js\"), \"utf8\");\nconst errors = [];\nif (src.includes(\"html?c:escape(c)\")) errors.push(\"show ainda interpola HTML cru\");\nif (!src.includes('escape(c).replace(/\\\\n/g,\"<br>\")')) errors.push(\"show não escapa mensagens\");\nif (!src.includes(\"async function importCase(file)\")) errors.push(\"importCase ausente\");\nif (!src.includes(\"const max=524288\")) errors.push(\"limite de tamanho ausente\");\nif (src.includes(\"JSON.parse(await f.text())\")) errors.push(\"import ainda faz parse direto no input\");\nif (!src.includes(\"<h3>${escape(e.title)}</h3>\")) errors.push(\"títulos de evidência sem escape\");\nif (errors.length) {\n  console.error(\"AZ-HOTFIX-003 FAIL\");\n  for (const e of errors) console.error(\"-\", e);\n  process.exit(1);\n}\nconsole.log(\"AZ-HOTFIX-003 PASS\");\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/hotfix/az-hotfix-003-import.test.mjs",
+  "source_path": "tests/hotfix/az-hotfix-003-import.test.mjs",
+  "ts": "2026-09-16T16:32:44Z"
+}

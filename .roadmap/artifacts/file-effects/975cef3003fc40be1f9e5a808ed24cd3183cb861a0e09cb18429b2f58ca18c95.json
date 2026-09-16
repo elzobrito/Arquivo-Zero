@@ -1,0 +1,13 @@
+{
+  "after_sha256": "efba4c63bd1cf36112521873c39808c8f462ce3fc65f061813391da38a0e32d4",
+  "artifact_id": "ART-efba4c63bd1cf36112521873c39808c8f462ce3fc65f061813391da38a0e32d4",
+  "artifact_sha256": "975cef3003fc40be1f9e5a808ed24cd3183cb861a0e09cb18429b2f58ca18c95",
+  "before_sha256": "efba4c63bd1cf36112521873c39808c8f462ce3fc65f061813391da38a0e32d4",
+  "bytes": 407,
+  "content": "export function catalogEvidence(state, evidenceId) {\n  if (!evidenceId) return state;\n  if ((state.evidence || []).includes(evidenceId)) return state;\n  return Object.assign({}, state, { evidence: (state.evidence || []).concat(evidenceId) });\n}\n\nexport function getDiscovered(state, game) {\n  const have = new Set(state.evidence || []);\n  return (game.evidence || []).filter((item) => have.has(item.id));\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/evidence-service.js",
+  "source_path": "dist/modules/evidence-service.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

@@ -1,0 +1,6 @@
+Reconciliação: ISS-AZ-CLUE-DF-NAV-20260916 materializado por AZ-HOTFIX-009 (done).
+Sem novo efeito em dist/.
+
+Recife oferece Brasília e Brasília oferece Porto Alegre nos cenários em que
+re_terminal concede E05 (B-17, B-23, U-11, V-08, V-14). Navegador: NULL · U-11,
+Periciar terminal → E05; VIAJAR mostra Brasília 5h habilitada.

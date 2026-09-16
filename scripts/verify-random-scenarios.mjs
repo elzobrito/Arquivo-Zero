@@ -196,6 +196,16 @@ if (validatingDefault) {
   }
 }
 
+function assertCanonicalScenarios() {
+  const cifra = game.campaign?.chapters?.cifra;
+  if (!cifra?.scenarios) return;
+  const root = game.scenarios || [];
+  if (JSON.stringify(cifra.scenarios) !== JSON.stringify(root)) {
+    push("game.scenarios diverge de campaign.chapters.cifra.scenarios; a fonte canônica é o capítulo");
+  }
+}
+
+assertCanonicalScenarios();
 const chapters = game.campaign ? campaignChapters() : [implicitChapter()];
 const tallies = chapters.map(chapter => validateChapter(chapter));
 const scenarioCount = tallies.reduce((sum, item) => sum + item.scenarioCount, 0);

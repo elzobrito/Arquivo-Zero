@@ -83,85 +83,99 @@
       "id": "E01",
       "title": "Crachá clonado",
       "text": "O invasor convenceu um funcionário a liberar o acesso.",
-      "tag": "especialidade"
+      "tag": "especialidade",
+      "source": null
     },
     {
       "id": "E02",
       "title": "Bilhete para Recife",
       "text": "Passagem emitida 40 minutos após o furto aponta para Recife.",
-      "tag": "rota"
+      "tag": "rota",
+      "source": null
     },
     {
       "id": "E03",
       "title": "Assinatura C1FR4",
       "text": "O padrão aparece em ataques atribuídos ao codinome Cifra.",
-      "tag": "identidade"
+      "tag": "identidade",
+      "source": null
     },
     {
       "id": "E04",
       "title": "Carga desviada",
       "text": "Um avião cargueiro foi reservado com documentos falsos.",
-      "tag": "transporte"
+      "tag": "transporte",
+      "source": null
     },
     {
       "id": "E05",
       "title": "Mensagem interceptada",
       "text": "A próxima chave está onde os três poderes se encontram.",
-      "tag": "rota"
+      "tag": "rota",
+      "source": null
     },
     {
       "id": "E06",
       "title": "Registro do hangar",
       "text": "Cifra embarcou no cargueiro AZ-714 rumo ao sul.",
-      "tag": "localização"
+      "tag": "localização",
+      "source": null
     },
     {
       "id": "E07",
       "title": "Áudio de negociação",
       "text": "A venda do algoritmo ocorrerá no terminal de Porto Alegre.",
-      "tag": "prova"
+      "tag": "prova",
+      "source": null
     },
     {
       "id": "E08",
       "title": "Manifesto de carga",
       "text": "O cargueiro pousará no terminal 4 antes do prazo.",
-      "tag": "prisão"
+      "tag": "prisão",
+      "source": null
     },
     {
       "id": "E11",
       "title": "Token de rede clonado",
       "text": "Um token corporativo foi clonado para abrir o perímetro interno.",
-      "tag": "especialidade"
+      "tag": "especialidade",
+      "source": null
     },
     {
       "id": "E12",
       "title": "Sedã preto na fuga",
       "text": "Câmeras registram um carro preto na janela do furto.",
-      "tag": "transporte"
+      "tag": "transporte",
+      "source": null
     },
     {
       "id": "E13",
       "title": "Dump da base acadêmica",
       "text": "Um export da tabela de notas saiu por um canal de manutenção.",
-      "tag": "especialidade"
+      "tag": "especialidade",
+      "source": null
     },
     {
       "id": "E14",
       "title": "Passagem de ônibus",
       "text": "Uma passagem interestadual foi emitida com documento falso.",
-      "tag": "transporte"
+      "tag": "transporte",
+      "source": null
     },
     {
       "id": "E15",
       "title": "Overlay gráfico forjado",
       "text": "A interface do boletim recebeu uma camada visual falsa.",
-      "tag": "especialidade"
+      "tag": "especialidade",
+      "source": null
     },
     {
       "id": "E16",
       "title": "Despacho fluvial",
       "text": "Uma carga foi lançada em manifesto de barco sem destinatário claro.",
-      "tag": "transporte"
+      "tag": "transporte",
+      "source": null
     }
   ],
   "navigation": {
@@ -480,6 +494,14 @@
       "x": 57,
       "y": 69,
       "coords": "23.5°S 46.6°W",
+      "territory": {
+        "stateId": "SP",
+        "stateName": "São Paulo",
+        "region": "Sudeste",
+        "capitalOf": null,
+        "municipalityType": "interior"
+      },
+      "asset": "dist/assets/cities/sao-paulo.webp",
       "description": "Laboratório Hórus. O acesso ocorreu com credenciais legítimas, mas o titular nega ter entrado.",
       "city_info": {
         "summary": "Maior centro urbano do país, São Paulo reúne universidades, centros financeiros, indústrias criativas e uma extensa rede de mobilidade.",
@@ -521,6 +543,14 @@
       "x": 73,
       "y": 43,
       "coords": "8.0°S 34.9°W",
+      "territory": {
+        "stateId": "PE",
+        "stateName": "Pernambuco",
+        "region": "Nordeste",
+        "capitalOf": "PE",
+        "municipalityType": "capital"
+      },
+      "asset": "dist/assets/cities/recife.webp",
       "description": "O suspeito circulou pelo porto e usou terminais públicos para contatar compradores.",
       "city_info": {
         "summary": "Capital pernambucana voltada para o Atlântico, Recife cresceu entre rios, pontes, arrecifes e um porto decisivo para sua história.",
@@ -561,6 +591,14 @@
       "x": 57,
       "y": 47,
       "coords": "15.8°S 47.9°W",
+      "territory": {
+        "stateId": "DF",
+        "stateName": "Distrito Federal",
+        "region": "Centro-Oeste",
+        "capitalOf": "DF",
+        "municipalityType": "capital"
+      },
+      "asset": "dist/assets/cities/brasilia.webp",
       "description": "A referência aos três poderes conduz à capital. Há movimentação em um hangar privado.",
       "city_info": {
         "summary": "Capital federal planejada no Planalto Central, Brasília tornou-se símbolo do urbanismo e da arquitetura moderna brasileira.",
@@ -601,6 +639,14 @@
       "x": 31,
       "y": 31,
       "coords": "3.1°S 60.0°W",
+      "territory": {
+        "stateId": "AM",
+        "stateName": "Amazonas",
+        "region": "Norte",
+        "capitalOf": "AM",
+        "municipalityType": "capital"
+      },
+      "asset": "dist/assets/cities/manaus.webp",
       "description": "Uma denúncia menciona transporte fluvial. Pode ser uma rota ou uma distração.",
       "city_info": {
         "summary": "Capital do Amazonas, Manaus é uma metrópole amazônica ligada ao Rio Negro e uma porta de entrada para a maior floresta tropical do mundo.",
@@ -633,6 +679,14 @@
       "x": 47,
       "y": 88,
       "coords": "30.0°S 51.2°W",
+      "territory": {
+        "stateId": "RS",
+        "stateName": "Rio Grande do Sul",
+        "region": "Sul",
+        "capitalOf": "RS",
+        "municipalityType": "capital"
+      },
+      "asset": "dist/assets/cities/porto-alegre.webp",
       "description": "O terminal recebe voos privados. Uma abordagem só pode resultar em prisão se o mandado corresponder à pessoa encontrada.",
       "city_info": {
         "summary": "Capital do Rio Grande do Sul, Porto Alegre se desenvolveu às margens do Guaíba como ponto de encontro entre rotas, culturas e atividades portuárias.",
@@ -719,6 +773,7 @@
     ],
     "lieutenant_chapters": 2,
     "boss": "cifra",
+    "canonical_scenarios": "chapters",
     "chapters": {
       "byte": {
         "culprit": "byte",
@@ -748,6 +803,7 @@
               ],
               "recife": [
                 "sao_paulo",
+                "brasilia",
                 "porto_alegre",
                 "manaus"
               ],
@@ -760,7 +816,8 @@
                 "recife"
               ],
               "brasilia": [
-                "sao_paulo"
+                "sao_paulo",
+                "porto_alegre"
               ]
             },
             "action_overrides": {
@@ -818,7 +875,8 @@
                 "brasilia"
               ],
               "recife": [
-                "sao_paulo"
+                "sao_paulo",
+                "brasilia"
               ]
             },
             "action_overrides": {
@@ -827,8 +885,8 @@
                 "result": "O invasor autenticou-se com um token corporativo clonado."
               },
               "sp_cafe": {
-                "evidence": null,
-                "result": "Ninguém na cafeteria viu o veículo da fuga."
+                "evidence": "E12",
+                "result": "A atendente identificou o sedã preto usado na fuga; o registro do veículo aponta para Brasília."
               },
               "bsb_hangar": {
                 "evidence": "E12",
@@ -888,10 +946,12 @@
               ],
               "recife": [
                 "sao_paulo",
+                "brasilia",
                 "manaus"
               ],
               "brasilia": [
-                "sao_paulo"
+                "sao_paulo",
+                "porto_alegre"
               ]
             },
             "action_overrides": {
@@ -1019,10 +1079,12 @@
               ],
               "recife": [
                 "sao_paulo",
+                "brasilia",
                 "manaus"
               ],
               "brasilia": [
-                "sao_paulo"
+                "sao_paulo",
+                "porto_alegre"
               ]
             },
             "action_overrides": {
@@ -1064,6 +1126,7 @@
               ],
               "recife": [
                 "sao_paulo",
+                "brasilia",
                 "porto_alegre",
                 "manaus"
               ],
@@ -1076,7 +1139,8 @@
                 "recife"
               ],
               "brasilia": [
-                "sao_paulo"
+                "sao_paulo",
+                "porto_alegre"
               ]
             },
             "action_overrides": {

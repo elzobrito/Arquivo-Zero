@@ -1,0 +1,13 @@
+{
+  "after_sha256": "87ee52588f13ffc18f65e026f72d1be7fe19a70a2eb0db27435ac8facb06d5da",
+  "artifact_id": "ART-87ee52588f13ffc18f65e026f72d1be7fe19a70a2eb0db27435ac8facb06d5da",
+  "artifact_sha256": "8eb13cf90dca07b6badef83a2ed298a8e0f6f4a69ee91037be75f3e164f0ab9f",
+  "before_sha256": "7e8c0e194bee24184b3cb8963059c03b3cd69011bc97a403935909b2f3b98f9f",
+  "bytes": 706,
+  "content": "# AZ-QA-002-BROWSER — Clique real pós-ESM\n\n**Data:** 2026-09-16  \n**Status:** três desfechos de prisão confirmados no Chromium com o fixture mínimo.\n\nRelatório de prisão: [`az-qa-002-browser-arrest.md`](az-qa-002-browser-arrest.md)\n\n## Sessão no caso vivo (anterior)\n\nESM 200, mandado recusado no BRIEFING, mandado contra Null após investigação, POA 10h disabled com 8h. Passos 4–6 do caso vivo não foram clicados por orçamento.\n\n## Sessão no fixture mínimo (esta passagem)\n\nTrês desfechos PASS: APPROVED, insufficient_evidence, wrong_warrant. Ver tabela no relatório de prisão.\n\nIDENTIFICAR ≠ PROVAR confirmado na UI: suspeito correto sem EA1 → CONJUNTO PROBATÓRIO INSUFICIENTE.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/qa/az-qa-002-browser.md",
+  "source_path": "docs/qa/az-qa-002-browser.md",
+  "ts": "2026-09-16T17:50:10Z"
+}

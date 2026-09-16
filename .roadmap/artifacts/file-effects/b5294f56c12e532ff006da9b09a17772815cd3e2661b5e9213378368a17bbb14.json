@@ -1,0 +1,13 @@
+{
+  "after_sha256": "15e5f5e89df31edb824035f4527187fd7693bf06e407c6a0d2950ede2cc48206",
+  "artifact_id": "ART-15e5f5e89df31edb824035f4527187fd7693bf06e407c6a0d2950ede2cc48206",
+  "artifact_sha256": "b5294f56c12e532ff006da9b09a17772815cd3e2661b5e9213378368a17bbb14",
+  "before_sha256": "15e5f5e89df31edb824035f4527187fd7693bf06e407c6a0d2950ede2cc48206",
+  "bytes": 1087,
+  "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"$id\": \"https://arquivo-zero.local/schemas/hypothesis-record.schema.json\",\n  \"title\": \"HypothesisRecord\",\n  \"type\": \"object\",\n  \"additionalProperties\": true,\n  \"required\": [\n    \"id\",\n    \"type\",\n    \"statement\",\n    \"supports\",\n    \"contradictions\",\n    \"confidence\",\n    \"status\"\n  ],\n  \"properties\": {\n    \"id\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"type\": {\n      \"enum\": [\n        \"authorship\",\n        \"route\",\n        \"method\",\n        \"motive\",\n        \"link\",\n        \"timeline\"\n      ]\n    },\n    \"statement\": {\n      \"type\": \"string\"\n    },\n    \"supports\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"contradictions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"confidence\": {\n      \"enum\": [\n        \"low\",\n        \"medium\",\n        \"high\"\n      ]\n    },\n    \"status\": {\n      \"enum\": [\n        \"active\",\n        \"supported\",\n        \"weakened\",\n        \"refuted\",\n        \"inconclusive\"\n      ]\n    }\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/contracts/hypothesis-record.schema.json",
+  "source_path": "src/contracts/hypothesis-record.schema.json",
+  "ts": "2026-09-16T16:56:02Z"
+}

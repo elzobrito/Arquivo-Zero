@@ -1,0 +1,13 @@
+{
+  "after_sha256": "cf5529e91eaa62014338c7b1c37918234634cdcf0769de6ab6f80ddc16a96d8f",
+  "artifact_id": "ART-cf5529e91eaa62014338c7b1c37918234634cdcf0769de6ab6f80ddc16a96d8f",
+  "artifact_sha256": "39ac5b3b88e280fd16f1517a09576b7fa6f4781b2e9a4abbc07c02dd2a5fdeb9",
+  "before_sha256": "cf5529e91eaa62014338c7b1c37918234634cdcf0769de6ab6f80ddc16a96d8f",
+  "bytes": 642,
+  "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"$id\": \"https://arquivo-zero.local/schemas/constraint-evaluation.schema.json\",\n  \"title\": \"ConstraintEvaluation\",\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\n    \"constraintId\",\n    \"candidateId\",\n    \"result\",\n    \"explanation\"\n  ],\n  \"properties\": {\n    \"constraintId\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"candidateId\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"result\": {\n      \"enum\": [\n        \"MATCH\",\n        \"NO_MATCH\",\n        \"UNKNOWN\"\n      ]\n    },\n    \"explanation\": {\n      \"type\": \"string\"\n    }\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/contracts/constraint-evaluation.schema.json",
+  "source_path": "src/contracts/constraint-evaluation.schema.json",
+  "ts": "2026-09-16T16:56:02Z"
+}

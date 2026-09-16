@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/case-schema-3.0.json",
+  "title": "Arquivo Zero case schema 3.0",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "metadata",
+    "suspects",
+    "dossier",
+    "evidence",
+    "locations",
+    "travel",
+    "navigation",
+    "arrest_requirements",
+    "scenarios",
+    "culprit",
+    "ending"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^3(\\.\\d+)?$"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "code",
+        "briefing",
+        "start",
+        "total_hours"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "briefing": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "total_hours": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "suspects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dossier": {
+      "type": "object",
+      "required": [
+        "fields"
+      ],
+      "properties": {
+        "fields": {
+          "type": "array"
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence-record.schema.json"
+      }
+    },
+    "locations": {
+      "type": "array",
+      "minItems": 1
+    },
+    "travel": {
+      "type": "object"
+    },
+    "navigation": {
+      "type": "object"
+    },
+    "arrest_requirements": {
+      "type": "object",
+      "required": [
+        "minimum_evidence",
+        "required_evidence"
+      ],
+      "properties": {
+        "minimum_evidence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1
+    },
+    "culprit": {
+      "type": "string"
+    },
+    "ending": {
+      "type": "object",
+      "required": [
+        "win_title",
+        "win_text",
+        "lose_title",
+        "lose_text"
+      ],
+      "properties": {
+        "win_title": {
+          "type": "string"
+        },
+        "win_text": {
+          "type": "string"
+        },
+        "lose_title": {
+          "type": "string"
+        },
+        "lose_text": {
+          "type": "string"
+        },
+        "wrong_warrant_title": {
+          "type": "string"
+        },
+        "wrong_warrant_text": {
+          "type": "string"
+        },
+        "insufficient_evidence_title": {
+          "type": "string"
+        },
+        "insufficient_evidence_text": {
+          "type": "string"
+        }
+      }
+    },
+    "territories": {
+      "type": "object"
+    },
+    "constraints": {
+      "type": "array"
+    },
+    "hypothesisPolicy": {
+      "type": "object"
+    },
+    "arrestPolicy": {
+      "type": "object"
+    },
+    "minigames": {
+      "type": "array"
+    },
+    "progressionRewards": {
+      "type": "object"
+    },
+    "reportTemplate": {
+      "type": "object"
+    },
+    "campaign": {
+      "type": "object"
+    }
+  }
+}

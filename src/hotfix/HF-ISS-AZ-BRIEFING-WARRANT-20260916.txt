@@ -1,0 +1,2 @@
+Reconciliação: ISS-AZ-BRIEFING-WARRANT-20260916 materializado por AZ-HOTFIX-007 (done).
+Sem novo efeito em dist/.

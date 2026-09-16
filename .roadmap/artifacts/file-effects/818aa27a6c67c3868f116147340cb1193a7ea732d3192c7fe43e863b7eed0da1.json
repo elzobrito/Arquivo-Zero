@@ -1,0 +1,13 @@
+{
+  "after_sha256": "46b5f72a5dfd941a1039e7bbcb5da1069306d72d467edadd6c82390047be04b2",
+  "artifact_id": "ART-46b5f72a5dfd941a1039e7bbcb5da1069306d72d467edadd6c82390047be04b2",
+  "artifact_sha256": "818aa27a6c67c3868f116147340cb1193a7ea732d3192c7fe43e863b7eed0da1",
+  "before_sha256": "46b5f72a5dfd941a1039e7bbcb5da1069306d72d467edadd6c82390047be04b2",
+  "bytes": 947,
+  "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"$id\": \"https://arquivo-zero.local/schemas/validation-decision.schema.json\",\n  \"title\": \"ValidationDecision\",\n  \"type\": \"object\",\n  \"additionalProperties\": true,\n  \"required\": [\n    \"decision\",\n    \"suspect\",\n    \"evidenceScore\",\n    \"procedureScore\",\n    \"hypothesisScore\",\n    \"reasons\"\n  ],\n  \"properties\": {\n    \"decision\": {\n      \"enum\": [\n        \"APPROVED\",\n        \"DENIED\",\n        \"INCONCLUSIVE\"\n      ]\n    },\n    \"suspect\": {\n      \"type\": [\n        \"string\",\n        \"null\"\n      ]\n    },\n    \"evidenceScore\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"procedureScore\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"hypothesisScore\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"reasons\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/architecture/schemas/validation-decision.schema.json",
+  "source_path": "docs/architecture/schemas/validation-decision.schema.json",
+  "ts": "2026-09-16T16:54:04Z"
+}

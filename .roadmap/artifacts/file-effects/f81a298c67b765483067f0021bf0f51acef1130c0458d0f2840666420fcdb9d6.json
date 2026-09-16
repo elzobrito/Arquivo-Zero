@@ -1,0 +1,13 @@
+{
+  "after_sha256": "fb7665bd6d1d0f4abfb04585ba839aaa1d273b9f1bd5c1b46394f38ac05cd54f",
+  "artifact_id": "ART-fb7665bd6d1d0f4abfb04585ba839aaa1d273b9f1bd5c1b46394f38ac05cd54f",
+  "artifact_sha256": "f81a298c67b765483067f0021bf0f51acef1130c0458d0f2840666420fcdb9d6",
+  "before_sha256": "fb7665bd6d1d0f4abfb04585ba839aaa1d273b9f1bd5c1b46394f38ac05cd54f",
+  "bytes": 1685,
+  "content": "#!/usr/bin/env node\nimport { readFile } from \"node:fs/promises\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport vm from \"node:vm\";\n\nconst root = resolve(dirname(fileURLToPath(import.meta.url)), \"../..\");\nconst src = await readFile(resolve(root, \"dist/app.js\"), \"utf8\");\nconst match = src.match(/function isUnaffordable\\(cost,allowZero=false\\)\\{[^}]+\\}/);\nif (!match) {\n  console.error(\"AZ-HOTFIX-001 FAIL: isUnaffordable ausente\");\n  process.exit(1);\n}\n\nfunction run(hours, cost, allowZero) {\n  const sandbox = { state: { hours } };\n  vm.runInNewContext(`${match[0]}; this.result = isUnaffordable(${JSON.stringify(cost)}, ${allowZero});`, sandbox);\n  return sandbox.result;\n}\n\nconst cases = [\n  [\"menor que o saldo\", 10, 4, false, false],\n  [\"igual ao saldo sem allowZero\", 4, 4, false, true],\n  [\"maior que o saldo\", 3, 4, false, true],\n  [\"prisão no limite exato\", 1, 1, true, false],\n  [\"prisão acima do saldo\", 0, 1, true, true],\n];\n\nconst errors = [];\nfor (const [label, hours, cost, allowZero, expected] of cases) {\n  const got = run(hours, cost, allowZero);\n  if (got !== expected) errors.push(`${label}: hours=${hours} cost=${cost} allowZero=${allowZero} got=${got} expected=${expected}`);\n}\n\nif (!src.includes(\"Math.max(0,state.hours-cost)\")) {\n  errors.push(\"openTravel ainda pode exibir saldo negativo\");\n}\nif (!src.includes('if(isUnaffordable(cost)){el.travel.close();')) {\n  errors.push(\"confirmação de viagem não recusa custo inacessível\");\n}\n\nif (errors.length) {\n  console.error(\"AZ-HOTFIX-001 FAIL\");\n  for (const e of errors) console.error(\"-\", e);\n  process.exit(1);\n}\nconsole.log(\"AZ-HOTFIX-001 PASS cases=5\");\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/hotfix/az-hotfix-001-spend.test.mjs",
+  "source_path": "tests/hotfix/az-hotfix-001-spend.test.mjs",
+  "ts": "2026-09-16T16:29:19Z"
+}

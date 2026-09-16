@@ -1,0 +1,13 @@
+{
+  "after_sha256": "2adb4072f5a69f5c0c80b686599df07c6f999cc7091b5b8b215cb68f595bdc33",
+  "artifact_id": "ART-2adb4072f5a69f5c0c80b686599df07c6f999cc7091b5b8b215cb68f595bdc33",
+  "artifact_sha256": "ecd547b544e73d264f61ba3cd7a0325d55c44f3f802a1f29a0750f44947e5bfc",
+  "before_sha256": "2adb4072f5a69f5c0c80b686599df07c6f999cc7091b5b8b215cb68f595bdc33",
+  "bytes": 319,
+  "content": "export function filterSuspects(game, chosen) {\n  const pairs = chosen || [];\n  return (game.suspects || []).filter((suspect) => pairs.every(([key, value]) => suspect[key] === value));\n}\n\nexport function issueWarrant(state, suspectId) {\n  return Object.assign({}, state, { warrant: true, warrantSuspect: suspectId });\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/dossier-service.js",
+  "source_path": "dist/modules/dossier-service.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

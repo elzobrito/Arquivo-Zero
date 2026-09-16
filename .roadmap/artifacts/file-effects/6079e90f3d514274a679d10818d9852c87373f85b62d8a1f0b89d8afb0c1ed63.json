@@ -1,0 +1,13 @@
+{
+  "after_sha256": "0a82c2cd7b1caed6303a919a81acbdec007e1259717e422b81c2798f3f764127",
+  "artifact_id": "ART-0a82c2cd7b1caed6303a919a81acbdec007e1259717e422b81c2798f3f764127",
+  "artifact_sha256": "6079e90f3d514274a679d10818d9852c87373f85b62d8a1f0b89d8afb0c1ed63",
+  "before_sha256": "0a82c2cd7b1caed6303a919a81acbdec007e1259717e422b81c2798f3f764127",
+  "bytes": 462,
+  "content": "\"use strict\";\n\nfunction catalogEvidence(state, evidenceId) {\n  if (!evidenceId) return state;\n  if ((state.evidence || []).includes(evidenceId)) return state;\n  return Object.assign({}, state, { evidence: (state.evidence || []).concat(evidenceId) });\n}\n\nfunction getDiscovered(state, game) {\n  const have = new Set(state.evidence || []);\n  return (game.evidence || []).filter((item) => have.has(item.id));\n}\n\nmodule.exports = { catalogEvidence, getDiscovered };\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/evidence/evidence-service.js",
+  "source_path": "src/domain/evidence/evidence-service.js",
+  "ts": "2026-09-16T17:00:34Z"
+}

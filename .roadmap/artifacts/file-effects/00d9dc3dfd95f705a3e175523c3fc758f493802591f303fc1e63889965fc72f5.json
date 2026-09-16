@@ -1,0 +1,13 @@
+{
+  "after_sha256": "4032879e3e72be834559f5828942c144dc1b9023216e23abf559780b2aadf100",
+  "artifact_id": "ART-4032879e3e72be834559f5828942c144dc1b9023216e23abf559780b2aadf100",
+  "artifact_sha256": "00d9dc3dfd95f705a3e175523c3fc758f493802591f303fc1e63889965fc72f5",
+  "before_sha256": "4032879e3e72be834559f5828942c144dc1b9023216e23abf559780b2aadf100",
+  "bytes": 980,
+  "content": "#!/usr/bin/env node\nimport { readFile } from \"node:fs/promises\";\nimport { createRequire } from \"node:module\";\nimport { dirname, resolve } from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\n\nconst require = createRequire(import.meta.url);\nconst { validateCase } = require(\"../src/infrastructure/schema/schema-validator.js\");\n\nconst file = process.argv[2];\nif (!file) {\n  console.error(\"uso: node scripts/validate-case.mjs <arquivo.json>\");\n  process.exit(2);\n}\n\nconst raw = JSON.parse(await readFile(resolve(process.cwd(), file), \"utf8\"));\nconst result = validateCase(raw);\nconst tag = { PASS: \"SCHEMA_PASS\", WARN: \"SCHEMA_WARN\", FAIL: \"SCHEMA_FAIL\" }[result.status];\nconsole.log(`${tag}  version=${result.version}  issues=${result.issues.length}  file=${file}`);\nfor (const item of result.issues) {\n  const line = item.path ? `${item.path}: ${item.message}` : item.message;\n  console.log(`- [${item.severity}] ${line}`);\n}\nprocess.exit(result.status === \"FAIL\" ? 1 : 0);\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "scripts/validate-case.mjs",
+  "source_path": "scripts/validate-case.mjs",
+  "ts": "2026-09-16T16:56:02Z"
+}

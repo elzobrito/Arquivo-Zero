@@ -4,10 +4,392 @@
     "esaa_version": "0.4.x",
     "generated_by": "esaa.project",
     "source_event_store": ".roadmap/activity.jsonl",
-    "last_event_seq": 253,
-    "updated_at": "2026-09-15T18:34:40Z"
+    "last_event_seq": 850,
+    "updated_at": "2026-09-16T23:17:01Z"
   },
   "issues": [
+    {
+      "issue_id": "ISS-AZ-BRIEFING-WARRANT-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "FSM aceita WARRANT no estado BRIEFING",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "BRIEFING transita para WARRANT_ISSUED sem investigação; submitDossier grava mandado mesmo assim.",
+        "repro_steps": [
+          "Chamar transition({actions:[], route:['a']}, 'WARRANT')",
+          "Observar ok true"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-BRIEFING-WARRANT-20260916",
+        "review_task_id": "HF-ISS-AZ-BRIEFING-WARRANT-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-007 done; FSM recusa BRIEFING+WARRANT",
+          "regression: verify-function-map PASS"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-007",
+        "fixes_task_id": "AZ-ARCH-005",
+        "hotfix_task_id": "HF-ISS-AZ-BRIEFING-WARRANT-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 546,
+        "resolved_event_seq": 578
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-CLUE-DF-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Pista do cenário B-23 não encaminha o jogador a Brasília",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "Em BYTE/B-23, a ação sp_cafe em São Paulo retorna PISTA INCONCLUSIVA e evidence:null; E12, que menciona Brasília, só é concedida em bsb_hangar após a chegada ao DF.",
+        "repro_steps": [
+          "Abrir campanha BYTE no cenário B-23 em São Paulo.",
+          "Executar Interrogar cafeteria.",
+          "Observar PISTA INCONCLUSIVA: Ninguém na cafeteria viu o veículo da fuga.",
+          "Inspecionar campaign.chapters.byte.scenarios.byte_planalto.action_overrides: sp_cafe tem evidence:null e E12 está em bsb_hangar."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command",
+        "hotfix_task_id": "AZ-HOTFIX-008"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-TERR-002",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 798,
+        "resolved_event_seq": 814
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-CLUE-DF-NAV-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "E05 aparece em cinco cenários sem Brasília na navegação de Recife",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "As capturas mostram NULL/U-11 em Recife com E05 catalogada, mas o mapa oferece apenas São Paulo e Manaus. O mesmo invariante quebrado ocorre em B-17, B-23, V-08 e V-14.",
+        "repro_steps": [
+          "Abrir NULL/U-11, viajar a Recife e executar Periciar terminal para catalogar E05.",
+          "Abrir VIAJAR e observar somente São Paulo e Manaus, sem Brasília.",
+          "Comparar action_overrides efetivo de re_terminal com scenario.navigation.recife nos nove cenários."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-CLUE-DF-NAV-20260916",
+        "review_task_id": "HF-ISS-AZ-CLUE-DF-NAV-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-009 done; Recife→Brasília nos cenários E05; browser NULL/U-11 Brasília 5h.",
+          "regression: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9; FUNCTION_MAP_PASS 79; nenhum dist/app.js nesta reconciliação."
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-008",
+        "fixes_task_id": "AZ-HOTFIX-008",
+        "hotfix_task_id": "HF-ISS-AZ-CLUE-DF-NAV-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 820,
+        "resolved_event_seq": 842
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-EVIDENCE-004-BOUNDARY-20260916",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Boundary de AZ-EVIDENCE-004 não concede dist/game.json",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "A submissão complete foi recusada com BOUNDARY_VIOLATION para dist/game.json, apesar de o arquivo constar em targets; a tarefa foi criada sem boundary_grant explícito para o artefato de distribuição.",
+        "repro_steps": [
+          "Executar complete de AZ-EVIDENCE-004 com file_update para dist/game.json.",
+          "Observar BOUNDARY_VIOLATION path not allowed for impl: dist/game.json."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-EVIDENCE-004",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 667,
+        "resolved_event_seq": 689
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-EVIDENCE-COUNT-20260916",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Migração exige 16 evidências, mas o catálogo possui somente 14",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "dist/game.json contém E01-E08 e E11-E16; E09 e E10 não existem no arquivo, no repositório ou no histórico Git. O gate jq .evidence|length esperado 16 não pode ser satisfeito preservando id/title/text/tag sem inventar dois registros.",
+        "repro_steps": [
+          "Executar jq \"{count:(.evidence|length), ids:[.evidence[].id]}\" dist/game.json e observar count=14.",
+          "Executar rg e git log -S para E09 e E10 e observar ausência de definições recuperáveis."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-EVIDENCE-004",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 718,
+        "resolved_event_seq": 734
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Teste do adaptador depende da ausência de metadados no caso vivo",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "Após migrar E01-E16 com incerteza explícita, tests/schema/case-adapter.test.mjs falha em warn evidence e source evidence not mutated, embora o adaptador preserve os campos e o caso continue 2.x com WARN de schemaVersion.",
+        "repro_steps": [
+          "Executar node tests/schema/case-adapter.test.mjs após materializar source/admissibility/quality/integrity em dist/game.json.",
+          "Observar que o teste usa dist/game.json como fixture legado sem campos, uma premissa incompatível com AZ-EVIDENCE-004."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+        "review_task_id": "HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
+        "checks": [
+          "unit: node tests/schema/case-adapter.test.mjs -> CASE_ADAPTER_PASS",
+          "regression: validate-case dist/game.json -> WARN 2.x; verify-random-scenarios PASS; hotfix suite PASS"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-EVIDENCE-004",
+        "fixes_task_id": "AZ-EVIDENCE-001",
+        "hotfix_task_id": "HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 652,
+        "resolved_event_seq": 664
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-IMPORT-XSS-20260916",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Vitória e import executam HTML do caso",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "show html=true interpola ending via innerHTML.",
+        "repro_steps": [
+          "Importar JSON com markup no ending",
+          "Vencer"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-IMPORT-XSS-20260916",
+        "review_task_id": "HF-ISS-AZ-IMPORT-XSS-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-003 em done; src/hotfix/HF-ISS-AZ-IMPORT-XSS-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-003",
+        "fixes_task_id": "AZ-SPEC-001",
+        "hotfix_task_id": "HF-ISS-AZ-IMPORT-XSS-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 306,
+        "resolved_event_seq": 408
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-INVALID-SAVE-20260916",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Save com location inválida quebra o render",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "loc() undefined; render usa current.name e lança TypeError.",
+        "repro_steps": [
+          "Gravar localStorage com location inexistente",
+          "Recarregar"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-INVALID-SAVE-20260916",
+        "review_task_id": "HF-ISS-AZ-INVALID-SAVE-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-002 em done; src/hotfix/HF-ISS-AZ-INVALID-SAVE-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-002",
+        "fixes_task_id": "AZ-SPEC-001",
+        "hotfix_task_id": "HF-ISS-AZ-INVALID-SAVE-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 302,
+        "resolved_event_seq": 397
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-RESET-SEMANTICS-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Reiniciar apaga só a fase mas o copy diz toda a investigação",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "reset-button não distingue capítulo, campanha e carreira.",
+        "repro_steps": [
+          "Clicar Reiniciar",
+          "Cursor da campanha permanece"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-RESET-SEMANTICS-20260916",
+        "review_task_id": "HF-ISS-AZ-RESET-SEMANTICS-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-004 em done; src/hotfix/HF-ISS-AZ-RESET-SEMANTICS-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-004",
+        "fixes_task_id": "AZ-SPEC-001",
+        "hotfix_task_id": "HF-ISS-AZ-RESET-SEMANTICS-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 310,
+        "resolved_event_seq": 419
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-SCENARIO-DUP-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Cenários duplicados entre raiz e capítulo Cifra",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "Dois arrays de cenários podem divergir sem o linter acusar.",
+        "repro_steps": [
+          "Alterar só a raiz",
+          "Rodar verify-random-scenarios.mjs"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-SCENARIO-DUP-20260916",
+        "review_task_id": "HF-ISS-AZ-SCENARIO-DUP-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-005 em done; src/hotfix/HF-ISS-AZ-SCENARIO-DUP-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-005",
+        "fixes_task_id": "AZ-SPEC-002",
+        "hotfix_task_id": "HF-ISS-AZ-SCENARIO-DUP-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 314,
+        "resolved_event_seq": 430
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-TERR-002-BOUNDARY-20260916",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "Boundary de AZ-TERR-002 omitiu concessão explícita para dist/game.json",
+      "baseline_id": null,
+      "affected": {
+        "paths": [
+          "dist/game.json"
+        ]
+      },
+      "evidence": {
+        "symptom": "O complete validado foi rejeitado com BOUNDARY_VIOLATION para dist/game.json porque --target não concede escrita a uma tarefa impl.",
+        "repro_steps": [
+          "Criar AZ-TERR-002 como impl com target dist/game.json sem boundary-grant correspondente.",
+          "Submeter complete com file_updates para dist/game.json.",
+          "Observar BOUNDARY_VIOLATION antes de qualquer escrita do Orchestrator."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command",
+        "hotfix_task_id": "AZ-TERR-002-PATCH-BOUNDARY"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-TERR-002",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 759,
+        "resolved_event_seq": 779
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-TRAVEL-BALANCE-20260916",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Viagem ou ação acima do saldo derrota na hora",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "Confirmar destino ou ação com custo maior que state.hours chama spend, zera o prazo e mostra derrota.",
+        "repro_steps": [
+          "Abrir mapa com poucas horas",
+          "Confirmar destino cujo custo excede o saldo"
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_hotfix",
+        "hotfix_task_id": "HF-ISS-AZ-TRAVEL-BALANCE-20260916",
+        "review_task_id": "HF-ISS-AZ-TRAVEL-BALANCE-20260916",
+        "checks": [
+          "unit: AZ-HOTFIX-001 em done; src/hotfix/HF-ISS-AZ-TRAVEL-BALANCE-20260916.txt registra a reconciliação",
+          "regression: verify-function-map e verify-random-scenarios já PASS na Onda 0"
+        ]
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HOTFIX-001",
+        "fixes_task_id": "AZ-SPEC-001",
+        "hotfix_task_id": "HF-ISS-AZ-TRAVEL-BALANCE-20260916"
+      },
+      "timeline": {
+        "created_event_seq": 298,
+        "resolved_event_seq": 386
+      }
+    },
     {
       "issue_id": "ISS-MAP-GEOGRAPHIC-FRAME-001",
       "status": "resolved",
