@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 850,
-      "projection_hash_sha256": "7eacf3c60233179bf0f906738a3624072843adf346e538ec0dd78ec35cc91dce",
+      "last_event_seq": 853,
+      "projection_hash_sha256": "e3992ac87e697513b61c71fb565dea7215a12ed722b0262f5ab6d4338eec8d42",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-16T23:17:01Z"
+    "updated_at": "2026-09-16T23:17:47Z"
   },
   "project": {
     "name": "esaa-core",
@@ -2880,7 +2880,7 @@
       "task_kind": "impl",
       "title": "Commit e push do Arquivo Zero para o GitHub (elzobrito/Tito)",
       "description": "Revisar working tree do repo em /home/elzobrito/desenvolvimento/Arquivo Zero, preparar commit(s) coerente(s) com as mudanças locais (incl. dist, src, docs, tests, .roadmap conforme política do projeto), e fazer push para origin (https://github.com/elzobrito/Tito.git) na branch main. Não incluir segredos nem artefatos inadequados. Confirmar status limpo e remote atualizado ao final.",
-      "status": "in_progress",
+      "status": "review",
       "depends_on": [],
       "targets": [
         ".git",
@@ -2904,13 +2904,21 @@
       ],
       "required_review_mode": "release",
       "assigned_to": "agent-impl",
-      "started_at": "2026-09-16T23:17:01Z"
+      "started_at": "2026-09-16T23:17:01Z",
+      "verification": {
+        "checks": [
+          "git log -1 --oneline => 9141f9a release: sincroniza Arquivo Zero...",
+          "git push origin main => 54e4b55..9141f9a main -> main (exit 0)",
+          "git status -sb => clean except intentional ?? .codex-hotfix009-claim.json",
+          "esaa verify before complete => ok; remote updated"
+        ]
+      }
     }
   ],
   "indexes": {
     "by_status": {
       "done": 59,
-      "in_progress": 1,
+      "review": 1,
       "todo": 3
     },
     "by_kind": {
