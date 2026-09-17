@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 921,
-      "projection_hash_sha256": "642e678429e02e7d9351eaad182a62e218f17965d4f428bc352a7bb068234488",
+      "last_event_seq": 934,
+      "projection_hash_sha256": "575280288fe30652b8e2d8b6b4e3e6026104b0774fdde87452d7cbae4487d375",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-17T02:38:28Z"
+    "updated_at": "2026-09-17T02:58:35Z"
   },
   "project": {
     "name": "esaa-core",
@@ -3197,15 +3197,58 @@
         ]
       },
       "completed_at": "2026-09-17T02:38:28Z"
+    },
+    {
+      "task_id": "AZ-UI-MOBILE-IMPORT-001",
+      "task_kind": "impl",
+      "title": "Ocultar Importar no layout mobile",
+      "description": "Em viewports estreitas (mobile), ocultar o controle Importar (upload de game.json): a build publicada para mobile não oferece importação e o botão quebra a topbar. Desktop mantém Importar.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "dist/styles.css",
+        "dist/index.html"
+      ],
+      "outputs": {
+        "files": [
+          "dist/styles.css"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/styles.css",
+        "dist/index.html"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Em max-width típico de mobile, o botão/label Importar não é exibido",
+        "Em viewport desktop, Importar permanece disponível",
+        "Sem alterar regras do jogo, evidências, schemaVersion ou política de prisão",
+        "python -m esaa verify ok; baselines de evidência/schema intactos se rodados"
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T02:58:22Z",
+      "verification": {
+        "checks": [
+          "MOBILE_IMPORT_HIDE_PASS (.file-label display:none em max-width:620px)",
+          "Importar permanece no HTML desktop (label.file-label)",
+          "esaa verify=ok",
+          "Sem mudança em game.json/regras/evidências/prisão"
+        ]
+      },
+      "completed_at": "2026-09-17T02:58:35Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 65,
+      "done": 66,
       "todo": 2
     },
     "by_kind": {
-      "impl": 51,
+      "impl": 52,
       "qa": 6,
       "spec": 10
     }
