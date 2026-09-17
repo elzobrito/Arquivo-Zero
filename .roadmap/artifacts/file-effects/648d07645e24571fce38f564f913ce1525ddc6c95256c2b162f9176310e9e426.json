@@ -1,0 +1,13 @@
+{
+  "after_sha256": "e52af52bde0fdf620ff4928dafd12b565048304a6f0f455304498576645855f9",
+  "artifact_id": "ART-e52af52bde0fdf620ff4928dafd12b565048304a6f0f455304498576645855f9",
+  "artifact_sha256": "648d07645e24571fce38f564f913ce1525ddc6c95256c2b162f9176310e9e426",
+  "before_sha256": "e52af52bde0fdf620ff4928dafd12b565048304a6f0f455304498576645855f9",
+  "bytes": 355,
+  "content": "{\n  \"cifra\": [\n    \"E01\",\n    \"E02\",\n    \"E03\",\n    \"E04\",\n    \"E05\",\n    \"E06\",\n    \"E07\",\n    \"E08\"\n  ],\n  \"byte\": [\n    \"E11\",\n    \"E12\"\n  ],\n  \"null\": [\n    \"E13\",\n    \"E14\"\n  ],\n  \"vertice\": [\n    \"E15\",\n    \"E16\"\n  ],\n  \"notes\": \"Atribuição pelo recorte já publicado: IDs concedidos e exigidos em cada capítulo. Não inventa vínculos novos.\"\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/fixtures/evidence/chapter-ownership.json",
+  "source_path": "tests/fixtures/evidence/chapter-ownership.json",
+  "ts": "2026-09-17T01:48:58Z"
+}

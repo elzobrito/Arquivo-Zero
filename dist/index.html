@@ -72,13 +72,19 @@
       <aside class="route-panel"><div class="section-head"><span>ROTA DA CAÇADA</span><strong id="visited-count">1 cidade</strong></div><div id="route-log" class="route-log"></div></aside>
     </div>
   </dialog>
-  <dialog id="evidence-dialog" class="modal evidence-modal">
-    <button class="modal-close" data-close="evidence-dialog" aria-label="Fechar pistas">×</button><p class="eyebrow">QUADRO DE EVIDÊNCIAS</p><div class="section-head"><h2>Pistas catalogadas</h2><strong id="evidence-count" aria-live="polite">0 catalogadas</strong></div><p class="panel-help">Aqui aparecem somente as provas que você localizou.</p><div id="evidence-list" class="evidence-list"></div>
+  <dialog id="evidence-dialog" class="modal evidence-modal evidence-modal-v2">
+    <button class="modal-close" data-close="evidence-dialog" aria-label="Fechar pistas">×</button>
+    <p class="eyebrow">QUADRO DE EVIDÊNCIAS</p>
+    <div class="section-head"><h2>Pistas catalogadas</h2><strong id="evidence-count" aria-live="polite">0 catalogadas</strong></div>
+    <p class="panel-help">Somente provas que você localizou. Fato e interpretação ficam separados; inadmissíveis e contradições permanecem visíveis. Identificar ≠ provar.</p>
+    <div id="evidence-list" class="evidence-list" hidden aria-hidden="true"></div>
+    <div id="evidence-board-host" class="evidence-board-host"></div>
   </dialog>
   <dialog id="travel-dialog" class="modal compact-modal"><button class="modal-close" data-close="travel-dialog" aria-label="Fechar autorização de viagem">×</button><p class="eyebrow">AUTORIZAÇÃO DE VIAGEM</p><h2 id="travel-title"></h2><p id="travel-copy"></p><div class="modal-actions"><button class="secondary" data-close="travel-dialog">CANCELAR</button><button id="confirm-travel" class="primary">CONFIRMAR ROTA</button></div></dialog>
   <dialog id="dossier-dialog" class="modal compact-modal"><button class="modal-close" data-close="dossier-dialog" aria-label="Fechar dossiê">×</button><p class="eyebrow">DOSSIÊ PARA MANDADO</p><h2>Identifique o fugitivo</h2><p>Use as evidências reunidas para preencher o perfil e identificar uma única pessoa.</p><form id="dossier-form" class="dossier-form"></form></dialog>
   <dialog id="notes-dialog" class="modal compact-modal"><button class="modal-close" data-close="notes-dialog" aria-label="Fechar caderno de campo">×</button><p class="eyebrow">CADERNO DE CAMPO</p><h2>Suas anotações</h2><textarea id="notebook" placeholder="Registre destinos, relações e hipóteses…"></textarea><div class="note-footer"><span id="char-count">0 caracteres</span><span>SALVO AUTOMATICAMENTE</span></div></dialog>
   <dialog id="message-dialog" class="modal compact-modal"><button class="modal-close" data-close="message-dialog" aria-label="Fechar mensagem">×</button><p class="eyebrow" id="message-kicker"></p><h2 id="message-title"></h2><div id="message-copy"></div><button class="primary wide" data-close="message-dialog">CONTINUAR</button></dialog>
   <script type="module" src="app.js?v=retro-ui-003"></script>
+  <script type="module" src="modules/ui/evidence/evidence-board.js?v=az-evidence-005"></script>
 </body>
 </html>

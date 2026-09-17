@@ -1,0 +1,13 @@
+{
+  "after_sha256": "8030e989f8d14bd076c85415b3ce13697d46d4b3264e749929c02dfe8b4e41c9",
+  "artifact_id": "ART-8030e989f8d14bd076c85415b3ce13697d46d4b3264e749929c02dfe8b4e41c9",
+  "artifact_sha256": "aa427ac74d8f41222e8b14fd5e4754864612871de6b483eabd1b2c124decc434",
+  "before_sha256": "8030e989f8d14bd076c85415b3ce13697d46d4b3264e749929c02dfe8b4e41c9",
+  "bytes": 364,
+  "content": "{\n  \"never_defined\": [\n    \"E09\",\n    \"E10\"\n  ],\n  \"existing_ids\": [\n    \"E01\",\n    \"E02\",\n    \"E03\",\n    \"E04\",\n    \"E05\",\n    \"E06\",\n    \"E07\",\n    \"E08\",\n    \"E11\",\n    \"E12\",\n    \"E13\",\n    \"E14\",\n    \"E15\",\n    \"E16\"\n  ],\n  \"reason\": \"Lacuna histórica de numeração. E09 e E10 nunca foram definidos nem referenciados; AZ-EVIDENCE-004-V2 não os inventa.\"\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/fixtures/evidence/historical-gap.json",
+  "source_path": "tests/fixtures/evidence/historical-gap.json",
+  "ts": "2026-09-17T01:48:58Z"
+}

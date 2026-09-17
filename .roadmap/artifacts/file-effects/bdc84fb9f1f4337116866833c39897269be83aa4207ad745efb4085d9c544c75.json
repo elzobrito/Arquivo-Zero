@@ -1,0 +1,13 @@
+{
+  "after_sha256": "db6ca628a3065f8c3c39055edf9c02e450c26ac6ef84c1b4b7fdb9f72691bf5a",
+  "artifact_id": "ART-db6ca628a3065f8c3c39055edf9c02e450c26ac6ef84c1b4b7fdb9f72691bf5a",
+  "artifact_sha256": "bdc84fb9f1f4337116866833c39897269be83aa4207ad745efb4085d9c544c75",
+  "before_sha256": "db6ca628a3065f8c3c39055edf9c02e450c26ac6ef84c1b4b7fdb9f72691bf5a",
+  "bytes": 1861,
+  "content": "# GitHub Pages — Arquivo Zero\n\nPublicação do **vertical slice** jogável a partir de `dist/` neste repositório.\n\n## URL\n\nhttps://elzobrito.github.io/Arquivo-Zero/\n\n## O que é publicado\n\nSomente o conteúdo de `dist/`:\n\n- `index.html`, `app.js`, `styles.css`, `game.json`\n- `modules/**` (ESM)\n- `assets/**`\n- `.nojekyll` (impede o Jekyll de filtrar arquivos)\n\nNão entram no artifact: `.roadmap/`, código-fonte fora de `dist/`, credenciais, testes.\n\n## Ativação (uma vez)\n\n1. Repo **Settings → Pages → Build and deployment → Source**: **GitHub Actions**.\n2. Faça push em `main` (ou rode o workflow **Deploy Pages** manualmente).\n3. Aguarde o job `deploy` e o smoke HTTP.\n\n## Workflow\n\nArquivo: `.github/workflows/deploy-pages.yml`\n\n1. **validate** — baselines Node (schema 3.x, function map 79, evidence migration/policy/service, hotfix 4) + checagem de caminhos relativos em `dist/index.html`.\n2. **deploy** — `actions/upload-pages-artifact` com `path: dist` + `deploy-pages`.\n3. **smoke** — HTTP 200 em `index.html`, `game.json`, módulos ESM e assets principais.\n\n## Caminhos relativos\n\nAssets em `dist/index.html` usam URLs relativas (`styles.css`, `app.js`, `modules/...`). Isso funciona sob o prefixo `/Arquivo-Zero/`.\n\n`fetch(\"./game.json\")` no board resolve contra a URL do documento (a página), não do módulo.\n\n## Fora de escopo deste deploy\n\n- Alterar regras do jogo, evidências, `schemaVersion` ou política de prisão\n- Publicar `.roadmap` ou segredos\n- Republicar o hub `elzobrito.github.io` (repo separado)\n\n## Verificação local\n\n```bash\nnode scripts/validate-case.mjs dist/game.json\nnode scripts/verify-function-map.mjs\nnode tests/content/evidence-migration.test.mjs\nnode tests/domain/evidence-policy.test.mjs\nnode tests/domain/evidence-service.test.mjs\nnode tests/hotfix/run-all.mjs\npython -m esaa --root . verify\n```\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/deployment/github-pages.md",
+  "source_path": "docs/deployment/github-pages.md",
+  "ts": "2026-09-17T02:38:10Z"
+}

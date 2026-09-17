@@ -1,0 +1,13 @@
+{
+  "after_sha256": "a80aaf550dd0e3b745037b218ab163a4fb59df4aebffe43aa35b4cc9a8994a13",
+  "artifact_id": "ART-a80aaf550dd0e3b745037b218ab163a4fb59df4aebffe43aa35b4cc9a8994a13",
+  "artifact_sha256": "ff1a671784ef507f9645e16efa5c69b07ce53800f46d873a83248dd2dd0a4403",
+  "before_sha256": "a80aaf550dd0e3b745037b218ab163a4fb59df4aebffe43aa35b4cc9a8994a13",
+  "bytes": 1921,
+  "content": "\"use strict\";\n\n/**\n * Builds the evidence board payload from discovered records + policy.\n * Pure: does not mutate state, game, or localStorage.\n */\n\nconst policy = require(\"../../domain/evidence/evidence-policy.js\");\nconst { getDiscovered, isEssential } = require(\"../../domain/evidence/evidence-service.js\");\nconst { buildViewModels } = require(\"../../ui/evidence/evidence-view-model.js\");\nconst { applyFilters, applySort, DEFAULT_FILTERS } = require(\"../../ui/evidence/evidence-filters.js\");\n\nfunction applyScenarioOverrides(records, state, game) {\n  const scenarios = (game && game.scenarios) || [];\n  let scenario = null;\n  for (let i = 0; i < scenarios.length; i += 1) {\n    if (scenarios[i] && scenarios[i].id === (state && state.scenario)) {\n      scenario = scenarios[i];\n      break;\n    }\n  }\n  const overrides = (scenario && scenario.evidence_overrides) || {};\n  return records.map(function (item) {\n    if (!item || !item.id) return item;\n    const patch = overrides[item.id];\n    return patch ? Object.assign({}, item, patch) : item;\n  });\n}\n\nfunction buildEvidenceBoard(state, game, options) {\n  const opts = options || {};\n  const filters = Object.assign({}, DEFAULT_FILTERS, opts.filters || {});\n  const sort = opts.sort || { key: \"id\", dir: \"asc\" };\n  const discovered = applyScenarioOverrides(getDiscovered(state, game), state, game);\n  const models = buildViewModels(discovered, {\n    policy: policy,\n    isEssential: function (id) { return isEssential(id, game); },\n    chapter: opts.chapter || null,\n    scenarioId: state && state.scenario ? state.scenario : null,\n  });\n  const filtered = applyFilters(models, filters);\n  const items = applySort(filtered, sort);\n  return {\n    totalDiscovered: models.length,\n    visibleCount: items.length,\n    filters: filters,\n    sort: sort,\n    items: items,\n    allItems: models,\n  };\n}\n\nmodule.exports = {\n  buildEvidenceBoard,\n  applyScenarioOverrides,\n};\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/application/evidence/build-evidence-board.js",
+  "source_path": "src/application/evidence/build-evidence-board.js",
+  "ts": "2026-09-17T02:29:23Z"
+}

@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 856,
-      "projection_hash_sha256": "e72c9f5c85132caba9eb9a01683045688a73ce0404fedb2d69469fe5ef314d19",
+      "last_event_seq": 921,
+      "projection_hash_sha256": "642e678429e02e7d9351eaad182a62e218f17965d4f428bc352a7bb068234488",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-16T23:18:07Z"
+    "updated_at": "2026-09-17T02:38:28Z"
   },
   "project": {
     "name": "esaa-core",
@@ -2266,14 +2266,17 @@
           "regression: FUNCTION_MAP_PASS 79; RANDOM_SCENARIOS_PASS; DOMAIN_PASS; CASE_ADAPTER_PASS; FSM_PASS; HOTFIX_SUITE_PASS 4"
         ]
       },
-      "completed_at": "2026-09-16T18:30:40Z"
+      "completed_at": "2026-09-16T18:30:40Z",
+      "superseded_by": [
+        "AZ-EVIDENCE-004-V2"
+      ]
     },
     {
       "task_id": "AZ-EVIDENCE-003",
       "task_kind": "impl",
       "title": "Implementar admissibilidade, integridade e qualidade",
       "description": "Impedir que toda pista encontrada seja tratada automaticamente como prova suficiente. evidence-policy.js puro + espelho ESM. Não ligar em issueWarrant. Não alterar arrest-validator nesta tarefa.",
-      "status": "todo",
+      "status": "done",
       "depends_on": [
         "AZ-EVIDENCE-002"
       ],
@@ -2305,7 +2308,27 @@
         "Espelho dist/modules/evidence-policy.js importável no Chromium sem erro ESM.",
         "issueWarrant e arrest-validator inalterados."
       ],
-      "required_review_mode": "functional"
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T00:50:32Z",
+      "verification": {
+        "checks": [
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node tests/domain/evidence-policy.test.mjs: EVIDENCE_POLICY_PASS tests=15; INV-001 a INV-015 cobertas",
+          "node tests/domain/evidence-service.test.mjs: EVIDENCE_SERVICE_PASS tests=18",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_WARN version=2.x issues=1; warning preexistente de schemaVersion ausente",
+          "Edge Chromium HTTP ESM import: {inadmissible:false,unknown:true}",
+          "dist/app.js SHA-256 inalterado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "src/domain/arrest/arrest-validator.js SHA-256: 56138272252764a047c99144c2d7cc6354989fdf8845fcd5f6b3986bcce6c2e5",
+          "dist/modules/arrest-validator.js SHA-256: bbd4d3fb6701ed31e4f35fa78eb7c1a4178b9868ae88d84f36c7386146f667f4",
+          "git diff --check: PASS",
+          "python3 -m esaa --root . verify antes do complete: ok seq=859"
+        ]
+      },
+      "completed_at": "2026-09-17T00:54:19Z"
     },
     {
       "task_id": "HF-ISS-AZ-EVIDENCE-LEGACY-TEST-20260916",
@@ -2914,15 +2937,275 @@
         ]
       },
       "completed_at": "2026-09-16T23:18:07Z"
+    },
+    {
+      "task_id": "AZ-SCHEMA-001",
+      "task_kind": "impl",
+      "title": "Formalizar schemaVersion 3.0 no caso publicado",
+      "description": "Eliminar o aviso de schemaVersion ausente em dist/game.json, formalizando a versão do documento completo sem alterar seu conteúdo funcional.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001",
+        "AZ-ARCH-002",
+        "AZ-ARCH-003",
+        "AZ-EVIDENCE-003"
+      ],
+      "targets": [
+        "docs/architecture/schemas/case-campaign-schema.json",
+        "dist/game.json",
+        "scripts/validate-case.mjs",
+        "tests/**"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/schemas/case-campaign-schema.json",
+          "dist/game.json",
+          "scripts/validate-case.mjs",
+          "tests/schema/case-campaign-schema.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "docs/architecture/schemas/case-campaign-schema.json",
+        "dist/game.json",
+        "scripts/validate-case.mjs",
+        "tests/**"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "case-campaign-schema.json continua válido no meta-schema Draft 07.",
+        "schemaVersion está definido na raiz com const 3.0 e consta no required da raiz.",
+        "dist/game.json contém schemaVersion 3.0 e o documento completo passa com zero erros.",
+        "validate-case retorna SCHEMA_PASS e não usa validação isolada de campaign.",
+        "Fixture 2.x sem schemaVersion continua produzindo WARN.",
+        "Fixture 3.0 inválida produz FAIL acionável.",
+        "FUNCTION_MAP_PASS total=79; HOTFIX_SUITE_PASS tests=4; EVIDENCE_POLICY_PASS tests=15; EVIDENCE_SERVICE_PASS tests=18.",
+        "dist/app.js permanece com o mesmo SHA da baseline da tarefa e python -m esaa verify retorna ok."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T01:07:09Z",
+      "verification": {
+        "checks": [
+          "DRAFT07_META_SCHEMA_PASS errors=0",
+          "node tests/schema/case-campaign-schema.test.mjs: CASE_CAMPAIGN_SCHEMA_PASS tests=14",
+          "node tests/schema/schema-validator.test.mjs: SCHEMA_VALIDATOR_PASS",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_PASS version=3.x issues=0",
+          "fixture 2.x campaign-contract-min.json: SCHEMA_WARN version=2.x issues=1 por schemaVersion ausente",
+          "fixture schema-3.0-invalid.json: SCHEMA_FAIL exit=1 com metadata.id acionável",
+          "HTTP smoke: GET /game.json 200; schemaVersion=3.0; payload byte-identical ao arquivo em disco",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node tests/domain/evidence-policy.test.mjs: EVIDENCE_POLICY_PASS tests=15",
+          "node tests/domain/evidence-service.test.mjs: EVIDENCE_SERVICE_PASS tests=18",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js e node --check scripts/validate-case.mjs: PASS",
+          "git diff --check nos caminhos da tarefa: PASS",
+          "dist/app.js SHA-256 inalterado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "dist/game.json antes: 6ca7494a3e08127626518f37a5cbcb83961865d84d7b8090009fba7b2bf55bb3; depois: 0274a9c3e00934d5b20e561b77678fe3f96fdecc249955b6567b62133422a00a; depois sem schemaVersion: 6ca7494a3e08127626518f37a5cbcb83961865d84d7b8090009fba7b2bf55bb3",
+          "case-campaign-schema antes: c6dfc6e72aabf8991784e44bd926a2ada9c9c40ffc0e8bf06416a1b69b726e14; depois: f947ec0aee82e9f450515b7b06c07a65662424f1ee1b70d521d85097f6b2ef57",
+          "validate-case antes: 4032879e3e72be834559f5828942c144dc1b9023216e23abf559780b2aadf100; depois: dd34e9e25c9c338450df883dcf1d7d5ebab70fae318db3b6d3e1ae8aa6180fe5",
+          "python3 -m esaa --root . verify antes do complete: ok seq=872"
+        ]
+      },
+      "completed_at": "2026-09-17T01:11:32Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-004-V2",
+      "task_kind": "impl",
+      "title": "Completar migração estruturada das evidências do caso publicado 3.0",
+      "description": "Completar a migração dos 14 registros existentes E01-E08 e E11-E16 ao contrato estruturado no documento 3.0, com inventário, matriz antes/depois, testes de isolamento e regressão, sem inventar E09/E10 ou fatos implícitos.",
+      "status": "done",
+      "depends_on": [
+        "AZ-EVIDENCE-001",
+        "AZ-ARCH-003",
+        "AZ-EVIDENCE-003",
+        "AZ-SCHEMA-001"
+      ],
+      "targets": [
+        "dist/game.json",
+        "tests/fixtures/evidence/**",
+        "tests/content/evidence-migration.test.mjs",
+        "docs/migrations/az-evidence-004.md"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json",
+          "tests/content/evidence-migration.test.mjs",
+          "docs/migrations/az-evidence-004.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "docs/migrations/az-evidence-004.md"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Os 14 IDs existentes E01-E08 e E11-E16 são preservados; E09/E10 permanecem registrados como lacuna histórica, sem invenção.",
+        "Origem desconhecida permanece source null; admissibility unknown, integrity unverified e quality null são defaults formais explícitos.",
+        "Nenhum fato, origem, relação ou interpretação implícita é inventado.",
+        "Evidências de outros capítulos não vazam para o capítulo ativo e descobertas continuam idempotentes.",
+        "O documento raiz mantém schemaVersion 3.0, retorna SCHEMA_PASS e a campanha com quatro capítulos e nove cenários continua solucionável.",
+        "FUNCTION_MAP_PASS total=79; EVIDENCE_POLICY_PASS tests=15; EVIDENCE_SERVICE_PASS tests=18; HOTFIX_SUITE_PASS tests=4.",
+        "dist.app.js permanece inalterado e python -m esaa verify retorna ok."
+      ],
+      "required_review_mode": "regression",
+      "supersedes": [
+        "AZ-EVIDENCE-004"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T01:18:27Z",
+      "verification": {
+        "checks": [
+          "node tests/content/evidence-migration.test.mjs: EVIDENCE_MIGRATION_PASS tests=29",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_PASS version=3.x issues=0",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node tests/domain/evidence-policy.test.mjs: EVIDENCE_POLICY_PASS tests=15",
+          "node tests/domain/evidence-service.test.mjs: EVIDENCE_SERVICE_PASS tests=18",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "node tests/schema/case-campaign-schema.test.mjs: CASE_CAMPAIGN_SCHEMA_PASS tests=14; node tests/schema/case-adapter.test.mjs: CASE_ADAPTER_PASS (2.x fixture + passthrough 3.0)",
+          "node --check dist/app.js PASS; SHA-256 inalterado 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "python -m esaa --root . verify: ok seq=888; git diff --check limpo nos caminhos da tarefa; HTTP 200 em / e /game.json; browser Null/U-19 catalogou só E13"
+        ]
+      },
+      "completed_at": "2026-09-17T01:49:19Z"
+    },
+    {
+      "task_id": "AZ-EVIDENCE-005",
+      "task_kind": "impl",
+      "title": "Criar quadro de evidências estruturado",
+      "description": "UI acessível para consultar evidências descobertas: fato vs interpretação, origem, qualidade, integridade, admissibilidade, relações e contradições. Consome evidence-service/policy. Sem mutar game.json, sem revelar não descobertas, sem conclusão de autoria.",
+      "status": "done",
+      "depends_on": [
+        "AZ-EVIDENCE-002",
+        "AZ-EVIDENCE-003",
+        "AZ-EVIDENCE-004-V2",
+        "AZ-SCHEMA-001"
+      ],
+      "targets": [
+        "src/ui/evidence/**",
+        "src/application/evidence/**",
+        "dist/modules/ui/evidence/**",
+        "dist/index.html",
+        "dist/styles.css",
+        "tests/ui/evidence/**",
+        "docs/ui/evidence-board.md"
+      ],
+      "outputs": {
+        "files": [
+          "src/ui/evidence/evidence-board.js",
+          "src/ui/evidence/evidence-view-model.js",
+          "src/ui/evidence/evidence-filters.js",
+          "src/ui/evidence/evidence-details.js",
+          "tests/ui/evidence/evidence-board.test.mjs",
+          "tests/ui/evidence/evidence-filters.test.mjs",
+          "tests/ui/evidence/evidence-accessibility.test.mjs",
+          "docs/ui/evidence-board.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/ui/evidence/**",
+        "dist/index.html",
+        "dist/styles.css"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Somente evidências descobertas são apresentadas",
+        "Fatos e interpretações em regiões distintas; unknown explícito",
+        "Filtros determinísticos sem mutar estado/save/admissibilidade",
+        "Contradições e inadmissíveis permanecem visíveis; teclado ok",
+        "dist/game.json e dist/app.js inalterados; baselines e esaa verify ok"
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T02:24:36Z",
+      "verification": {
+        "checks": [
+          "EVIDENCE_FILTERS_PASS tests=7",
+          "EVIDENCE_BOARD_PASS tests=10",
+          "EVIDENCE_A11Y_PASS tests=11",
+          "EVIDENCE_POLICY_PASS tests=15",
+          "sha256 dist/game.json == 870c69317dbbf5d078075ad41543daad9f3593da9e248d963fb1422a9bc046b7 (inalterado vs claim)",
+          "sha256 dist/app.js == 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed (inalterado)"
+        ]
+      },
+      "completed_at": "2026-09-17T02:29:35Z"
+    },
+    {
+      "task_id": "AZ-DEPLOY-001",
+      "task_kind": "impl",
+      "title": "Publicar o vertical slice do Arquivo Zero no GitHub Pages",
+      "description": "Criar workflow de validação e publicação que publica somente dist/, com .nojekyll, caminhos relativos válidos e smoke test da URL. Fora de escopo: regras do jogo, evidências, schemaVersion, .roadmap, credenciais, política de prisão.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SCHEMA-001",
+        "AZ-EVIDENCE-004-V2"
+      ],
+      "targets": [
+        ".github/workflows/deploy-pages.yml",
+        "dist/.nojekyll",
+        "dist/index.html",
+        "dist/modules/**",
+        "docs/deployment/github-pages.md"
+      ],
+      "outputs": {
+        "files": [
+          ".github/workflows/deploy-pages.yml",
+          "dist/.nojekyll",
+          "docs/deployment/github-pages.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        ".github/workflows/deploy-pages.yml",
+        "dist/.nojekyll",
+        "docs/deployment/**"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "workflow conclui com sucesso",
+        "site abre por HTTPS; index.html, game.json e módulos ESM retornam 200",
+        "somente dist é publicado; sem .roadmap nem credenciais",
+        "SCHEMA_PASS 3.x, FUNCTION_MAP_PASS 79, EVIDENCE_MIGRATION_PASS 29, EVIDENCE_POLICY_PASS 15, EVIDENCE_SERVICE_PASS 18, HOTFIX_SUITE_PASS 4",
+        "console do navegador sem erros; python -m esaa verify ok"
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T02:36:57Z",
+      "verification": {
+        "checks": [
+          "SCHEMA_PASS  version=3.x  issues=0  file=dist/game.json ",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37 ",
+          "EVIDENCE_MIGRATION_PASS tests=29 ",
+          "EVIDENCE_POLICY_PASS tests=15 ",
+          "EVIDENCE_SERVICE_PASS tests=18 ",
+          "AZ-HOTFIX-001 PASS cases=5 AZ-HOTFIX-002 PASS AZ-HOTFIX-003 PASS AZ-HOTFIX-004 PASS HOTFIX_SUITE_PASS tests=4 ",
+          "esaa verify=ok",
+          "Pages build_type=workflow html_url=https://elzobrito.github.io/Arquivo-Zero/",
+          "dist/index.html sem src|href root-absolutos; artifact path=dist"
+        ]
+      },
+      "completed_at": "2026-09-17T02:38:28Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 60,
-      "todo": 3
+      "done": 65,
+      "todo": 2
     },
     "by_kind": {
-      "impl": 47,
+      "impl": 51,
       "qa": 6,
       "spec": 10
     }

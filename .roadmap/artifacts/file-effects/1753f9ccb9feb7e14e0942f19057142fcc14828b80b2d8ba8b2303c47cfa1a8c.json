@@ -1,0 +1,13 @@
+{
+  "after_sha256": "0af4097c7b1b3caf87ea2ccdb68852ada1d7db4e164a9a0e3c0e91316a2e63ab",
+  "artifact_id": "ART-0af4097c7b1b3caf87ea2ccdb68852ada1d7db4e164a9a0e3c0e91316a2e63ab",
+  "artifact_sha256": "1753f9ccb9feb7e14e0942f19057142fcc14828b80b2d8ba8b2303c47cfa1a8c",
+  "before_sha256": "0af4097c7b1b3caf87ea2ccdb68852ada1d7db4e164a9a0e3c0e91316a2e63ab",
+  "bytes": 1956,
+  "content": "\"use strict\";\n\n/**\n * Browser board bootstrap (CommonJS mirror for tests).\n * Runtime browser entry is dist/modules/ui/evidence/evidence-board.js (ESM).\n */\n\nconst { buildEvidenceBoard } = require(\"../../application/evidence/build-evidence-board.js\");\nconst { uniqueTags, DEFAULT_FILTERS } = require(\"./evidence-filters.js\");\nconst { renderEvidenceDetails } = require(\"./evidence-details.js\");\n\nfunction createBoardController(options) {\n  const opts = options || {};\n  let filters = Object.assign({}, DEFAULT_FILTERS);\n  let sort = { key: \"id\", dir: \"asc\" };\n  let selectedId = null;\n  let lastPayload = null;\n\n  function refresh(state, game, chapter) {\n    const payload = buildEvidenceBoard(state, game, {\n      filters: filters,\n      sort: sort,\n      chapter: chapter || null,\n    });\n    lastPayload = payload;\n    if (selectedId && !payload.items.some(function (i) { return i.id === selectedId; })) {\n      selectedId = payload.items[0] ? payload.items[0].id : null;\n    }\n    if (!selectedId && payload.items[0]) selectedId = payload.items[0].id;\n    return {\n      payload: payload,\n      selectedId: selectedId,\n      selected: payload.items.find(function (i) { return i.id === selectedId; }) || null,\n      tags: uniqueTags(payload.allItems || payload.items),\n      filters: filters,\n      sort: sort,\n      detailsHtml: renderEvidenceDetails(\n        payload.items.find(function (i) { return i.id === selectedId; }) || null\n      ),\n    };\n  }\n\n  function setFilter(key, value) {\n    filters = Object.assign({}, filters, { [key]: value });\n  }\n\n  function setSort(key, dir) {\n    sort = { key: key || \"id\", dir: dir === \"desc\" ? \"desc\" : \"asc\" };\n  }\n\n  function select(id) {\n    selectedId = id || null;\n  }\n\n  function getState() {\n    return { filters: filters, sort: sort, selectedId: selectedId, lastPayload: lastPayload };\n  }\n\n  return { refresh, setFilter, setSort, select, getState };\n}\n\nmodule.exports = {\n  createBoardController,\n};\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/ui/evidence/evidence-board.js",
+  "source_path": "src/ui/evidence/evidence-board.js",
+  "ts": "2026-09-17T02:29:23Z"
+}

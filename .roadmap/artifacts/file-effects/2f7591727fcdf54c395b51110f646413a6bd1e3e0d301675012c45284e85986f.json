@@ -1,0 +1,13 @@
+{
+  "after_sha256": "dcf071520f9b8642e85d4bc48daa1267784e890dfde9e82b88a556396d6aafa8",
+  "artifact_id": "ART-dcf071520f9b8642e85d4bc48daa1267784e890dfde9e82b88a556396d6aafa8",
+  "artifact_sha256": "2f7591727fcdf54c395b51110f646413a6bd1e3e0d301675012c45284e85986f",
+  "before_sha256": "dcf071520f9b8642e85d4bc48daa1267784e890dfde9e82b88a556396d6aafa8",
+  "bytes": 1440,
+  "content": "import * as policy from \"../../evidence-policy.js\";\nimport { getDiscovered, isEssential } from \"../../evidence-service.js\";\nimport { buildViewModels } from \"./evidence-view-model.js\";\nimport { applyFilters, applySort, DEFAULT_FILTERS } from \"./evidence-filters.js\";\n\nexport function applyScenarioOverrides(records, state, game) {\n  const scenarios = (game && game.scenarios) || [];\n  const scenario = scenarios.find((s) => s && s.id === (state && state.scenario)) || null;\n  const overrides = (scenario && scenario.evidence_overrides) || {};\n  return records.map((item) => {\n    if (!item || !item.id) return item;\n    const patch = overrides[item.id];\n    return patch ? { ...item, ...patch } : item;\n  });\n}\n\nexport function buildEvidenceBoard(state, game, options = {}) {\n  const filters = { ...DEFAULT_FILTERS, ...(options.filters || {}) };\n  const sort = options.sort || { key: \"id\", dir: \"asc\" };\n  const discovered = applyScenarioOverrides(getDiscovered(state, game), state, game);\n  const models = buildViewModels(discovered, {\n    policy,\n    isEssential: (id) => isEssential(id, game),\n    chapter: options.chapter || null,\n    scenarioId: state && state.scenario ? state.scenario : null,\n  });\n  const filtered = applyFilters(models, filters);\n  const items = applySort(filtered, sort);\n  return {\n    totalDiscovered: models.length,\n    visibleCount: items.length,\n    filters,\n    sort,\n    items,\n    allItems: models,\n  };\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/ui/evidence/build-evidence-board.js",
+  "source_path": "dist/modules/ui/evidence/build-evidence-board.js",
+  "ts": "2026-09-17T02:29:23Z"
+}

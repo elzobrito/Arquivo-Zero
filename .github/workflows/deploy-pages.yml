@@ -1,0 +1,159 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dist/**"
+      - ".github/workflows/deploy-pages.yml"
+      - "scripts/**"
+      - "tests/**"
+      - "docs/deployment/github-pages.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-arquivo-zero
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate baselines
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: SCHEMA_PASS (game.json 3.x)
+        run: |
+          set -euo pipefail
+          node scripts/validate-case.mjs dist/game.json | tee /tmp/schema.out
+          grep -E 'SCHEMA_PASS[[:space:]]+version=3\.x[[:space:]]+issues=0' /tmp/schema.out
+
+      - name: FUNCTION_MAP_PASS (total=79)
+        run: |
+          set -euo pipefail
+          node scripts/verify-function-map.mjs | tee /tmp/fmap.out
+          grep -E 'FUNCTION_MAP_PASS[[:space:]]+total=79' /tmp/fmap.out
+
+      - name: EVIDENCE_MIGRATION_PASS (tests=29)
+        run: |
+          set -euo pipefail
+          node tests/content/evidence-migration.test.mjs | tee /tmp/emig.out
+          grep -E 'EVIDENCE_MIGRATION_PASS[[:space:]]+tests=29' /tmp/emig.out
+
+      - name: EVIDENCE_POLICY_PASS (tests=15)
+        run: |
+          set -euo pipefail
+          node tests/domain/evidence-policy.test.mjs | tee /tmp/epol.out
+          grep -E 'EVIDENCE_POLICY_PASS[[:space:]]+tests=15' /tmp/epol.out
+
+      - name: EVIDENCE_SERVICE_PASS (tests=18)
+        run: |
+          set -euo pipefail
+          node tests/domain/evidence-service.test.mjs | tee /tmp/esvc.out
+          grep -E 'EVIDENCE_SERVICE_PASS[[:space:]]+tests=18' /tmp/esvc.out
+
+      - name: HOTFIX_SUITE_PASS (tests=4)
+        run: |
+          set -euo pipefail
+          node tests/hotfix/run-all.mjs | tee /tmp/hf.out
+          grep -E 'HOTFIX_SUITE_PASS[[:space:]]+tests=4' /tmp/hf.out
+
+      - name: Relative asset paths and dist guards
+        run: |
+          set -euo pipefail
+          if grep -EOut ' (src|href)="/[^"]+"' dist/index.html; then
+            echo "Absolute root paths found in dist/index.html" >&2
+            exit 1
+          fi
+          test -f dist/.nojekyll
+          test -f dist/game.json
+          test -f dist/app.js
+          test -d dist/modules
+          test ! -e dist/.roadmap
+          test ! -e dist/.env
+
+      - name: ESAA verify when CLI available
+        run: |
+          if python3 -m esaa --help >/dev/null 2>&1; then
+            python3 -m esaa --root . verify
+          else
+            echo "esaa CLI not installed on runner; skipped (operator verifies locally)."
+          fi
+
+  deploy:
+    name: Deploy dist to GitHub Pages
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure .nojekyll and dist-only guards
+        run: |
+          set -euo pipefail
+          test -f dist/.nojekyll || : > dist/.nojekyll
+          test -d dist
+          test ! -e dist/.roadmap
+          test ! -e dist/.env
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload dist only
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke:
+    name: Smoke published URL
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: HTTP 200 for index, game.json, ESM modules
+        env:
+          PAGE_BASE: https://elzobrito.github.io/Arquivo-Zero
+        run: |
+          set -euo pipefail
+          paths=(
+            "/"
+            "/index.html"
+            "/game.json"
+            "/modules/evidence-policy.js"
+            "/modules/ui/evidence/evidence-board.js"
+            "/app.js"
+            "/styles.css"
+          )
+          for attempt in $(seq 1 12); do
+            ok=1
+            for path in "${paths[@]}"; do
+              url="${PAGE_BASE}${path}"
+              code=$(curl -sS -o /tmp/body -w "%{http_code}" -L "$url" || true)
+              echo "attempt=${attempt} $url -> $code"
+              if [ "$code" != "200" ]; then ok=0; fi
+            done
+            if [ "$ok" = "1" ]; then
+              echo "SMOKE_PASS"
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Smoke failed after retries" >&2
+          exit 1

@@ -4,8 +4,8 @@
     "esaa_version": "0.4.x",
     "generated_by": "esaa.project",
     "source_event_store": ".roadmap/activity.jsonl",
-    "last_event_seq": 856,
-    "updated_at": "2026-09-16T23:18:07Z"
+    "last_event_seq": 921,
+    "updated_at": "2026-09-17T02:38:28Z"
   },
   "issues": [
     {
@@ -130,6 +130,38 @@
       "timeline": {
         "created_event_seq": 667,
         "resolved_event_seq": 689
+      }
+    },
+    {
+      "issue_id": "ISS-AZ-EVIDENCE-004-EXPANDED-SCOPE-20260916",
+      "status": "open",
+      "severity": "medium",
+      "title": "Escopo ampliado não pode substituir tarefa done e contagem E01-E16 não corresponde ao catálogo",
+      "baseline_id": null,
+      "affected": {
+        "paths": [
+          "dist/game.json",
+          "docs/architecture/function-map.md",
+          "docs/spec/wbs-esaa-evolucao.md"
+        ]
+      },
+      "evidence": {
+        "symptom": "AZ-EVIDENCE-004 já está done com 14 registros existentes; o novo envelope tenta alterar dependências e exige expected=16 sem que E09/E10 existam.",
+        "repro_steps": [
+          "python3 -m esaa --root . state AZ-EVIDENCE-004 mostra status done e dependências originais",
+          "jq -r .evidence[].id dist/game.json lista E01-E08 e E11-E16",
+          "rg por E09 e E10 encontra apenas documentação da lacuna, sem definições ou referências de caso"
+        ]
+      },
+      "resolution": null,
+      "links": {
+        "reported_by_task_id": "AZ-EVIDENCE-004",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 880,
+        "resolved_event_seq": null
       }
     },
     {
@@ -486,6 +518,10 @@
     }
   ],
   "indexes": {
-    "open_by_baseline": {}
+    "open_by_baseline": {
+      "unknown": [
+        "ISS-AZ-EVIDENCE-004-EXPANDED-SCOPE-20260916"
+      ]
+    }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "after_sha256": "41eea3a7e5e536c54be94836ce8a2b4aa437e2c88116d040641e3b572286cf41",
+  "artifact_id": "ART-41eea3a7e5e536c54be94836ce8a2b4aa437e2c88116d040641e3b572286cf41",
+  "artifact_sha256": "b37f53c1559898f34569d15b75bc41d30d261ca35af2a7e687909daf338c8f50",
+  "before_sha256": "41eea3a7e5e536c54be94836ce8a2b4aa437e2c88116d040641e3b572286cf41",
+  "bytes": 1139,
+  "content": "\"use strict\";\n\n/**\n * An evidence record is admissible unless it was explicitly marked as\n * inadmissible. Unknown admissibility receives the benefit of the doubt.\n */\nfunction isAdmissible(record) {\n  return !!record && record.admissibility !== \"inadmissible\";\n}\n\n/**\n * Missing quality is not a failed quality check. When quality is available,\n * it must meet the requested minimum.\n */\nfunction meetsQualityThreshold(record, minQuality = 0) {\n  if (!record) return false;\n  if (record.quality == null) return true;\n  return record.quality >= minQuality;\n}\n\n/**\n * Integrity is acceptable unless it was explicitly marked as compromised.\n * Unverified integrity receives the benefit of the doubt.\n */\nfunction isIntegrityVerified(record) {\n  return !!record && record.integrity !== \"compromised\";\n}\n\n/**\n * Evidence can support an arrest only when neither admissibility nor\n * integrity contains an explicit blocking decision.\n */\nfunction canSupportArrest(record) {\n  return isAdmissible(record) && isIntegrityVerified(record);\n}\n\nmodule.exports = {\n  isAdmissible,\n  meetsQualityThreshold,\n  isIntegrityVerified,\n  canSupportArrest,\n};\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/evidence/evidence-policy.js",
+  "source_path": "src/domain/evidence/evidence-policy.js",
+  "ts": "2026-09-17T00:54:03Z"
+}
