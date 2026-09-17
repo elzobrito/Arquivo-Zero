@@ -1,0 +1,142 @@
+[
+  {
+    "id": "E01",
+    "title": "Crachá clonado",
+    "text": "O invasor convenceu um funcionário a liberar o acesso.",
+    "tag": "especialidade",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E02",
+    "title": "Bilhete para Recife",
+    "text": "Passagem emitida 40 minutos após o furto aponta para Recife.",
+    "tag": "rota",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E03",
+    "title": "Assinatura C1FR4",
+    "text": "O padrão aparece em ataques atribuídos ao codinome Cifra.",
+    "tag": "identidade",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E04",
+    "title": "Carga desviada",
+    "text": "Um avião cargueiro foi reservado com documentos falsos.",
+    "tag": "transporte",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E05",
+    "title": "Mensagem interceptada",
+    "text": "A próxima chave está onde os três poderes se encontram.",
+    "tag": "rota",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E06",
+    "title": "Registro do hangar",
+    "text": "Cifra embarcou no cargueiro AZ-714 rumo ao sul.",
+    "tag": "localização",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E07",
+    "title": "Áudio de negociação",
+    "text": "A venda do algoritmo ocorrerá no terminal de Porto Alegre.",
+    "tag": "prova",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E08",
+    "title": "Manifesto de carga",
+    "text": "O cargueiro pousará no terminal 4 antes do prazo.",
+    "tag": "prisão",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E11",
+    "title": "Token de rede clonado",
+    "text": "Um token corporativo foi clonado para abrir o perímetro interno.",
+    "tag": "especialidade",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E12",
+    "title": "Sedã preto na fuga",
+    "text": "Câmeras registram um carro preto na janela do furto.",
+    "tag": "transporte",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E13",
+    "title": "Dump da base acadêmica",
+    "text": "Um export da tabela de notas saiu por um canal de manutenção.",
+    "tag": "especialidade",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E14",
+    "title": "Passagem de ônibus",
+    "text": "Uma passagem interestadual foi emitida com documento falso.",
+    "tag": "transporte",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E15",
+    "title": "Overlay gráfico forjado",
+    "text": "A interface do boletim recebeu uma camada visual falsa.",
+    "tag": "especialidade",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  },
+  {
+    "id": "E16",
+    "title": "Despacho fluvial",
+    "text": "Uma carga foi lançada em manifesto de barco sem destinatário claro.",
+    "tag": "transporte",
+    "source": null,
+    "admissibility": "unknown",
+    "quality": null,
+    "integrity": "unverified"
+  }
+]

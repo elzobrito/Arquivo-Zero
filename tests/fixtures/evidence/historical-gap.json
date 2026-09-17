@@ -1,0 +1,23 @@
+{
+  "never_defined": [
+    "E09",
+    "E10"
+  ],
+  "existing_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E08",
+    "E11",
+    "E12",
+    "E13",
+    "E14",
+    "E15",
+    "E16"
+  ],
+  "reason": "Lacuna histórica de numeração. E09 e E10 nunca foram definidos nem referenciados; AZ-EVIDENCE-004-V2 não os inventa."
+}

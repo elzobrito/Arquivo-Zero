@@ -1,0 +1,25 @@
+{
+  "cifra": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E08"
+  ],
+  "byte": [
+    "E11",
+    "E12"
+  ],
+  "null": [
+    "E13",
+    "E14"
+  ],
+  "vertice": [
+    "E15",
+    "E16"
+  ],
+  "notes": "Atribuição pelo recorte já publicado: IDs concedidos e exigidos em cada capítulo. Não inventa vínculos novos."
+}
