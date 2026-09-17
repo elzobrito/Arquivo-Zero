@@ -13,26 +13,356 @@
     {
       "id": "byte",
       "name": "Byte Azul",
+      "codename": "Byte Azul",
       "specialty": "Redes",
-      "vehicle": "Carro preto"
+      "vehicle": "Carro preto",
+      "capabilities": [
+        "network-access",
+        "credential-cloning"
+      ],
+      "methods": [
+        "token-reuse",
+        "social-engineering"
+      ],
+      "mobility": [
+        {
+          "mode": "road",
+          "vehicleClass": "car",
+          "details": "Carro preto"
+        }
+      ],
+      "caseProfiles": {
+        "caca_algoritmo_001": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "byte": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "null": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "vertice": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "cifra": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        }
+      },
+      "metadata": {
+        "record": "SuspectRecord-3.0",
+        "task": "AZ-SUSPECT-002",
+        "newContentApproved": [
+          "codename",
+          "capabilities",
+          "methods",
+          "mobility",
+          "caseProfiles",
+          "metadata"
+        ],
+        "preservedLegacy": [
+          "id",
+          "name",
+          "specialty",
+          "vehicle"
+        ],
+        "notes": "Campos 3.0 acrescentados sem inventar oportunidade, álibi ou localização. name/specialty/vehicle 2.x permanecem para o motor e o dossiê."
+      }
     },
     {
       "id": "null",
       "name": "Null",
-      "specialty": "Banco de dados",
-      "vehicle": "Ônibus interestadual"
+      "codename": "Null",
+      "specialty": "Redes",
+      "vehicle": "Ônibus interestadual",
+      "capabilities": [
+        "database-access",
+        "credential-cloning"
+      ],
+      "methods": [
+        "query-manipulation",
+        "token-reuse"
+      ],
+      "mobility": [
+        {
+          "mode": "road",
+          "vehicleClass": "bus",
+          "details": "Ônibus interestadual"
+        }
+      ],
+      "caseProfiles": {
+        "caca_algoritmo_001": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "byte": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "null": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "vertice": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "cifra": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        }
+      },
+      "metadata": {
+        "record": "SuspectRecord-3.0",
+        "task": "AZ-SUSPECT-002",
+        "newContentApproved": [
+          "codename",
+          "capabilities",
+          "methods",
+          "mobility",
+          "caseProfiles",
+          "metadata"
+        ],
+        "preservedLegacy": [
+          "id",
+          "name",
+          "specialty",
+          "vehicle"
+        ],
+        "notes": "Campos 3.0 acrescentados sem inventar oportunidade, álibi ou localização. name/specialty/vehicle 2.x permanecem para o motor e o dossiê."
+      }
     },
     {
       "id": "cifra",
       "name": "Cifra",
+      "codename": "Cifra",
       "specialty": "Engenharia social",
-      "vehicle": "Avião cargueiro"
+      "vehicle": "Ônibus interestadual",
+      "capabilities": [
+        "database-access",
+        "credential-cloning",
+        "visual-systems"
+      ],
+      "methods": [
+        "social-engineering",
+        "query-manipulation",
+        "visual-forgery"
+      ],
+      "mobility": [
+        {
+          "mode": "air",
+          "vehicleClass": "cargo-plane",
+          "details": "Ônibus interestadual"
+        }
+      ],
+      "caseProfiles": {
+        "caca_algoritmo_001": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "byte": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "null": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "vertice": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "cifra": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        }
+      },
+      "metadata": {
+        "record": "SuspectRecord-3.0",
+        "task": "AZ-SUSPECT-002",
+        "newContentApproved": [
+          "codename",
+          "capabilities",
+          "methods",
+          "mobility",
+          "caseProfiles",
+          "metadata"
+        ],
+        "preservedLegacy": [
+          "id",
+          "name",
+          "specialty",
+          "vehicle"
+        ],
+        "notes": "Campos 3.0 acrescentados sem inventar oportunidade, álibi ou localização. name/specialty/vehicle 2.x permanecem para o motor e o dossiê."
+      }
     },
     {
       "id": "vertice",
       "name": "Vértice",
-      "specialty": "Computação gráfica",
-      "vehicle": "Barco fluvial"
+      "codename": "Vértice",
+      "specialty": "Engenharia social",
+      "vehicle": "Carro preto",
+      "capabilities": [
+        "network-access",
+        "visual-systems"
+      ],
+      "methods": [
+        "social-engineering",
+        "visual-forgery"
+      ],
+      "mobility": [
+        {
+          "mode": "river",
+          "vehicleClass": "boat",
+          "details": "Carro preto"
+        }
+      ],
+      "caseProfiles": {
+        "caca_algoritmo_001": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "byte": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "null": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "vertice": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        },
+        "cifra": {
+          "opportunity": {
+            "status": "unknown",
+            "window": null,
+            "evidenceIds": []
+          },
+          "possibleLocationIds": [],
+          "alibis": []
+        }
+      },
+      "metadata": {
+        "record": "SuspectRecord-3.0",
+        "task": "AZ-SUSPECT-002",
+        "newContentApproved": [
+          "codename",
+          "capabilities",
+          "methods",
+          "mobility",
+          "caseProfiles",
+          "metadata"
+        ],
+        "preservedLegacy": [
+          "id",
+          "name",
+          "specialty",
+          "vehicle"
+        ],
+        "notes": "Campos 3.0 acrescentados sem inventar oportunidade, álibi ou localização. name/specialty/vehicle 2.x permanecem para o motor e o dossiê."
+      }
     }
   ],
   "dossier": {

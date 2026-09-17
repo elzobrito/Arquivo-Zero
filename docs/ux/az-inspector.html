@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arquivo Zero — Inspector</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#070d1a;--bg2:#0d1526;--bg3:#111e36;--border:#1a2a4a;
+  --accent:#4488ff;--text:#c8d8f0;--dim:#5a7099;
+  --ok:#44cc88;--warn:#ffcc44;--err:#ff4444;--ch:#aa44ff;
+  --mono:"Courier New",ui-monospace,monospace;
+  --sans:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden}
+button,input,select,a.btn{font:inherit;color:inherit;text-decoration:none}
+#load{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50;background:var(--bg)}
+#load h1{font-size:22px;color:var(--accent);letter-spacing:2px;font-family:var(--mono)}
+#load p{font-size:13px;color:var(--dim)}
+#dz{border:2px dashed var(--border);border-radius:10px;padding:28px 48px;text-align:center;color:var(--dim);cursor:pointer;transition:.15s}
+#dz.over{border-color:var(--accent);color:var(--accent);background:rgba(68,136,255,.06)}
+.btn{display:inline-block;background:rgba(68,136,255,.14);border:1px solid var(--accent);color:var(--accent);padding:8px 16px;border-radius:6px;cursor:pointer}
+.btn:hover{background:rgba(68,136,255,.24)}
+.btn.ghost{background:transparent;border-color:var(--border);color:var(--dim)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+#lerr{color:var(--err);font-size:12px;display:none;max-width:420px;text-align:center}
+input[type=file]{display:none}
+#app{display:none;height:100vh;width:100vw;flex-direction:column}
+#app.show{display:flex}
+#drawer.collapsed{max-height:36px;min-height:36px}
+#drawer.collapsed #dbody{display:none}
+#top{display:flex;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg2)}
+#top .brand{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--accent);font-weight:700}
+#top .meta{font-size:12px;color:var(--dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#top .counts span{display:inline-block;margin-right:8px;font-size:11px;font-family:var(--mono)}
+#top .counts .e{color:var(--err)} #top .counts .w{color:var(--warn)} #top .counts .ok{color:var(--ok)}
+#main{flex:1;display:grid;grid-template-columns:220px minmax(280px,1fr) minmax(320px,400px);min-height:0}
+#drawer{border-top:1px solid var(--border);background:var(--bg2);max-height:32vh;display:flex;flex-direction:column;min-height:120px}
+#drawer.collapsed{max-height:36px;min-height:36px}
+#drawer.collapsed #dbody{display:none}
+.panel{display:flex;flex-direction:column;min-height:0;background:var(--bg2);border-right:1px solid var(--border)}
+#right{border-right:none;border-left:1px solid var(--border);background:var(--bg3)}
+#center{background:var(--bg)}
+.ph{padding:10px 12px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);font-weight:700;font-family:var(--mono)}
+.ps{padding:10px 12px;border-bottom:1px solid var(--border)}
+.scroll{overflow:auto;flex:1}
+h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin:10px 0 8px;font-weight:600}
+label.f{display:block;font-size:11px;color:var(--dim);margin-bottom:4px}
+input[type=search],select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 9px;margin-bottom:8px}
+.chk{font-size:12px;display:flex;align-items:center;gap:6px;margin:6px 0}
+#tree{padding:8px 6px 24px}
+.trow{display:flex;align-items:flex-start;gap:6px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13px;line-height:1.35}
+.trow:hover{background:rgba(255,255,255,.04)}
+.trow.sel{background:rgba(68,136,255,.16);outline:1px solid rgba(68,136,255,.35)}
+.trow .tw{width:12px;flex-shrink:0;color:var(--dim);font-family:var(--mono);font-size:11px;margin-top:2px}
+.trow .lab{flex:1;min-width:0}
+.trow .lab .id{font-family:var(--mono);font-size:12px}
+.trow .lab .sub{display:block;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;font-size:10px;font-family:var(--mono);font-weight:700;margin-left:4px}
+.badge.e{background:var(--err);color:#fff}
+.badge.w{background:var(--warn);color:#111}
+.badge.ok{background:rgba(68,204,136,.15);color:var(--ok);border:1px solid rgba(68,204,136,.35)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dot.campaign{background:var(--accent)} .dot.chapter{background:var(--ch)}
+.dot.ok{background:var(--ok)} .dot.warning{background:var(--warn)} .dot.error{background:var(--err)}
+#detail-empty{padding:16px;color:var(--dim);font-size:13px}
+#dtitle{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:2px}
+#dtitle .mono,.mono{font-family:var(--mono)}
+#dsub{font-size:12px;color:var(--dim);margin-bottom:8px}
+.route{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:4px}
+.chip{background:rgba(68,136,255,.12);border:1px solid rgba(68,136,255,.3);padding:3px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)}
+.eid{display:inline-block;background:rgba(68,204,136,.1);border:1px solid rgba(68,204,136,.3);color:var(--ok);padding:3px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);margin:2px 4px 2px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{text-align:left;padding:4px 6px;color:var(--dim);border-bottom:1px solid var(--border);font-weight:600;font-size:10px;text-transform:uppercase}
+.tbl td{padding:5px 6px;border-bottom:1px solid rgba(26,42,74,.55);vertical-align:top;font-family:var(--mono)}
+.tbl tr.prob{background:rgba(255,204,68,.07)}
+.tbl tr:hover td{background:rgba(255,255,255,.03)}
+.ok{color:var(--ok)} .wn{color:var(--warn)} .er{color:var(--err)} .di{color:var(--dim)}
+.issue{padding:8px 10px;border-radius:6px;font-size:12px;cursor:pointer;line-height:1.4;margin-bottom:6px}
+.issue.error{background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.28)}
+.issue.warning{background:rgba(255,204,68,.08);border:1px solid rgba(255,204,68,.28)}
+.issue:hover{filter:brightness(1.12)}
+.issue .meta{font-family:var(--mono);font-size:11px;color:var(--dim);margin:2px 0 4px}
+.diff{font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;margin:6px 0;font-family:var(--mono);white-space:pre-wrap}
+.muted{color:var(--dim);font-size:12px}
+#dhead{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;user-select:none}
+#dhead strong{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-family:var(--mono)}
+#dbody{overflow:auto;padding:0 12px 12px;flex:1}
+</style>
+</head>
+<body>
+<div id="load">
+  <h1>◉ ARQUIVO ZERO</h1>
+  <p>Inspector v2 — árvore 2D da campanha</p>
+  <div id="dz">
+    Arraste o <strong>game.json</strong> aqui<br><br>
+    <label class="btn" for="fi">Selecionar arquivo</label>
+    <input type="file" id="fi" accept=".json,application/json">
+  </div>
+  <button class="btn ghost" type="button" id="btnLocal">Tentar ../../dist/game.json</button>
+  <p id="lerr"></p>
+</div>
+
+<div id="app">
+  <div id="top">
+    <div class="brand">◉ AZ Inspector</div>
+    <div class="meta" id="meta">—</div>
+    <div class="counts" id="counts"></div>
+    <a class="btn ghost" href="az-inspector-3d.html">Vista 3D</a>
+    <label class="btn ghost" for="fi2">Trocar JSON</label>
+    <input type="file" id="fi2" accept=".json,application/json">
+  </div>
+  <div id="main">
+    <aside class="panel" id="left">
+      <div class="ph">Filtros</div>
+      <div class="ps">
+        <label class="f" for="q">Busca</label>
+        <input type="search" id="q" placeholder="capítulo, cenário, ação…">
+        <label class="f" for="chap">Capítulo</label>
+        <select id="chap"><option value="">Todos</option></select>
+        <label class="f" for="sev">Severidade</label>
+        <select id="sev">
+          <option value="">Todas</option>
+          <option value="error">Só erros</option>
+          <option value="warning">Só avisos</option>
+          <option value="clean">Só limpos</option>
+        </select>
+        <label class="chk"><input type="checkbox" id="onlyProb" checked> Só com problema</label>
+      </div>
+      <div class="ps" style="margin-top:auto;border-bottom:none">
+        <h3 style="margin-top:0">Legenda</h3>
+        <div class="muted">
+          <span class="dot campaign" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>Campanha<br>
+          <span class="dot chapter" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>Capítulo<br>
+          <span class="dot ok" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>OK ·
+          <span class="dot warning" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>Aviso ·
+          <span class="dot error" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>Erro
+        </div>
+      </div>
+    </aside>
+    <section class="panel" id="center">
+      <div class="ph">Mapa da campanha</div>
+      <div class="scroll" id="tree"></div>
+    </section>
+    <aside class="panel" id="right">
+      <div class="ph">Detalhe do nó</div>
+      <div class="scroll" id="detail"><div id="detail-empty">Selecione um nó na árvore.</div></div>
+    </aside>
+  </div>
+  <div id="drawer">
+    <div id="dhead">
+      <strong>Problemas</strong>
+      <span class="muted" id="dfilter">todos</span>
+      <span style="flex:1"></span>
+      <span class="muted" id="dtoggle">recolher ▾</span>
+    </div>
+    <div id="dbody"><div id="dlist"></div></div>
+  </div>
+</div>
+
+<script>
+'use strict'
+let GAME=null, ISSUES=[], SELECTED=null
+let FILTER={q:'',chap:'',sev:'',onlyProb:true}
+
+const fi=document.getElementById('fi'), fi2=document.getElementById('fi2')
+const dz=document.getElementById('dz'), lerr=document.getElementById('lerr')
+function bindFile(el){el.addEventListener('change',e=>{if(e.target.files[0])readFile(e.target.files[0])})}
+bindFile(fi); bindFile(fi2)
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')})
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'))
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files[0])readFile(e.dataTransfer.files[0])})
+document.getElementById('btnLocal').onclick=async()=>{
+  try{
+    const r=await fetch('../../dist/game.json')
+    if(!r.ok) throw new Error('HTTP '+r.status)
+    GAME=await r.json(); startApp()
+  }catch(err){
+    lerr.style.display='block'
+    lerr.textContent='Falha no fetch automático (comum em file://). Use o seletor. '+err.message
+  }
+}
+function readFile(f){
+  const r=new FileReader()
+  r.onload=e=>{try{GAME=JSON.parse(e.target.result);startApp()}catch(err){lerr.style.display='block';lerr.textContent='Erro JSON: '+err.message}}
+  r.readAsText(f)
+}
+
+function validate(game){
+  const issues=[]
+  const evIds=new Set((game.evidence||[]).map(e=>e.id))
+  const base={}
+  ;(game.locations||[]).forEach(loc=>{(loc.actions||[]).forEach(a=>{base[a.id]={...a,city:loc.name,cityId:loc.id}})})
+  const culpritEv={
+    byte:new Set(['E11','E12']), null:new Set(['E13','E14']),
+    vertice:new Set(['E15','E16']), cifra:new Set(['E01','E02','E03','E04','E05','E06','E07','E08'])
+  }
+  Object.entries(game.campaign?.chapters||{}).forEach(([cid,ch])=>{
+    const arrest=ch.arrest_requirements||{}
+    ;(arrest.required_evidence||[]).forEach(eid=>{
+      if(!evIds.has(eid)) push(issues,'error','MISSING_REQUIRED_EV',cid,null,null,
+        `Evidência obrigatória ${eid} não existe no catálogo`,`chapters.${cid}.arrest_requirements`)
+    })
+    ;(ch.scenarios||[]).forEach(sc=>{
+      const routeSet=new Set(sc.route||[])
+      const ov=sc.action_overrides||{}
+      ;(sc.route||[]).forEach(city=>{
+        if(!(sc.navigation||{})[city]) push(issues,'warning','ROUTE_NAV_MISMATCH',cid,sc.id,null,
+          `Cidade "${city}" na rota mas sem entrada na navigation`,`chapters.${cid}.scenarios[${sc.id}].navigation`)
+      })
+      Object.values(base).forEach(ba=>{
+        const override=ov[ba.id], hasOv=override!==undefined
+        if(hasOv){
+          if(override.evidence && !evIds.has(override.evidence))
+            push(issues,'error','BROKEN_EV_REF',cid,sc.id,ba.id,
+              `override.evidence="${override.evidence}" não existe no catálogo`,
+              `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+        }else{
+          if(ba.evidence==='E05' && !routeSet.has('brasilia'))
+            push(issues,'error','MISLEADING_CLUE',cid,sc.id,ba.id,
+              `"${ba.id}" sem override → E05 implica Brasília, rota=[${(sc.route||[]).join('→')}]`,
+              `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+          if(ba.evidence){
+            const others=Object.entries(culpritEv).filter(([c])=>c!==cid).flatMap(([,s])=>[...s])
+            if(others.includes(ba.evidence))
+              push(issues,'warning','WRONG_SUSPECT_EV',cid,sc.id,ba.id,
+                `"${ba.id}" sem override → base usa ${ba.evidence} (outro suspeito)`,
+                `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+          }
+        }
+      })
+      Object.keys(ov).forEach(aid=>{
+        if(!base[aid]) push(issues,'warning','ORPHAN_OVERRIDE',cid,sc.id,aid,
+          `Override para "${aid}" mas ação não existe em nenhuma location`,
+          `chapters.${cid}.scenarios[${sc.id}].action_overrides.${aid}`)
+      })
+    })
+  })
+  return issues
+}
+function push(arr,sev,type,chapter,scenario,action,message,path){
+  arr.push({severity:sev,type,chapter,scenario,action,message,path})
+}
+function issuesFor(chapId,scenId){
+  return ISSUES.filter(i=>{
+    if(chapId && i.chapter!==chapId) return false
+    if(scenId) return i.scenario===scenId
+    return true
+  })
+}
+function statusOf(list){
+  if(list.some(i=>i.severity==='error')) return 'error'
+  if(list.some(i=>i.severity==='warning')) return 'warning'
+  return 'ok'
+}
+function countBadge(list){
+  const e=list.filter(i=>i.severity==='error').length
+  const w=list.filter(i=>i.severity==='warning').length
+  if(e) return `<span class="badge e">${e}</span>`+(w?` <span class="badge w">${w}</span>`:'')
+  if(w) return `<span class="badge w">${w}</span>`
+  return `<span class="badge ok">✓</span>`
+}
+function buildBase(game){
+  const base={}
+  ;(game.locations||[]).forEach(loc=>{(loc.actions||[]).forEach(a=>{base[a.id]={...a,city:loc.name,cityId:loc.id}})})
+  return base
+}
+
+function startApp(){
+  document.getElementById('load').style.display='none'
+  document.getElementById('app').classList.add('show')
+  ISSUES=validate(GAME)
+  const meta=GAME.metadata||{}
+  document.getElementById('meta').textContent=
+    `${meta.code||GAME.campaign?.id||'campanha'} · ${meta.title||''} · ${(GAME.evidence||[]).length} evidências`
+  const errs=ISSUES.filter(i=>i.severity==='error').length
+  const warns=ISSUES.filter(i=>i.severity==='warning').length
+  document.getElementById('counts').innerHTML=
+    `<span class="e">${errs} erro(s)</span><span class="w">${warns} aviso(s)</span><span class="ok">${ISSUES.length} total</span>`
+  const sel=document.getElementById('chap')
+  sel.innerHTML='<option value="">Todos</option>'
+  Object.keys(GAME.campaign?.chapters||{}).forEach(cid=>{
+    const o=document.createElement('option'); o.value=cid; o.textContent=cid; sel.appendChild(o)
+  })
+  SELECTED={type:'campaign'}
+  ;['q','chap','sev','onlyProb'].forEach(id=>{
+    const el=document.getElementById(id)
+    const sync=()=>{
+      FILTER.q=document.getElementById('q').value.trim().toLowerCase()
+      FILTER.chap=document.getElementById('chap').value
+      FILTER.sev=document.getElementById('sev').value
+      FILTER.onlyProb=document.getElementById('onlyProb').checked
+      renderAll()
+    }
+    el.oninput=sync; el.onchange=sync
+  })
+  const drawer=document.getElementById('drawer')
+  document.getElementById('dhead').onclick=()=>{
+    drawer.classList.toggle('collapsed')
+    document.getElementById('dtoggle').textContent=drawer.classList.contains('collapsed')?'expandir ▸':'recolher ▾'
+  }
+  renderAll()
+}
+
+function nodeMatch(chapId,scenId,label,iss){
+  if(FILTER.chap && FILTER.chap!==chapId) return false
+  const st=statusOf(iss)
+  if(FILTER.sev==='error' && st!=='error') return false
+  if(FILTER.sev==='warning' && st!=='warning') return false
+  if(FILTER.sev==='clean' && st!=='ok') return false
+  if(FILTER.onlyProb && chapId && st==='ok') return false
+  if(FILTER.q){
+    const blob=(label+' '+chapId+' '+(scenId||'')+' '+iss.map(i=>i.message+(i.action||'')+i.type).join(' ')).toLowerCase()
+    if(!blob.includes(FILTER.q)) return false
+  }
+  return true
+}
+
+function renderAll(){ renderTree(); renderDetail(); renderDrawer() }
+
+function renderTree(){
+  const root=document.getElementById('tree')
+  const chaps=GAME.campaign?.chapters||{}
+  let html=''
+  html+=`<div class="trow${SELECTED?.type==='campaign'?' sel':''}" data-type="campaign" style="padding-left:8px">
+    <span class="dot campaign"></span>
+    <div class="lab"><span class="id">Campanha</span>
+      <span class="sub">${GAME.campaign?.id||''} · boss ${GAME.campaign?.boss||'—'}</span></div>
+    ${countBadge(ISSUES)}
+  </div>`
+  Object.entries(chaps).forEach(([cid,ch])=>{
+    const allC=issuesFor(cid,null)
+    const scenarios=ch.scenarios||[]
+    const visibleSc=scenarios.filter(sc=>nodeMatch(cid,sc.id,`${sc.code||''} ${sc.id}`,issuesFor(cid,sc.id)))
+    if(FILTER.chap && FILTER.chap!==cid) return
+    if(FILTER.onlyProb && statusOf(allC)==='ok' && !FILTER.q) return
+    if(FILTER.q && !nodeMatch(cid,null,cid,allC) && !visibleSc.length) return
+    if(FILTER.sev==='clean' && statusOf(allC)!=='ok') {
+      /* still show chapter if it has clean scenarios */
+    } else if(FILTER.sev && FILTER.sev!=='clean' && statusOf(allC)==='ok' && !visibleSc.length) return
+
+    html+=`<div class="trow${SELECTED?.type==='chapter'&&SELECTED.chapId===cid?' sel':''}" data-type="chapter" data-chap="${cid}" style="padding-left:18px">
+      <span class="tw">▸</span><span class="dot chapter"></span>
+      <div class="lab"><span class="id">${cid}</span>
+        <span class="sub">${ch.culprit||''} · ${ch.total_hours||'?'}h · ${scenarios.length} cenário(s)</span></div>
+      ${countBadge(allC)}
+    </div>`
+    scenarios.forEach(sc=>{
+      const sIssues=issuesFor(cid,sc.id)
+      if(!nodeMatch(cid,sc.id,`${sc.code||''} ${sc.id}`,sIssues)) return
+      const sst=statusOf(sIssues)
+      html+=`<div class="trow${SELECTED?.type==='scenario'&&SELECTED.chapId===cid&&SELECTED.scenId===sc.id?' sel':''}" data-type="scenario" data-chap="${cid}" data-scen="${sc.id}" style="padding-left:36px">
+        <span class="tw">·</span><span class="dot ${sst}"></span>
+        <div class="lab"><span class="id">${sc.code||''} ${sc.id}</span>
+          <span class="sub">${(sc.route||[]).join(' → ')}</span></div>
+        ${countBadge(sIssues)}
+      </div>`
+    })
+  })
+  root.innerHTML=html||'<div class="muted" style="padding:12px">Nenhum nó com esses filtros.</div>'
+  root.querySelectorAll('.trow').forEach(row=>{
+    row.onclick=()=>{
+      const t=row.dataset.type
+      if(t==='campaign') SELECTED={type:'campaign'}
+      else if(t==='chapter') SELECTED={type:'chapter',chapId:row.dataset.chap}
+      else SELECTED={type:'scenario',chapId:row.dataset.chap,scenId:row.dataset.scen}
+      renderAll()
+    }
+  })
+}
+
+function issueBlock(i){
+  return `<div class="issue ${i.severity}" onclick='selectFromIssue(${JSON.stringify(i.chapter)},${JSON.stringify(i.scenario||null)})'>
+    <span class="badge ${i.severity==='error'?'e':'w'}">${i.type}</span>
+    <div class="meta">${i.chapter}${i.scenario?' · '+i.scenario:''}${i.action?' · '+i.action:''}</div>
+    ${i.message}
+  </div>`
+}
+
+function renderDetail(){
+  const d=document.getElementById('detail')
+  if(!SELECTED){d.innerHTML='<div id="detail-empty">Selecione um nó na árvore.</div>';return}
+
+  if(SELECTED.type==='campaign'){
+    const pool=GAME.campaign?.lieutenant_pool||[]
+    d.innerHTML=`<div class="ps" style="border:none">
+      <div id="dtitle">Campanha</div>
+      <div id="dsub"><span class="mono">${GAME.campaign?.id||''}</span></div>
+      <h3>Lieutenants</h3>
+      <div>${pool.map(l=>`<span class="eid" style="color:#cc88ff;border-color:rgba(170,68,255,.35)">${l}</span>`).join('')||'—'}</div>
+      <h3>Boss</h3><span class="eid" style="color:var(--err);border-color:rgba(255,68,68,.35)">${GAME.campaign?.boss||'—'}</span>
+      <h3>Resumo</h3>
+      <p class="muted">${ISSUES.filter(i=>i.severity==='error').length} erro(s), ${ISSUES.filter(i=>i.severity==='warning').length} aviso(s)</p>
+    </div>`
+    return
+  }
+
+  if(SELECTED.type==='chapter'){
+    const ch=GAME.campaign.chapters[SELECTED.chapId]
+    const arrest=ch.arrest_requirements||{}
+    const iss=issuesFor(SELECTED.chapId,null)
+    d.innerHTML=`<div class="ps" style="border:none">
+      <div id="dtitle">Capítulo · <span class="mono">${SELECTED.chapId}</span></div>
+      <div id="dsub">Culprit: <strong>${ch.culprit||''}</strong> · ${ch.total_hours||'?'}h</div>
+      <h3>Evidências obrigatórias</h3>
+      <div>${(arrest.required_evidence||[]).map(e=>`<span class="eid">${e}</span>`).join('')||'—'}</div>
+      <h3>Mínimo</h3><p class="muted">${arrest.minimum_evidence??'—'}</p>
+      <h3>Briefing</h3><p class="muted" style="line-height:1.45">${ch.briefing||''}</p>
+      <h3>Problemas</h3>
+      ${iss.length?iss.slice(0,12).map(issueBlock).join(''):'<span class="ok">✓ Nenhum</span>'}
+    </div>`
+    return
+  }
+
+  const cid=SELECTED.chapId, sid=SELECTED.scenId
+  const ch=GAME.campaign.chapters[cid]
+  const sc=(ch.scenarios||[]).find(s=>s.id===sid)
+  if(!sc){d.innerHTML='<div id="detail-empty">Cenário não encontrado.</div>';return}
+  const iss=issuesFor(cid,sid)
+  const base=buildBase(GAME)
+  const ov=sc.action_overrides||{}
+  const arrest=ch.arrest_requirements||{}
+  const actions=Object.values(base).map(ba=>{
+    const o=ov[ba.id], hasOv=o!==undefined
+    const evId=hasOv?o.evidence:ba.evidence
+    const issue=iss.find(i=>i.action===ba.id)
+    let st='ok'
+    if(issue) st=issue.severity
+    else if(!hasOv && evId==='E05') st='check'
+    return {id:ba.id,cityId:ba.cityId,hasOv,evId,result:hasOv?o.result:ba.result,st,issue}
+  })
+  actions.sort((a,b)=>{
+    const rank=s=>s==='error'?0:s==='warning'||s==='check'?1:2
+    return rank(a.st)-rank(b.st)||a.id.localeCompare(b.id)
+  })
+  const routeHtml=(sc.route||[]).map((c,i)=>
+    `<span class="chip">${c}</span>${i<sc.route.length-1?'<span class="di">→</span>':''}`).join('')
+  const rows=actions.map(a=>{
+    const ovl=a.hasOv?'<span class="ok">override</span>':'<span class="wn">base</span>'
+    let st='<span class="di">—</span>'
+    if(a.st==='error') st='<span class="er">✗ erro</span>'
+    else if(a.st==='warning') st='<span class="wn">⚠ aviso</span>'
+    else if(a.st==='check') st='<span class="wn">⚠ checar</span>'
+    else if(a.hasOv && !a.evId) st='<span class="ok">null ✓</span>'
+    else if(a.evId) st=`<span class="ok">${a.evId}</span>`
+    const cls=(a.st==='error'||a.st==='warning'||a.st==='check')?'prob':''
+    const tip=(a.result||'').substring(0,160).replace(/"/g,'&quot;')
+    return `<tr class="${cls}" title="${tip}"><td>${a.id}</td><td class="di">${a.cityId}</td><td>${ovl}</td><td>${st}</td></tr>`
+  }).join('')
+  const firstProb=actions.find(a=>a.issue)
+  let diff=''
+  if(firstProb){
+    const ba=base[firstProb.id], o=ov[firstProb.id]
+    diff=`<h3>Base → override (ex.: ${firstProb.id})</h3>
+      <div class="diff">base.evidence = ${ba?.evidence??'null'}\n${o?('override.evidence = '+(o.evidence??'null')):'(sem override)'}</div>`
+  }
+  d.innerHTML=`
+    <div class="ps" style="border:none">
+      <div id="dtitle"><span class="mono">${sc.code||''}</span> · ${sc.id}</div>
+      <div id="dsub">Capítulo: <span class="mono">${cid}</span></div>
+      <h3>Rota</h3><div class="route">${routeHtml||'—'}</div>
+      <h3>Problemas neste cenário</h3>
+      ${iss.length?iss.map(issueBlock).join(''):'<span class="ok">✓ Nenhum problema</span>'}
+      ${diff}
+    </div>
+    <div class="ps">
+      <h3>Ações <span class="muted">(problemáticas primeiro)</span></h3>
+      <table class="tbl"><thead><tr><th>Ação</th><th>Cidade</th><th>Origem</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    </div>
+    <div class="ps" style="border:none">
+      <h3>Evidências obrigatórias</h3>
+      ${(arrest.required_evidence||[]).map(e=>`<span class="eid">${e}</span>`).join('')||'—'}
+    </div>`
+}
+
+function selectFromIssue(chap,scen){
+  if(scen) SELECTED={type:'scenario',chapId:chap,scenId:scen}
+  else SELECTED={type:'chapter',chapId:chap}
+  renderAll()
+}
+window.selectFromIssue=selectFromIssue
+
+function renderDrawer(){
+  const list=document.getElementById('dlist')
+  const label=document.getElementById('dfilter')
+  let items=ISSUES
+  if(SELECTED?.type==='scenario'){
+    items=issuesFor(SELECTED.chapId,SELECTED.scenId)
+    label.textContent=`filtrado: ${SELECTED.chapId} · ${SELECTED.scenId}`
+  }else if(SELECTED?.type==='chapter'){
+    items=issuesFor(SELECTED.chapId,null)
+    label.textContent=`filtrado: ${SELECTED.chapId}`
+  }else label.textContent='todos'
+  if(FILTER.sev==='error') items=items.filter(i=>i.severity==='error')
+  if(FILTER.sev==='warning') items=items.filter(i=>i.severity==='warning')
+  if(FILTER.q) items=items.filter(i=>(i.message+i.type+(i.action||'')+i.chapter+(i.scenario||'')).toLowerCase().includes(FILTER.q))
+  if(!items.length){list.innerHTML='<span class="ok">✓ Nenhum problema neste recorte.</span>';return}
+  list.innerHTML=items.map((iss,n)=>`
+    <div class="issue ${iss.severity}" onclick='selectFromIssue(${JSON.stringify(iss.chapter)},${JSON.stringify(iss.scenario||null)})'>
+      <span class="badge ${iss.severity==='error'?'e':'w'}">${n+1}</span>
+      <strong style="font-family:var(--mono);font-size:12px">${iss.type}</strong>
+      <div class="meta">${iss.chapter}${iss.scenario?' · '+iss.scenario:''}${iss.action?' · '+iss.action:''}</div>
+      ${iss.message}
+    </div>`).join('')
+}
+</script>
+</body>
+</html>

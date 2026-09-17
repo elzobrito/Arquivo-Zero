@@ -1,0 +1,13 @@
+{
+  "after_sha256": "381aae551a90a1fd97984912e94c08b1c86d8e006a041d400751ad926c2028a7",
+  "artifact_id": "ART-381aae551a90a1fd97984912e94c08b1c86d8e006a041d400751ad926c2028a7",
+  "artifact_sha256": "2166da1053fd0466e85132f4c99e926a1e662620dd060213d984274d9af162df",
+  "before_sha256": "381aae551a90a1fd97984912e94c08b1c86d8e006a041d400751ad926c2028a7",
+  "bytes": 2010,
+  "content": "\"use strict\";\n\nconst constraintEngine = require(\"../constraints/constraint-engine.js\");\n\nfunction candidateId(suspect) {\n  if (suspect && typeof suspect.id === \"string\" && suspect.id.trim() !== \"\") {\n    return suspect.id;\n  }\n  return null;\n}\n\nfunction constraintId(constraint, index) {\n  if (constraint && typeof constraint.id === \"string\" && constraint.id.trim() !== \"\") {\n    return constraint.id;\n  }\n  return \"constraint-\" + String(index + 1);\n}\n\nfunction explanation(constraintIdValue, evaluation) {\n  return {\n    constraintId: constraintIdValue,\n    result: evaluation.result,\n    explanation: evaluation.explanation,\n  };\n}\n\nfunction evaluateCandidate(suspect, constraints, game) {\n  const id = candidateId(suspect);\n  const evaluations = [];\n  const explanations = [];\n\n  if (id === null) {\n    const missingId = {\n      result: \"UNKNOWN\",\n      explanation: \"suspeito sem id estável; identidade não pode ser avaliada.\",\n    };\n    evaluations.push(missingId);\n    explanations.push(explanation(\"candidate-id\", missingId));\n  }\n\n  for (let i = 0; i < constraints.length; i += 1) {\n    const current = constraintEngine.evaluate(constraints[i], {\n      record: suspect,\n      candidateId: id,\n      game: game,\n    });\n    evaluations.push(current);\n    explanations.push(explanation(constraintId(constraints[i], i), current));\n  }\n\n  const aggregate = constraintEngine.composeAnd(evaluations);\n  if (constraints.length === 0 && id !== null) {\n    explanations.push(explanation(\"constraints\", aggregate));\n  }\n\n  return {\n    id: id,\n    result: aggregate.result,\n    explanations: explanations,\n  };\n}\n\nfunction filterCandidates(suspects, constraints, game) {\n  const records = Array.isArray(suspects) ? suspects : [];\n  const rules = Array.isArray(constraints) ? constraints : [];\n  const output = [];\n\n  for (let i = 0; i < records.length; i += 1) {\n    output.push(evaluateCandidate(records[i], rules, game));\n  }\n\n  return output;\n}\n\nmodule.exports = {\n  filterCandidates: filterCandidates,\n};\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "src/domain/suspects/candidate-service.js",
+  "source_path": "src/domain/suspects/candidate-service.js",
+  "ts": "2026-09-17T16:49:21Z"
+}

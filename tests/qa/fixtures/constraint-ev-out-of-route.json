@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "3.0",
+  "metadata": { "id": "cv-route", "code": "CV-R", "title": "Route", "briefing": "Fixture", "total_hours": 10, "start": "lab" },
+  "suspects": [{ "id": "alpha", "name": "Alpha", "specialty": "shared", "vehicle": "shared" }],
+  "dossier": { "fields": [] },
+  "evidence": [{ "id": "E1", "title": "Essential", "text": "Essential", "tag": "proof" }],
+  "locations": [
+    { "id": "lab", "name": "Lab", "type": "lab", "x": 0, "y": 0, "coords": "0,0", "description": "Fixture", "city_info": { "summary": "Fixture", "facts": [] }, "actions": [{ "id": "arrest", "label": "Prender", "cost": 0, "result": "Fim", "arrest": true }] },
+    { "id": "remote", "name": "Remote", "type": "lab", "x": 1, "y": 1, "coords": "1,1", "description": "Fixture", "city_info": { "summary": "Fixture", "facts": [] }, "actions": [{ "id": "inspect", "label": "Examinar", "cost": 1, "evidence": "E1", "result": "Prova" }] }
+  ],
+  "travel": {},
+  "navigation": { "lab": [], "remote": [] },
+  "culprit": "alpha",
+  "arrest_requirements": { "minimum_evidence": 1, "required_evidence": ["E1"] },
+  "scenarios": [{ "id": "offroute", "code": "OFFROUTE", "route": ["lab"], "navigation": { "lab": [] }, "action_overrides": {} }],
+  "ending": { "win_title": "Fim", "win_text": "Fim", "lose_title": "Fim", "lose_text": "Fim" },
+  "campaign": { "id": "cv-route", "lieutenant_pool": ["alpha"], "lieutenant_chapters": 1, "boss": "alpha", "chapters": { "case": {
+    "culprit": "alpha", "start": "lab", "total_hours": 10,
+    "arrest_requirements": { "minimum_evidence": 1, "required_evidence": ["E1"] },
+    "scenarios": [{ "id": "offroute", "code": "OFFROUTE", "route": ["lab"], "navigation": { "lab": [] }, "action_overrides": {} }]
+  } } }
+}

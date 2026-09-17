@@ -4,8 +4,8 @@
     "esaa_version": "0.4.x",
     "generated_by": "esaa.project",
     "source_event_store": ".roadmap/activity.jsonl",
-    "last_event_seq": 934,
-    "updated_at": "2026-09-17T02:58:35Z"
+    "last_event_seq": 1273,
+    "updated_at": "2026-09-17T19:37:38Z"
   },
   "issues": [
     {
@@ -514,6 +514,150 @@
       "timeline": {
         "created_event_seq": 222,
         "resolved_event_seq": 238
+      }
+    },
+    {
+      "issue_id": "ISSUE-AZ-DOSSIER-UI-INTEGRATION",
+      "status": "resolved",
+      "severity": "medium",
+      "title": "dist/app.js FN-017 ainda não delega ao warrant-service",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "dist/app.js (FN-017 submitDossier) ainda usa filterSuspects/issueWarrant inline; a UI pode apresentar mandado aprovado com correspondência única de dossiê sem passar por requestWarrant. Nome isolado já é bloqueado por filterSuspects, mas a UI não usa o serviço governado nem explica dimensões.",
+        "repro_steps": [
+          "Abrir dist/app.js e localizar function submitDossier.",
+          "Observar import de filterSuspects e issueWarrant e a emissão direta de mandado.",
+          "Confirmar ausência de import de warrant-service.js."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HYP-005-V2",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 1248,
+        "resolved_event_seq": 1271
+      }
+    },
+    {
+      "issue_id": "ISSUE-AZ-HYP-002-DIST-BOUNDARY",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Target ESM obrigatório sem boundary_grant",
+      "baseline_id": null,
+      "affected": {
+        "environment": "workspace",
+        "paths": [
+          "dist/modules/hypothesis-service.js"
+        ]
+      },
+      "evidence": {
+        "symptom": "O complete de AZ-HYP-002 foi rejeitado com BOUNDARY_VIOLATION para dist/modules/hypothesis-service.js, embora esse arquivo conste em targets e outputs e o aceite exija espelho ESM.",
+        "repro_steps": [
+          "Executar python3 -m esaa --root . dispatch-context AZ-HYP-002 e observar targets/outputs sem boundary_grant.",
+          "Submeter action=complete como agent-impl/runner codex com file_update de dist/modules/hypothesis-service.js.",
+          "Observar error_code BOUNDARY_VIOLATION: path not allowed for impl: dist/modules/hypothesis-service.js."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HYP-002",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 1106,
+        "resolved_event_seq": 1131
+      }
+    },
+    {
+      "issue_id": "ISSUE-AZ-HYP-003-DIST-BOUNDARY",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Target ESM obrigatório sem boundary_grant",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "O complete de AZ-HYP-003 foi rejeitado com BOUNDARY_VIOLATION para dist/modules/ui/hypothesis-board/hypothesis-board.js, embora esse arquivo conste em targets e outputs e o aceite exija espelho ESM.",
+        "repro_steps": [
+          "Executar python3 -m esaa --root . dispatch-context AZ-HYP-003 e observar targets/outputs sem boundary_grant.",
+          "Submeter action=complete como agent-impl/runner grok com file_update de dist/modules/ui/hypothesis-board/hypothesis-board.js.",
+          "Observar error_code BOUNDARY_VIOLATION: path not allowed for impl: dist/modules/ui/hypothesis-board/hypothesis-board.js."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-HYP-003",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 1153,
+        "resolved_event_seq": 1168
+      }
+    },
+    {
+      "issue_id": "ISSUE-AZ-REPORT-002-DIST-BOUNDARY",
+      "status": "resolved",
+      "severity": "high",
+      "title": "Target ESM obrigatório sem boundary_grant",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "O complete de AZ-REPORT-002 foi rejeitado com BOUNDARY_VIOLATION para dist/modules/timeline-builder.js, embora esse arquivo conste em targets e outputs e o aceite exija espelho ESM.",
+        "repro_steps": [
+          "Executar python3 -m esaa --root . dispatch-context AZ-REPORT-002 e observar targets/outputs sem boundary_grant.",
+          "Submeter action=complete como agent-impl/runner grok com file_update de dist/modules/timeline-builder.js.",
+          "Observar error_code BOUNDARY_VIOLATION: path not allowed for impl: dist/modules/timeline-builder.js."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-REPORT-002",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 1156,
+        "resolved_event_seq": 1171
+      }
+    },
+    {
+      "issue_id": "ISSUE-AZ-SUSPECT-004-TRIVIAL-ATTR-BOUNDARY",
+      "status": "resolved",
+      "severity": "high",
+      "title": "TRIVIAL_ATTR exige alteração fora dos targets",
+      "baseline_id": null,
+      "affected": {},
+      "evidence": {
+        "symptom": "A instrução exige reduzir a zero os oito avisos TRIVIAL_ATTR alterando specialty e vehicle dos suspeitos, mas AZ-SUSPECT-004 autoriza somente dossier-service e testes; validate-case-constraints lê esses atributos de dist/game.json.",
+        "repro_steps": [
+          "Executar node scripts/validate-case-constraints.mjs dist/game.json e observar oito WARN em suspects.*.specialty e suspects.*.vehicle.",
+          "Executar python3 -m esaa --root . state AZ-SUSPECT-004 e observar que dist/game.json não consta em targets nem boundary_grant."
+        ]
+      },
+      "resolution": {
+        "status": "resolved_by_command"
+      },
+      "links": {
+        "reported_by_task_id": "AZ-SUSPECT-004",
+        "fixes_task_id": null,
+        "hotfix_task_id": null
+      },
+      "timeline": {
+        "created_event_seq": 1134,
+        "resolved_event_seq": 1197
       }
     }
   ],

@@ -1,0 +1,294 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arquivo-zero.local/schemas/case-campaign-schema.json",
+  "title": "Arquivo Zero Case and Campaign Schema",
+  "description": "JSON Schema Draft-07 do documento completo de caso e campanha publicado pelo Arquivo Zero na versão 3.0.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "metadata",
+    "suspects",
+    "dossier",
+    "evidence",
+    "locations",
+    "travel",
+    "navigation"
+  ],
+  "anyOf": [
+    { "required": ["campaign"] },
+    { "required": ["culprit", "scenarios", "arrest_requirements", "ending"] }
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "3.0",
+      "description": "Versão obrigatória do documento completo publicado."
+    },
+    "metadata": { "$ref": "#/definitions/Metadata" },
+    "culprit": {
+      "type": "string",
+      "description": "ID do suspeito culpado no caso padrão/implícito."
+    },
+    "suspects": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/Suspect" }
+    },
+    "dossier": {
+      "type": "object",
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/DossierField" }
+        }
+      }
+    },
+    "arrest_requirements": { "$ref": "#/definitions/ArrestRequirements" },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/Evidence" }
+    },
+    "navigation": {
+      "type": "object",
+      "description": "Grafo de adjacência de conexões de viagem entre cidades.",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "trail": {
+      "type": "object",
+      "description": "Caminho canônico sugerido de fuga.",
+      "additionalProperties": { "type": "string" }
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "Variações de rotas e pistas do caso padrão/implícito.",
+      "items": { "$ref": "#/definitions/Scenario" }
+    },
+    "locations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/Location" }
+    },
+    "travel": {
+      "type": "object",
+      "description": "Matriz de custos de tempo (horas) de viagem entre cidades.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "number", "minimum": 0 }
+      }
+    },
+    "ending": { "$ref": "#/definitions/Ending" },
+    "campaign": { "$ref": "#/definitions/Campaign" }
+  },
+  "definitions": {
+    "Metadata": {
+      "type": "object",
+      "required": ["id", "code", "title", "briefing", "total_hours", "start"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "code": { "type": "string" },
+        "title": { "type": "string" },
+        "briefing": { "type": "string" },
+        "total_hours": { "type": "integer", "minimum": 1 },
+        "start": { "type": "string", "description": "ID da cidade de início." }
+      }
+    },
+    "Suspect": {
+      "type": "object",
+      "required": ["id", "name", "specialty", "vehicle"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "specialty": { "type": "string" },
+        "vehicle": { "type": "string" }
+      }
+    },
+    "DossierField": {
+      "type": "object",
+      "required": ["id", "label", "options"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ArrestRequirements": {
+      "type": "object",
+      "required": ["minimum_evidence", "required_evidence"],
+      "properties": {
+        "minimum_evidence": { "type": "integer", "minimum": 0 },
+        "required_evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Evidence": {
+      "type": "object",
+      "required": ["id", "title", "text", "tag"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "text": { "type": "string" },
+        "tag": { "type": "string" },
+        "source": { "type": ["string", "null"] },
+        "admissibility": { "enum": ["admissible", "inadmissible", "unknown"] },
+        "quality": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "integrity": { "enum": ["verified", "unverified", "compromised"] }
+      }
+    },
+    "ActionOverride": {
+      "type": "object",
+      "required": ["result"],
+      "properties": {
+        "label": { "type": "string" },
+        "cost": { "type": "integer", "minimum": 0 },
+        "evidence": { "type": ["string", "null"] },
+        "result": { "type": "string" }
+      }
+    },
+    "EvidenceOverride": {
+      "type": "object",
+      "required": ["title", "text"],
+      "properties": {
+        "title": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "Scenario": {
+      "type": "object",
+      "required": ["id", "code", "route", "navigation", "action_overrides"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "code": { "type": "string" },
+        "route": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "navigation": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "action_overrides": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/ActionOverride" }
+        },
+        "evidence_overrides": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/EvidenceOverride" }
+        }
+      }
+    },
+    "Territory": {
+      "type": "object",
+      "required": ["stateId", "stateName", "region", "municipalityType"],
+      "properties": {
+        "stateId": { "type": "string" },
+        "stateName": { "type": "string" },
+        "region": { "type": "string" },
+        "capitalOf": { "type": ["string", "null"] },
+        "municipalityType": { "type": "string" }
+      }
+    },
+    "CityInfo": {
+      "type": "object",
+      "required": ["summary", "facts"],
+      "properties": {
+        "summary": { "type": "string" },
+        "facts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "required": ["id", "label", "cost", "result"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "cost": { "type": "integer", "minimum": 0 },
+        "evidence": { "type": ["string", "null"] },
+        "result": { "type": "string" },
+        "requires_warrant": { "type": "boolean" },
+        "arrest": { "type": "boolean" }
+      }
+    },
+    "Location": {
+      "type": "object",
+      "required": ["id", "name", "type", "x", "y", "coords", "description", "city_info", "actions"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "coords": { "type": "string" },
+        "territory": { "$ref": "#/definitions/Territory" },
+        "asset": { "type": "string" },
+        "description": { "type": "string" },
+        "city_info": { "$ref": "#/definitions/CityInfo" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Action" }
+        }
+      }
+    },
+    "Ending": {
+      "type": "object",
+      "required": ["win_title", "win_text", "lose_title", "lose_text"],
+      "properties": {
+        "win_title": { "type": "string" },
+        "win_text": { "type": "string" },
+        "wrong_warrant_title": { "type": "string" },
+        "wrong_warrant_text": { "type": "string" },
+        "insufficient_evidence_title": { "type": "string" },
+        "insufficient_evidence_text": { "type": "string" },
+        "lose_title": { "type": "string" },
+        "lose_text": { "type": "string" }
+      }
+    },
+    "Chapter": {
+      "type": "object",
+      "required": ["culprit", "start", "arrest_requirements", "scenarios"],
+      "properties": {
+        "culprit": { "type": "string" },
+        "start": { "type": "string" },
+        "briefing": { "type": "string" },
+        "total_hours": { "type": "integer", "minimum": 1 },
+        "arrest_requirements": { "$ref": "#/definitions/ArrestRequirements" },
+        "scenarios": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Scenario" }
+        }
+      }
+    },
+    "Campaign": {
+      "type": "object",
+      "required": ["id", "lieutenant_pool", "lieutenant_chapters", "boss", "chapters"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "lieutenant_pool": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "lieutenant_chapters": { "type": "integer", "minimum": 1 },
+        "boss": { "type": "string" },
+        "canonical_scenarios": { "type": "string" },
+        "chapters": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/Chapter" }
+        }
+      }
+    }
+  }
+}

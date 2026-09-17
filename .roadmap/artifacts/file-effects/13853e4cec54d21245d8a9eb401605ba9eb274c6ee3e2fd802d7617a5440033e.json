@@ -1,0 +1,13 @@
+{
+  "after_sha256": "2a026ec4c0a948c1da0b9e37593582683529a05dea8fffe1b4298f6a7fea99d5",
+  "artifact_id": "ART-2a026ec4c0a948c1da0b9e37593582683529a05dea8fffe1b4298f6a7fea99d5",
+  "artifact_sha256": "13853e4cec54d21245d8a9eb401605ba9eb274c6ee3e2fd802d7617a5440033e",
+  "before_sha256": "2a026ec4c0a948c1da0b9e37593582683529a05dea8fffe1b4298f6a7fea99d5",
+  "bytes": 1648,
+  "content": "{\n  \"schemaVersion\": \"3.0\",\n  \"metadata\": { \"id\": \"cv-trivial\", \"code\": \"CV-T\", \"title\": \"Trivial\", \"briefing\": \"Fixture\", \"total_hours\": 10, \"start\": \"lab\" },\n  \"suspects\": [\n    { \"id\": \"alpha\", \"name\": \"Alpha\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"skill\": \"rare\" },\n    { \"id\": \"beta\", \"name\": \"Beta\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"skill\": \"common\" },\n    { \"id\": \"gamma\", \"name\": \"Gamma\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"skill\": \"common\" }\n  ],\n  \"dossier\": { \"fields\": [] },\n  \"evidence\": [{ \"id\": \"E0\", \"title\": \"Base\", \"text\": \"Base\", \"tag\": \"base\" }],\n  \"locations\": [{ \"id\": \"lab\", \"name\": \"Lab\", \"type\": \"lab\", \"x\": 0, \"y\": 0, \"coords\": \"0,0\", \"description\": \"Fixture\", \"city_info\": { \"summary\": \"Fixture\", \"facts\": [] }, \"actions\": [{ \"id\": \"arrest\", \"label\": \"Prender\", \"cost\": 0, \"result\": \"Fim\", \"arrest\": true }] }],\n  \"travel\": {},\n  \"navigation\": { \"lab\": [] },\n  \"culprit\": \"alpha\",\n  \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n  \"scenarios\": [{ \"id\": \"trivial\", \"code\": \"TRIVIAL\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"action_overrides\": {} }],\n  \"ending\": { \"win_title\": \"Fim\", \"win_text\": \"Fim\", \"lose_title\": \"Fim\", \"lose_text\": \"Fim\" },\n  \"campaign\": { \"id\": \"cv-trivial\", \"lieutenant_pool\": [\"alpha\"], \"lieutenant_chapters\": 1, \"boss\": \"alpha\", \"chapters\": { \"case\": {\n    \"culprit\": \"alpha\", \"start\": \"lab\", \"total_hours\": 10,\n    \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n    \"scenarios\": [{ \"id\": \"trivial\", \"code\": \"TRIVIAL\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"action_overrides\": {} }]\n  } } }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/qa/fixtures/constraint-trivial-attr.json",
+  "source_path": "tests/qa/fixtures/constraint-trivial-attr.json",
+  "ts": "2026-09-17T17:03:21Z"
+}

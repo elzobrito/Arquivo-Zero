@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "generatedForTask": "TITO-FUNCTION-MAP-001",
-  "lastUpdatedForTask": "AZ-EVIDENCE-004",
+  "lastUpdatedForTask": "AZ-HYP-005-V2",
   "source": "dist/app.js",
-  "sourceSha256": "8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+  "sourceSha256": "ee5f2be9ed24890a18414979d688755dbb10cbe9388b8a57131a49e900ab328f",
   "inventory": {
-    "total": 79,
+    "total": 78,
     "functions": 42,
-    "arrows": 37
+    "arrows": 36
   },
   "idPolicy": "IDs FN-* e CB-* são permanentes e não podem ser reutilizados após remoção.",
   "functions": [
@@ -891,7 +891,7 @@
       "name": "submitDossier",
       "kind": "function",
       "signature": "submitDossier(event)",
-      "responsibility": "Cruzar atributos do formulário com suspeitos e emitir mandado apenas para correspondência única.",
+      "responsibility": "Delegar o cruzamento do dossiê a requestWarrant e emitir mandado somente se o serviço aprovar, sem revelar o culpado em recusa.",
       "source": {
         "file": "dist/app.js",
         "line": 30,
@@ -903,7 +903,6 @@
       "returns": "void",
       "calls": [
         "CB-019",
-        "CB-022",
         "FN-004",
         "FN-007",
         "FN-021"
@@ -924,7 +923,8 @@
         "warrantSuspect"
       ],
       "gamePaths": [
-        "suspects"
+        "suspects",
+        "arrest_requirements.minWarrantStrength"
       ],
       "storage": [
         "STORE + metadata.id"
@@ -2206,42 +2206,6 @@
       ],
       "impactAreas": [
         "dossiê"
-      ]
-    },
-    {
-      "id": "CB-022",
-      "name": "submitDossier.suspectName",
-      "kind": "arrow",
-      "signature": "suspect => suspect.name",
-      "responsibility": "Extrair nomes para a mensagem de múltiplos suspeitos.",
-      "source": {
-        "file": "dist/app.js",
-        "line": 30,
-        "anchor": "matches.map(s=>s.name)"
-      },
-      "inputs": [
-        "suspect"
-      ],
-      "returns": "nome",
-      "calls": [],
-      "calledBy": [
-        "FN-017"
-      ],
-      "events": [],
-      "dom": [],
-      "stateReads": [],
-      "stateWrites": [],
-      "gamePaths": [
-        "suspects[].name"
-      ],
-      "storage": [],
-      "sideEffects": [],
-      "external": [
-        "Array.map"
-      ],
-      "impactAreas": [
-        "dossiê",
-        "interface"
       ]
     },
     {

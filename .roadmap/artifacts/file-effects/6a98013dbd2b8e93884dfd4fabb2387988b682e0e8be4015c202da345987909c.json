@@ -1,0 +1,13 @@
+{
+  "after_sha256": "70fbeaa54bb231148e3bf3758884842226aa617bdcbb6588a490581657c63a7d",
+  "artifact_id": "ART-70fbeaa54bb231148e3bf3758884842226aa617bdcbb6588a490581657c63a7d",
+  "artifact_sha256": "6a98013dbd2b8e93884dfd4fabb2387988b682e0e8be4015c202da345987909c",
+  "before_sha256": "70fbeaa54bb231148e3bf3758884842226aa617bdcbb6588a490581657c63a7d",
+  "bytes": 2075,
+  "content": "import { evaluate as evaluateNode } from \"./constraint-engine.js\";\nimport { getById } from \"./evidence-service.js\";\nimport { canSupportArrest } from \"./evidence-policy.js\";\n\nfunction evaluation(result, explanation) {\n  return { result, explanation };\n}\n\nfunction discoveredIds(state) {\n  return Array.isArray(state && state.evidence) ? state.evidence : [];\n}\n\nfunction resolveRecord(evidenceId, context) {\n  if (context && context.record && context.record.id === evidenceId) {\n    return context.record;\n  }\n  return getById(evidenceId, context && context.game);\n}\n\nfunction isDiscovered(evidenceId, context) {\n  if (context && typeof context.discovered === \"boolean\") return context.discovered;\n  return discoveredIds(context && context.state).indexOf(evidenceId) !== -1;\n}\n\nfunction explain(evidenceId, discovered, support, detail) {\n  return (\n    \"evidenceId=\" + evidenceId +\n    \"; discovered=\" + String(discovered) +\n    \"; canSupportArrest=\" + String(support) +\n    \"; \" + detail\n  );\n}\n\nfunction evaluateEvidenceConstraint(node, context) {\n  if (!isDiscovered(node.evidenceId, context)) {\n    return evaluation(\n      \"UNKNOWN\",\n      explain(node.evidenceId, false, \"unknown\", \"evidência não descoberta; restrição não afeta candidatos.\"),\n    );\n  }\n\n  const record = resolveRecord(node.evidenceId, context);\n  if (!record) {\n    return evaluation(\n      \"UNKNOWN\",\n      explain(node.evidenceId, true, false, \"registro de evidência ausente do catálogo.\"),\n    );\n  }\n\n  const support = canSupportArrest(record);\n  const result = evaluateNode(node, { record });\n  return evaluation(\n    result.result,\n    explain(node.evidenceId, true, support, result.explanation),\n  );\n}\n\nexport function buildConstraint(evidenceId, field, operator, value) {\n  const node = {\n    id: \"EVIDENCE:\" + String(evidenceId) + \":\" + String(field) + \":\" + String(operator),\n    op: \"ATOM\",\n    path: field,\n    operator,\n    value,\n    evidenceId,\n  };\n  node.evaluate = function evaluate(context) {\n    return evaluateEvidenceConstraint(node, context || {});\n  };\n  return node;\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "dist/modules/evidence-constraint-adapter.js",
+  "source_path": "dist/modules/evidence-constraint-adapter.js",
+  "ts": "2026-09-17T16:49:21Z"
+}

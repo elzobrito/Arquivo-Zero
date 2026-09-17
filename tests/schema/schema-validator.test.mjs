@@ -19,14 +19,16 @@ function check(label, cond) {
 
 const live = load("dist/game.json");
 const liveResult = validateCase(live);
-check("game.json version 2.x", detectVersion(live) === "2.x");
-check("game.json WARN", liveResult.status === "WARN");
-check("game.json schemaVersion warning", liveResult.issues.some((i) => i.path === "schemaVersion" && i.severity === "warning"));
+check("game.json version 3.x", detectVersion(live) === "3.x");
+check("game.json has no validation errors", liveResult.issues.every((i) => i.severity !== "error"));
+check("game.json has no schemaVersion warning", !liveResult.issues.some((i) => i.path === "schemaVersion"));
 check("game.json not FAIL", liveResult.status !== "FAIL");
 
 const min = load("tests/fixtures/campaign-contract-min.json");
 const minResult = validateCase(min);
 check(`campaign-min status ${minResult.status}`, minResult.status === "PASS" || minResult.status === "WARN");
+check("campaign-min remains 2.x", detectVersion(min) === "2.x");
+check("campaign-min schemaVersion warning", minResult.issues.some((i) => i.path === "schemaVersion" && i.severity === "warning"));
 if (minResult.status === "FAIL") {
   errors.push("campaign-min FAIL: " + minResult.issues.map((i) => i.message).join("; "));
 }

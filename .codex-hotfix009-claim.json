@@ -1,0 +1,7 @@
+{
+  "activity_event": {
+    "action": "claim",
+    "task_id": "AZ-HOTFIX-009",
+    "prior_status": "todo"
+  }
+}

@@ -16,13 +16,22 @@ function check(label, cond) {
 const livePath = resolve(root, "dist/game.json");
 const liveRaw = readFileSync(livePath, "utf8");
 const live = JSON.parse(liveRaw);
-const adapted = adaptCase(live);
-check("detect 2.x", detectVersion(live) === "2.x");
+const liveAdapted = adaptCase(live);
+check("published case is 3.x", detectVersion(live) === "3.x");
+check("published 3.x is not rewritten", liveAdapted.warnings.length === 0 && liveAdapted.version === "3.x");
+check("published defaults stay explicit", live.evidence[0].admissibility === "unknown" && live.evidence[0].source === null);
+check("published disk unchanged by adaptCase", readFileSync(livePath, "utf8") === liveRaw);
+
+const legacyPath = resolve(root, "tests/fixtures/campaign-contract-min.json");
+const legacyRaw = readFileSync(legacyPath, "utf8");
+const legacy = JSON.parse(legacyRaw);
+const adapted = adaptCase(legacy);
+check("detect 2.x", detectVersion(legacy) === "2.x");
 check("warn schemaVersion", adapted.warnings.some((w) => w.path === "schemaVersion"));
 check("warn evidence", adapted.warnings.some((w) => /admissibility/.test(w.path)));
 check("normalized schemaVersion 2.x", adapted.normalized.schemaVersion === "2.x");
-check("disk unchanged", readFileSync(livePath, "utf8") === liveRaw);
-check("source evidence not mutated", live.evidence[0].admissibility === undefined);
+check("legacy disk unchanged", readFileSync(legacyPath, "utf8") === legacyRaw);
+check("source evidence not mutated", legacy.evidence[0].admissibility === undefined);
 check("adapted evidence filled", adapted.normalized.evidence[0].admissibility === "unknown");
 
 const valid = JSON.parse(readFileSync(resolve(root, "tests/fixtures/schema-3.0-valid.json"), "utf8"));

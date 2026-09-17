@@ -10,12 +10,15 @@ por `TITO-MAP-LABEL-ALIGN-001`, corrigida cartograficamente por
 `TITO-MAP-CARTOGRAPHIC-LABELS-001`, teve o marcador de Recife alinhado por
 `TITO-MAP-RECIFE-MARKER-001` e passou a recusar custos sem saldo em
 `AZ-HOTFIX-001` e isolamento de save em `AZ-HOTFIX-002` e sanitização de importação em `AZ-HOTFIX-003` e semântica de reinício em `AZ-HOTFIX-004` e passou a adaptar casos 2.x em `AZ-ARCH-003` e passou a delegar regras de domínio em `AZ-ARCH-004` e consulta a FSM em `AZ-ARCH-005` e passou a catalogar evidência com o caso em `AZ-EVIDENCE-002`. Em `AZ-EVIDENCE-004`, as evidências legadas E01–E08 e E11–E16 passaram a declarar origem desconhecida explicitamente.
-IDs retirados do motor (lógica em `src/domain/**`, não reutilizáveis): `CB-016`, `CB-020`, `CB-021`.
+IDs retirados do motor (lógica em `src/domain/**`, não reutilizáveis): `CB-016`, `CB-020`, `CB-021`. Em `AZ-HYP-005-V2` também `CB-022`.
+Em `AZ-CONSTRAINT-002` os operadores escalares triestados (`eq`, `neq`, `contains`, `in`, `notIn`, `range`) vivem em `src/domain/constraints/scalar-operators.js` e no espelho ESM `dist/modules/scalar-operators.js`; não alteram `dist/app.js` nem criam `FN-*` novos.
+Em `AZ-CONSTRAINT-003` a composição Kleene (`composeAnd`, `composeOr`, `composeNot`) e `evaluate` da árvore vivem em `src/domain/constraints/constraint-engine.js` e no espelho ESM `dist/modules/constraint-engine.js`; profundidade > 10 e ciclos devolvem UNKNOWN.
+Em `AZ-HYP-005-V2`, `FN-017 submitDossier` passa a delegar a `requestWarrant` em `dist/modules/warrant-service.js`. O callback `CB-022` (nomes de múltiplos suspeitos) foi retirado do motor; o ID não é reutilizado. Recusa de mandado não revela o culpado.
 
-- SHA-256 mapeado: `8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed`
-- Unidades executáveis: **79**
+- SHA-256 mapeado: `ee5f2be9ed24890a18414979d688755dbb10cbe9388b8a57131a49e900ab328f`
+- Unidades executáveis: **78**
 - Ocorrências de `function`: **42**
-- Arrow functions: **37**
+- Arrow functions: **36**
 - Convenção: `FN-*` identifica funções do motor ou auxiliares; `CB-*` identifica
   callbacks, projeções e manipuladores inline.
 
@@ -43,7 +46,7 @@ dependências detalhados estão no JSON canônico.
 | `FN-014` | `act` | 16 | Executar ação, prova e resultado da abordagem. |
 | `FN-015` | `spend` | 17 | Consumir horas ou encerrar o prazo. |
 | `FN-016` | `dossier` | 18 | Renderizar o formulário sem revelar totais internos do caso. |
-| `FN-017` | `submitDossier` | 19 | Filtrar suspeitos e emitir mandado único. |
+| `FN-017` | `submitDossier` | 19 | Delegar o cruzamento a `requestWarrant` e emitir mandado só se o serviço aprovar. |
 | `FN-018` | `career` | 20 | Renderizar estrelas acumuladas. |
 | `FN-019` | `awardStar` | 20 | Conceder uma estrela sem duplicidade. |
 | `FN-020` | `newCase` | 20 | Reiniciar com outra variante, preservando carreira. |
@@ -94,8 +97,6 @@ dependências detalhados estão no JSON canônico.
 | `CB-017` | `dossier.renderField` | 18 | Projetar campo do dossiê. |
 | `CB-018` | `dossier.renderOption` | 18 | Projetar opção do dossiê. |
 | `CB-019` | `submitDossier.keepChosen` | 19 | Descartar atributos desconhecidos. |
-
-| `CB-022` | `submitDossier.suspectName` | 19 | Extrair nomes dos resultados. |
 | `CB-023` | `show.continue` | 21 | Fechar mensagem não final. |
 | `CB-024` | `closeAll.closeDialog` | 21 | Fechar cada diálogo aberto. |
 | `CB-025` | `events.openDossier` | 22 | Abrir o dossiê. |
@@ -288,4 +289,4 @@ jq empty dist/game.json
 O verificador confere IDs únicos, campos obrigatórios, referências entre IDs,
 âncoras e linhas atuais, presença de cada ID nesta visão humana, SHA-256 da
 fonte, objeto `inventory` e paridade entre as 42 ocorrências de `function`, as
-37 arrow functions e as 79 entradas do mapa.
+36 arrow functions e as 78 entradas do mapa.

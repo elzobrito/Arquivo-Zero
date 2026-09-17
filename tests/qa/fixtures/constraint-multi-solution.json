@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "3.0",
+  "metadata": { "id": "cv-multi", "code": "CV-M", "title": "Multi", "briefing": "Fixture", "total_hours": 10, "start": "lab" },
+  "suspects": [
+    { "id": "alpha", "name": "Alpha", "specialty": "shared", "vehicle": "shared", "team": "blue" },
+    { "id": "beta", "name": "Beta", "specialty": "shared", "vehicle": "shared", "team": "blue" }
+  ],
+  "dossier": { "fields": [] },
+  "evidence": [{ "id": "E0", "title": "Base", "text": "Base", "tag": "base" }],
+  "locations": [{ "id": "lab", "name": "Lab", "type": "lab", "x": 0, "y": 0, "coords": "0,0", "description": "Fixture", "city_info": { "summary": "Fixture", "facts": [] }, "actions": [{ "id": "arrest", "label": "Prender", "cost": 0, "result": "Fim", "arrest": true }] }],
+  "travel": {},
+  "navigation": { "lab": [] },
+  "culprit": "alpha",
+  "arrest_requirements": { "minimum_evidence": 0, "required_evidence": [] },
+  "scenarios": [{ "id": "multiple", "code": "MULTI", "route": ["lab"], "navigation": { "lab": [] }, "constraints": [{ "id": "team", "op": "ATOM", "path": "team", "operator": "eq", "value": "blue" }], "action_overrides": {} }],
+  "ending": { "win_title": "Fim", "win_text": "Fim", "lose_title": "Fim", "lose_text": "Fim" },
+  "campaign": { "id": "cv-multi", "lieutenant_pool": ["alpha"], "lieutenant_chapters": 1, "boss": "alpha", "chapters": { "case": {
+    "culprit": "alpha", "start": "lab", "total_hours": 10,
+    "arrest_requirements": { "minimum_evidence": 0, "required_evidence": [] },
+    "scenarios": [{ "id": "multiple", "code": "MULTI", "route": ["lab"], "navigation": { "lab": [] }, "constraints": [{ "id": "team", "op": "ATOM", "path": "team", "operator": "eq", "value": "blue" }], "action_overrides": {} }]
+  } } }
+}

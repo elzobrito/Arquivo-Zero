@@ -1,0 +1,13 @@
+{
+  "after_sha256": "c0c4c0cecbd713b0cffe1b801078e53f2e46ae8a2cfb20f388f433b5360f090f",
+  "artifact_id": "ART-c0c4c0cecbd713b0cffe1b801078e53f2e46ae8a2cfb20f388f433b5360f090f",
+  "artifact_sha256": "64fc9fb582ca9fd7c7aaacb72bfae1bdcc75666754ecffe06eee31e0365db1cf",
+  "before_sha256": "c0c4c0cecbd713b0cffe1b801078e53f2e46ae8a2cfb20f388f433b5360f090f",
+  "bytes": 2059,
+  "content": "# AZ-CONSTRAINT-007 — Validador de unicidade e solucionabilidade\n\n## Resultado\n\n`scripts/validate-case-constraints.mjs` oferece a função pura\n`validateConstraints(gameJson)` e a interface CLI solicitada. O resultado contém\n`status` (`PASS`, `WARN` ou `FAIL`) e issues com `severity`, `path`, `message` e\n`suggestion`.\n\n## Regras implementadas\n\n1. Restrições do cenário, capítulo ou caso são avaliadas contra os suspeitos pelo\n   `candidate-service`. Zero ou múltiplos `MATCH` são falhas. Um cenário sem\n   restrições declaradas não é promovido artificialmente a único nem ambíguo.\n2. Campos escalares, exceto identidade nominal (`id`, `name`, `codename`), são\n   comparados entre os suspeitos. Valor pertencente a apenas um registro gera\n   aviso de identificação trivial.\n3. Para cada cenário, evidências obrigatórias precisam ser obtíveis por ações das\n   localidades presentes em sua rota, após aplicação de `action_overrides`.\n4. O custo mínimo soma o percurso fixado pela rota e a ação mais barata que produz\n   cada evidência essencial. Se esse total exceder `total_hours`, o caso falha.\n\n## Caso publicado\n\nO caso 3.0 não declara conjuntos de restrições por cenário; por isso a verificação\nde cardinalidade é corretamente omitida, sem inferir regras a partir de narrativa.\nAs verificações de rota e orçamento cobrem os quatro capítulos e nove cenários.\nOs campos legados `specialty` e `vehicle`, quando únicos, podem produzir `WARN`:\nisso é não crítico e torna explícito o risco de identificação por um único atributo.\n\n## Cobertura\n\nAs cinco fixtures em `tests/qa/fixtures/` isolam solução zero, solução múltipla,\natributo trivial, orçamento inviável e evidência obrigatória fora da rota.\n`tests/qa/constraint-validator.test.mjs` cobre `INV-CV-001` a `INV-CV-008`,\nincluindo os códigos de saída 0 e 1 da CLI.\n\n## Limites\n\nO validador é uma ferramenta standalone de QA. Não altera `dist/game.json`, não\né importado por `dist/app.js` e não modifica funções ou callbacks do motor.\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "docs/qa/az-constraint-007.md",
+  "source_path": "docs/qa/az-constraint-007.md",
+  "ts": "2026-09-17T17:03:21Z"
+}

@@ -1,0 +1,13 @@
+{
+  "after_sha256": "64d8227add178c1eeff7008cf73b83e3bc0584afcc84ef10087815f94769e1e1",
+  "artifact_id": "ART-64d8227add178c1eeff7008cf73b83e3bc0584afcc84ef10087815f94769e1e1",
+  "artifact_sha256": "5d216bbb97fe6ea86f42d036f125ffd141bab14da0a2d2c7c5d18ac85fa2e0ed",
+  "before_sha256": "64d8227add178c1eeff7008cf73b83e3bc0584afcc84ef10087815f94769e1e1",
+  "bytes": 1733,
+  "content": "{\n  \"schemaVersion\": \"3.0\",\n  \"metadata\": { \"id\": \"cv-multi\", \"code\": \"CV-M\", \"title\": \"Multi\", \"briefing\": \"Fixture\", \"total_hours\": 10, \"start\": \"lab\" },\n  \"suspects\": [\n    { \"id\": \"alpha\", \"name\": \"Alpha\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"team\": \"blue\" },\n    { \"id\": \"beta\", \"name\": \"Beta\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"team\": \"blue\" }\n  ],\n  \"dossier\": { \"fields\": [] },\n  \"evidence\": [{ \"id\": \"E0\", \"title\": \"Base\", \"text\": \"Base\", \"tag\": \"base\" }],\n  \"locations\": [{ \"id\": \"lab\", \"name\": \"Lab\", \"type\": \"lab\", \"x\": 0, \"y\": 0, \"coords\": \"0,0\", \"description\": \"Fixture\", \"city_info\": { \"summary\": \"Fixture\", \"facts\": [] }, \"actions\": [{ \"id\": \"arrest\", \"label\": \"Prender\", \"cost\": 0, \"result\": \"Fim\", \"arrest\": true }] }],\n  \"travel\": {},\n  \"navigation\": { \"lab\": [] },\n  \"culprit\": \"alpha\",\n  \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n  \"scenarios\": [{ \"id\": \"multiple\", \"code\": \"MULTI\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"constraints\": [{ \"id\": \"team\", \"op\": \"ATOM\", \"path\": \"team\", \"operator\": \"eq\", \"value\": \"blue\" }], \"action_overrides\": {} }],\n  \"ending\": { \"win_title\": \"Fim\", \"win_text\": \"Fim\", \"lose_title\": \"Fim\", \"lose_text\": \"Fim\" },\n  \"campaign\": { \"id\": \"cv-multi\", \"lieutenant_pool\": [\"alpha\"], \"lieutenant_chapters\": 1, \"boss\": \"alpha\", \"chapters\": { \"case\": {\n    \"culprit\": \"alpha\", \"start\": \"lab\", \"total_hours\": 10,\n    \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n    \"scenarios\": [{ \"id\": \"multiple\", \"code\": \"MULTI\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"constraints\": [{ \"id\": \"team\", \"op\": \"ATOM\", \"path\": \"team\", \"operator\": \"eq\", \"value\": \"blue\" }], \"action_overrides\": {} }]\n  } } }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/qa/fixtures/constraint-multi-solution.json",
+  "source_path": "tests/qa/fixtures/constraint-multi-solution.json",
+  "ts": "2026-09-17T17:03:21Z"
+}

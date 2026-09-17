@@ -1,0 +1,13 @@
+{
+  "after_sha256": "c8bd0f7d524ee64754d2475294ec755f5588465fc2b5e2468c5220d98f83c2ef",
+  "artifact_id": "ART-c8bd0f7d524ee64754d2475294ec755f5588465fc2b5e2468c5220d98f83c2ef",
+  "artifact_sha256": "8dcfe3334f99015ffe9b776aa05ee319a68f7b6f5dc65e2e37bcecb330849ac5",
+  "before_sha256": "c8bd0f7d524ee64754d2475294ec755f5588465fc2b5e2468c5220d98f83c2ef",
+  "bytes": 1519,
+  "content": "{\n  \"schemaVersion\": \"3.0\",\n  \"metadata\": { \"id\": \"cv-budget\", \"code\": \"CV-B\", \"title\": \"Budget\", \"briefing\": \"Fixture\", \"total_hours\": 5, \"start\": \"lab\" },\n  \"suspects\": [{ \"id\": \"alpha\", \"name\": \"Alpha\", \"specialty\": \"shared\", \"vehicle\": \"shared\" }],\n  \"dossier\": { \"fields\": [] },\n  \"evidence\": [{ \"id\": \"E1\", \"title\": \"Essential\", \"text\": \"Essential\", \"tag\": \"proof\" }],\n  \"locations\": [{ \"id\": \"lab\", \"name\": \"Lab\", \"type\": \"lab\", \"x\": 0, \"y\": 0, \"coords\": \"0,0\", \"description\": \"Fixture\", \"city_info\": { \"summary\": \"Fixture\", \"facts\": [] }, \"actions\": [{ \"id\": \"inspect\", \"label\": \"Examinar\", \"cost\": 6, \"evidence\": \"E1\", \"result\": \"Prova\" }, { \"id\": \"arrest\", \"label\": \"Prender\", \"cost\": 0, \"result\": \"Fim\", \"arrest\": true }] }],\n  \"travel\": {},\n  \"navigation\": { \"lab\": [] },\n  \"culprit\": \"alpha\",\n  \"arrest_requirements\": { \"minimum_evidence\": 1, \"required_evidence\": [\"E1\"] },\n  \"scenarios\": [{ \"id\": \"budget\", \"code\": \"BUDGET\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"action_overrides\": {} }],\n  \"ending\": { \"win_title\": \"Fim\", \"win_text\": \"Fim\", \"lose_title\": \"Fim\", \"lose_text\": \"Fim\" },\n  \"campaign\": { \"id\": \"cv-budget\", \"lieutenant_pool\": [\"alpha\"], \"lieutenant_chapters\": 1, \"boss\": \"alpha\", \"chapters\": { \"case\": {\n    \"culprit\": \"alpha\", \"start\": \"lab\", \"total_hours\": 5,\n    \"arrest_requirements\": { \"minimum_evidence\": 1, \"required_evidence\": [\"E1\"] },\n    \"scenarios\": [{ \"id\": \"budget\", \"code\": \"BUDGET\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"action_overrides\": {} }]\n  } } }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/qa/fixtures/constraint-budget-fail.json",
+  "source_path": "tests/qa/fixtures/constraint-budget-fail.json",
+  "ts": "2026-09-17T17:03:21Z"
+}

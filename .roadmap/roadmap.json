@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 934,
-      "projection_hash_sha256": "575280288fe30652b8e2d8b6b4e3e6026104b0774fdde87452d7cbae4487d375",
+      "last_event_seq": 1273,
+      "projection_hash_sha256": "b2609a9498a792cbcb9776776062ab91f111625b4a4bb02d9131643e6bdafb40",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-17T02:58:35Z"
+    "updated_at": "2026-09-17T19:37:38Z"
   },
   "project": {
     "name": "esaa-core",
@@ -2593,7 +2593,7 @@
       "task_kind": "qa",
       "title": "Verificar a fundação probatória",
       "description": "Auditar procedência, normalização em memória, admissibilidade, qualidade, integridade, compatibilidade legada e canSupportArrest sobre o catálogo real de 14 evidências.",
-      "status": "todo",
+      "status": "done",
       "depends_on": [
         "AZ-EVIDENCE-003",
         "AZ-EVIDENCE-004",
@@ -2621,7 +2621,31 @@
         "canSupportArrest funciona com os valores normalizados dos 14 registros existentes E01-E08 e E11-E16; E09/E10 não são criados.",
         "Evidência inadmissível não valida prisão, evidência parcial não é promovida silenciosamente e casos legados continuam carregando."
       ],
-      "required_review_mode": "regression"
+      "required_review_mode": "regression",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-17T12:51:55Z",
+      "verification": {
+        "checks": [
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "node tests/domain/evidence-service.test.mjs: EVIDENCE_SERVICE_PASS tests=18",
+          "node tests/domain/evidence-policy.test.mjs: EVIDENCE_POLICY_PASS tests=15; INV-001 a INV-015 manuais PASS",
+          "node tests/ui/evidence/evidence-board.test.mjs: EVIDENCE_BOARD_PASS tests=10",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "validateCase(dist/game.json): SCHEMA_PASS version=3.x issues=0 (004-V2; não WARN 2.x)",
+          "catálogo: 14 IDs E01-E08+E11-E16; E09/E10 ausentes; source=null em 14/14; defaults unknown/null/unverified no disco",
+          "adaptCase 3.x passthrough warnings=0; 2.x fixture ainda injeta defaults (CASE_ADAPTER_PASS); policy sem fs/game.json",
+          "getDiscovered vazio=0; inadmissível sintético permanece visível e canSupportArrest=false",
+          "buildEvidenceBoard payload sem <script/javascript:; escapeHtml em details; innerHTML só com markup escapado",
+          "Chromium http://127.0.0.1:8765/: ESM 200; exports refreshBoard,wire; host pinta E13; filtro Admissível → 0 visíveis de 1 catalogadas; save inalterado; cafeteria Null não cataloga E02 Cifra",
+          "arrest-validator hypothesisScore=0 em 3 ramos; sem canSupportArrest (gap AZ-HYP-004)",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "SHA dist/game.json=870c69317dbbf5d078075ad41543daad9f3593da9e248d963fb1422a9bc046b7 inalterado",
+          "python3 -m esaa --root . verify no claim: ok seq=937"
+        ]
+      },
+      "completed_at": "2026-09-17T14:48:56Z"
     },
     {
       "task_id": "AZ-TERR-002",
@@ -3240,17 +3264,1462 @@
         ]
       },
       "completed_at": "2026-09-17T02:58:35Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-001",
+      "task_kind": "spec",
+      "title": "Especificar modelo triestado de restrições",
+      "description": "Especificar o modelo triestado MATCH/NO_MATCH/UNKNOWN de restrições, com operadores iniciais, árvore composta, explicação obrigatória por avaliação e critérios de aceite de AZ-CONSTRAINT-002. Campo ausente retorna UNKNOWN, nunca NO_MATCH. Um caso bem formado exige múltiplas restrições para solução única.",
+      "status": "done",
+      "depends_on": [
+        "AZ-ARCH-001"
+      ],
+      "targets": [
+        "docs/architecture/az-constraint-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-constraint-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Semântica de MATCH, NO_MATCH e UNKNOWN documentada com exemplos.",
+        "Tabela verdade de AND, OR e NOT com UNKNOWN em todos os operandos.",
+        "Operadores iniciais especificados: igualdade, diferença, contém, inclusão em conjunto, exclusão de conjunto, intervalo numérico.",
+        "Formato de restrição composta (árvore de regras) documentado.",
+        "Formato de explicação obrigatório por avaliação documentado.",
+        "Regra explícita: campo ausente retorna UNKNOWN, nunca NO_MATCH.",
+        "Critérios de aceite de AZ-CONSTRAINT-002 incluídos no documento."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-17T15:10:19Z",
+      "verification": {
+        "checks": [
+          "docs/architecture/az-constraint-001.md cobre AC: semântica MATCH/NO_MATCH/UNKNOWN com exemplos; tabelas AND/OR/NOT com UNKNOWN; operadores eq,neq,contains,in,notIn,range; árvore ATOM/AND/OR/NOT; ConstraintEvaluation {constraintId,candidateId,result,explanation}; campo ausente/null → UNKNOWN nunca NO_MATCH; AC AZ-CONSTRAINT-002 listados.",
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "python3 -m esaa --root . verify: ok seq=962"
+        ]
+      },
+      "completed_at": "2026-09-17T15:12:14Z"
+    },
+    {
+      "task_id": "AZ-VALIDATION-001",
+      "task_kind": "spec",
+      "title": "Especificar decisão de validação",
+      "description": "Especificar o contrato ValidationDecision alinhado ao schema existente, as sete dimensões de validação e os resultados APPROVED/DENIED/INCONCLUSIVE. Identificar o suspeito correto não implica APPROVED. Documentar hypothesisScore=0 como gap para AZ-HYP-004 e incluir critérios de AZ-HYP-004 e AZ-HYP-005.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-001",
+        "AZ-EVIDENCE-003"
+      ],
+      "targets": [
+        "docs/architecture/az-validation-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-validation-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Contrato ValidationDecision alinhado ao schema existente em src/contracts/validation-decision.schema.json.",
+        "Separação explícita das sete dimensões de validação: identidade, localização, hipótese, força probatória, evidências essenciais, procedimento e prazo.",
+        "Resultados possíveis: APPROVED, DENIED, INCONCLUSIVE.",
+        "Regra canônica explícita: identificar o suspeito correto não implica APPROVED.",
+        "Comportamento atual de hypothesisScore=0 documentado como gap para AZ-HYP-004.",
+        "Critérios de aceite de AZ-HYP-004 e AZ-HYP-005 incluídos."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-17T15:12:24Z",
+      "verification": {
+        "checks": [
+          "docs/architecture/az-validation-001.md: schema ValidationDecision; 7 dimensões; APPROVED/DENIED/INCONCLUSIVE; identificar ↛ APPROVED; gap hypothesisScore=0 nos 3 ramos do arrest-validator; AC AZ-HYP-004 e AZ-HYP-005.",
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "python3 -m esaa --root . verify: ok"
+        ]
+      },
+      "completed_at": "2026-09-17T15:14:01Z"
+    },
+    {
+      "task_id": "AZ-SUSPECT-002",
+      "task_kind": "impl",
+      "title": "Migrar os quatro suspeitos para o esquema 3.0",
+      "description": "Migrar Byte Azul, Null, Vértice e Cifra para SuspectRecord 3.0 em dist/game.json, sem tornar nenhum suspeito identificável por um único atributo, compartilhando parcialmente especialidades e métodos, sem alterar dist/app.js.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SUSPECT-001",
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "dist/game.json"
+      ],
+      "outputs": {
+        "files": [
+          "dist/game.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json"
+      ],
+      "task_type": "maintenance",
+      "acceptance_criteria": [
+        "Byte Azul, Null, Vértice e Cifra representados no formato SuspectRecord 3.0 definido em AZ-SUSPECT-001.",
+        "Nenhum suspeito identificável por um único atributo isolado.",
+        "Suspeitos compartilham parcialmente especialidades e métodos.",
+        "verify-random-scenarios PASS chapters=4 scenarios=9.",
+        "SHA de dist/app.js permanece 8e0b2d03... (motor inalterado).",
+        "validate-case dist/game.json sem FAIL."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T15:14:36Z",
+      "verification": {
+        "checks": [
+          "4 SuspectRecord 3.0: ids byte,null,cifra,vertice; codename=name; capabilities/methods/mobility/caseProfiles/metadata presentes; opportunity unknown; alibis []; possibleLocationIds []",
+          "Nenhuma capability ou method 3.0 identifica um único suspeito (todas compartilhadas por ≥2).",
+          "Legacy name/specialty/vehicle preservados e únicos no dossiê 2.x.",
+          "node scripts/validate-case.mjs dist/game.json: SCHEMA_PASS version=3.x issues=0",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "node tests/content/evidence-migration.test.mjs: EVIDENCE_MIGRATION_PASS tests=29",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "python3 -m esaa --root . verify: ok seq=982"
+        ]
+      },
+      "completed_at": "2026-09-17T15:15:59Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-002",
+      "task_kind": "impl",
+      "title": "Implementar operadores escalares triestados",
+      "description": "Implementar os operadores escalares triestados eq, neq, contains, in, notIn e range como funções puras, com explanation obrigatória, UNKNOWN para campo ausente/null/tipo incompatível, testes e espelho ESM.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-001",
+        "AZ-ARCH-004",
+        "AZ-EVIDENCE-003"
+      ],
+      "targets": [
+        "src/domain/constraints/scalar-operators.js",
+        "dist/modules/scalar-operators.js",
+        "tests/domain/scalar-operators.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/constraints/scalar-operators.js",
+          "dist/modules/scalar-operators.js",
+          "tests/domain/scalar-operators.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/scalar-operators.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Implementar os operadores: eq, neq, contains, in, notIn, range.",
+        "Cada operador retorna { result: MATCH|NO_MATCH|UNKNOWN, explanation }.",
+        "Campo ausente ou null retorna UNKNOWN, nunca lança exceção.",
+        "Tipos incompatíveis retornam UNKNOWN com explanation descritivo.",
+        "Operadores são funções puras sem efeitos colaterais.",
+        "Testes cobrem: match, no_match, unknown, limites de range, campo ausente e tipo incompatível para cada operador.",
+        "Espelho ESM em dist/modules/scalar-operators.js.",
+        "verify-function-map PASS após atualizar o mapa de funções."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T15:16:23Z",
+      "verification": {
+        "checks": [
+          "node tests/domain/scalar-operators.test.mjs: SCALAR_OPERATORS_PASS tests=52",
+          "Cada operador cobre MATCH, NO_MATCH, UNKNOWN por ausência/null e UNKNOWN por tipo; range cobre limites inclusivos e intervalo invertido.",
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "python3 -m esaa --root . verify: ok seq=992"
+        ]
+      },
+      "completed_at": "2026-09-17T15:18:54Z"
+    },
+    {
+      "task_id": "AZ-SUSPECT-003",
+      "task_kind": "impl",
+      "title": "Implementar serviço de candidatos",
+      "description": "Implementar filterCandidates(suspects, constraints, game) com resultado triestado por suspeito, sem excluir por dado ausente, sem mutar a lista e com espelho ESM.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SUSPECT-001",
+        "AZ-CONSTRAINT-003"
+      ],
+      "targets": [
+        "src/domain/suspects/candidate-service.js",
+        "dist/modules/candidate-service.js",
+        "tests/domain/candidate-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/suspects/candidate-service.js",
+          "dist/modules/candidate-service.js",
+          "tests/domain/candidate-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/candidate-service.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar filterCandidates(suspects, constraints, game).",
+        "Retornar por suspeito: { id, result: MATCH|NO_MATCH|UNKNOWN, explanations[] }.",
+        "Ausência de dado em suspeito retorna UNKNOWN para aquela dimensão, sem excluir o suspeito.",
+        "Filtros são determinísticos para a mesma entrada.",
+        "Nenhuma lista de suspeitos é mutada.",
+        "Testes cobrem: match completo, no_match por uma dimensão, unknown por campo ausente, lista vazia.",
+        "Espelho ESM em dist/modules/candidate-service.js."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T16:46:32Z",
+      "verification": {
+        "checks": [
+          "CANDIDATE_SERVICE_PASS tests=18",
+          "CANDIDATE_SERVICE_ESM_PASS results=MATCH,UNKNOWN",
+          "CONSTRAINT_ENGINE_PASS tests=45",
+          "SCALAR_OPERATORS_PASS tests=52",
+          "DOMAIN_PASS invariants=5",
+          "HOTFIX_SUITE_PASS tests=4",
+          "EVIDENCE_POLICY_PASS tests=15",
+          "EVIDENCE_SERVICE_PASS tests=18",
+          "EVIDENCE_MIGRATION_PASS tests=29",
+          "CASE_CAMPAIGN_SCHEMA_PASS tests=14",
+          "SCHEMA_VALIDATOR_PASS",
+          "CASE_ADAPTER_PASS",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "SCHEMA_PASS version=3.x issues=0 file=dist/game.json",
+          "node --check src/domain/suspects/candidate-service.js",
+          "git diff --check nos tres targets",
+          "dist/app.js sha256=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed"
+        ]
+      },
+      "completed_at": "2026-09-17T16:51:17Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-003",
+      "task_kind": "impl",
+      "title": "Implementar composição lógica de restrições",
+      "description": "Implementar composeAnd, composeOr, composeNot e evaluate(node, context) com lógica de Kleene, recusa de profundidade > 10 e detecção de referência circular, sem colapsar UNKNOWN em NO_MATCH.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-002"
+      ],
+      "targets": [
+        "src/domain/constraints/constraint-engine.js",
+        "dist/modules/constraint-engine.js",
+        "tests/domain/constraint-engine.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/constraints/constraint-engine.js",
+          "dist/modules/constraint-engine.js",
+          "tests/domain/constraint-engine.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/constraint-engine.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar composeAnd(rules), composeOr(rules), composeNot(rule).",
+        "Cada composição retorna { result: MATCH|NO_MATCH|UNKNOWN, explanation }.",
+        "Tabela verdade Kleene completa para AND, OR e NOT com UNKNOWN.",
+        "UNKNOWN propagado corretamente, nunca colapsado para NO_MATCH.",
+        "Exportar evaluate(node, context) para árvore de restrições aninhadas.",
+        "Árvores com profundidade > 10 são rejeitadas com UNKNOWN e aviso.",
+        "Referências circulares são detectadas e rejeitadas.",
+        "Testes cobrem tabela verdade completa, profundidade máxima e referência circular.",
+        "Espelho ESM em dist/modules/constraint-engine.js.",
+        "verify-function-map PASS após atualizar o mapa de funções."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T16:39:40Z",
+      "verification": {
+        "checks": [
+          "node tests/domain/constraint-engine.test.mjs: CONSTRAINT_ENGINE_PASS tests=45 (tabela Kleene AND/OR 9+9, NOT 3, profundidade 10/11, circular objeto e id)",
+          "UNKNOWN não colapsa: AND(U,M)=U OR(U,N)=U NOT(U)=U",
+          "node tests/domain/scalar-operators.test.mjs: SCALAR_OPERATORS_PASS tests=52",
+          "node --check dist/app.js: PASS",
+          "node scripts/verify-function-map.mjs: FUNCTION_MAP_PASS total=79",
+          "node scripts/verify-random-scenarios.mjs: RANDOM_SCENARIOS_PASS chapters=4 scenarios=9",
+          "node tests/hotfix/run-all.mjs: HOTFIX_SUITE_PASS tests=4",
+          "SHA dist/app.js=8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed inalterado",
+          "python3 -m esaa --root . verify: ok seq=1023"
+        ]
+      },
+      "completed_at": "2026-09-17T16:41:56Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-005",
+      "task_kind": "impl",
+      "title": "Integrar evidência e restrição",
+      "description": "Adaptar evidências descobertas em restrições compatíveis com constraint-engine: evidência não descoberta é UNKNOWN, inadmissível gera restrição com canSupportArrest=false na explanation.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-003",
+        "AZ-EVIDENCE-002",
+        "AZ-ARCH-003"
+      ],
+      "targets": [
+        "src/domain/constraints/evidence-constraint-adapter.js",
+        "dist/modules/evidence-constraint-adapter.js",
+        "tests/domain/evidence-constraint-adapter.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/constraints/evidence-constraint-adapter.js",
+          "dist/modules/evidence-constraint-adapter.js",
+          "tests/domain/evidence-constraint-adapter.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/evidence-constraint-adapter.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar buildConstraint(evidenceId, field, operator, value).",
+        "Retornar objeto de restrição compatível com constraint-engine.",
+        "Evidência não descoberta retorna UNKNOWN, nunca NO_MATCH.",
+        "Evidência inadmissível pode gerar restrição, mas canSupportArrest=false é registrado na explanation.",
+        "Restrição referencia o evidenceId de origem.",
+        "Testes cobrem evidência descoberta, não descoberta, inadmissível e campo ausente.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T16:46:21Z",
+      "verification": {
+        "checks": [
+          "EVIDENCE_CONSTRAINT_ADAPTER_PASS tests=28",
+          "CONSTRAINT_ENGINE_PASS tests=45",
+          "EVIDENCE_SERVICE_PASS tests=18",
+          "EVIDENCE_POLICY_PASS tests=15",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "SCHEMA_PASS version=3.x issues=0",
+          "DOMAIN_PASS invariants=5",
+          "HOTFIX_SUITE_PASS tests=4",
+          "HTTP_STATUS=200 e SHA HTTP do espelho ESM igual ao disco: 70fbeaa54bb231148e3bf3758884842226aa617bdcbb6588a490581657c63a7d",
+          "node --check CJS/ESM PASS",
+          "python -m esaa verify: verify_status ok",
+          "Diff restrito aos três targets autorizados; arquivos novos",
+          "dist/app.js SHA-256 preservado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "FN/CB impactados: nenhum"
+        ]
+      },
+      "completed_at": "2026-09-17T16:51:15Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-004",
+      "task_kind": "impl",
+      "title": "Implementar restrições territoriais",
+      "description": "Implementar matchRegion, matchState e matchInfrastructure sobre o catálogo de estados, devolvendo triestado; cidade/estado fora do catálogo é UNKNOWN sem lançar.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-003",
+        "AZ-TERR-001"
+      ],
+      "targets": [
+        "src/domain/constraints/territorial-constraints.js",
+        "dist/modules/territorial-constraints.js",
+        "tests/domain/territorial-constraints.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/constraints/territorial-constraints.js",
+          "dist/modules/territorial-constraints.js",
+          "tests/domain/territorial-constraints.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/territorial-constraints.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar matchRegion(stateId, region, catalog).",
+        "Exportar matchState(stateId, targetStateId).",
+        "Exportar matchInfrastructure(stateId, field, value, catalog).",
+        "Todos retornam { result: MATCH|NO_MATCH|UNKNOWN, explanation }.",
+        "Cidade/estado fora do catálogo retorna UNKNOWN, nunca lança exceção.",
+        "Catálogo é lido de content/territories/brazil-states.json.",
+        "Testes cobrem match, no_match e estado fora do catálogo.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T16:46:15Z",
+      "verification": {
+        "checks": [
+          "TERRITORIAL_CONSTRAINTS_PASS tests=31",
+          "CONSTRAINT_ENGINE_PASS tests=45",
+          "SCALAR_OPERATORS_PASS tests=52",
+          "DOMAIN_PASS invariants=5",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "node --check CJS: pass",
+          "node --input-type=module --check ESM: pass",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T16:51:14Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-006",
+      "task_kind": "impl",
+      "title": "Criar painel explicável de filtragem",
+      "description": "Painel de filtragem com grupos MATCH/NO_MATCH/UNKNOWN, justificativa por eliminação, escolha do jogador sobre evidências cruzadas, sem revelar a solução, navegável por teclado.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-005",
+        "AZ-SUSPECT-003"
+      ],
+      "targets": [
+        "src/ui/constraint-panel/constraint-panel.js",
+        "dist/modules/ui/constraint-panel/constraint-panel.js",
+        "tests/ui/constraint-panel.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/ui/constraint-panel/constraint-panel.js",
+          "dist/modules/ui/constraint-panel/constraint-panel.js",
+          "tests/ui/constraint-panel.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/ui/constraint-panel/constraint-panel.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Apresentar candidatos em três grupos: compatíveis, incompatíveis, indeterminados.",
+        "Cada eliminação possui justificativa consultável.",
+        "Jogador escolhe quais evidências cruzar; painel não decide sozinho.",
+        "Solução não é revelada automaticamente.",
+        "Navegável por teclado (Tab e setas).",
+        "Testes cobrem os três grupos, justificativa e lista vazia.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T16:56:15Z",
+      "verification": {
+        "checks": [
+          "CONSTRAINT_PANEL_PASS tests=30; INV-CP-001 a INV-CP-010 cobertas",
+          "CANDIDATE_SERVICE_PASS tests=18",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check CJS candidate: pass",
+          "node --input-type=module --check ESM candidate: pass",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python3 -m esaa --root . verify: verify_status ok before complete",
+          "standalone: no engine integration; zero FN/CB impacts"
+        ]
+      },
+      "completed_at": "2026-09-17T17:04:54Z"
+    },
+    {
+      "task_id": "AZ-CONSTRAINT-007",
+      "task_kind": "qa",
+      "title": "Validar unicidade e solucionabilidade de casos",
+      "description": "CLI e testes para detectar zero soluções, ambiguidade, identificação trivial por atributo único e orçamento de tempo inviável, com PASS/WARN/FAIL.",
+      "status": "done",
+      "depends_on": [
+        "AZ-CONSTRAINT-005"
+      ],
+      "targets": [
+        "scripts/validate-case-constraints.mjs",
+        "tests/qa/constraint-validator.test.mjs",
+        "docs/qa/az-constraint-007.md"
+      ],
+      "outputs": {
+        "files": [
+          "scripts/validate-case-constraints.mjs",
+          "tests/qa/constraint-validator.test.mjs",
+          "docs/qa/az-constraint-007.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "scripts/validate-case-constraints.mjs"
+      ],
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Detectar conjunto de restrições sem candidato compatível (zero soluções).",
+        "Detectar conjunto com múltiplos candidatos ao final (solução ambígua).",
+        "Detectar atributo único que identifica suspeito trivialmente.",
+        "Validar orçamento mínimo de tempo para percurso das evidências.",
+        "Retornar PASS, WARN ou FAIL com caminho e motivo por problema.",
+        "Executável por CLI: node scripts/validate-case-constraints.mjs dist/game.json.",
+        "Testes cobrem zero soluções, múltiplas soluções e orçamento inviável."
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "agent-qa",
+      "started_at": "2026-09-17T16:56:32Z",
+      "verification": {
+        "checks": [
+          "CONSTRAINT_VALIDATOR_WARN issues=8 file=dist/game.json; exit code 0; nenhum FAIL",
+          "CONSTRAINT_VALIDATOR_TESTS_PASS tests=18; INV-CV-001 a INV-CV-008 cobertas",
+          "CLI com fixture de solução zero retorna CONSTRAINT_VALIDATOR_FAIL e exit code 1",
+          "Fixtures zero, multi, trivial e budget: SCHEMA_PASS version=3.x issues=0",
+          "Fixture ev-out-of-route: única falha semântica esperada, required evidence E1 fora da rota",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "CANDIDATE_SERVICE_PASS tests=18",
+          "SCHEMA_PASS version=3.x issues=0 file=dist/game.json",
+          "node --check dist/app.js e scripts PASS",
+          "python -m esaa verify: verify_status ok",
+          "dist/app.js SHA-256 preservado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "Diff restrito ao script autorizado, teste/fixtures sob tests/qa e relatório docs/qa",
+          "FN/CB impactados: nenhum; integração standalone"
+        ]
+      },
+      "completed_at": "2026-09-17T17:04:55Z"
+    },
+    {
+      "task_id": "AZ-SUSPECT-004",
+      "task_kind": "impl",
+      "title": "Redesenhar dossiê e política de mandado",
+      "description": "issueWarrant exige suspeito único, suporte probatório mínimo e hipótese de autoria; nome isolado não emite mandado; mandado explica dimensões satisfeitas ou falhas.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-SUSPECT-002",
+        "AZ-SUSPECT-003",
+        "AZ-HYP-003-V2"
+      ],
+      "targets": [
+        "src/domain/dossier/dossier-service.js",
+        "dist/modules/dossier-service.js",
+        "tests/domain/dossier-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/dossier/dossier-service.js",
+          "dist/modules/dossier-service.js",
+          "tests/domain/dossier-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/dossier-service.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "issueWarrant exige suspeito único E suporte probatório mínimo E hipótese de autoria (quando AZ-HYP-003 estiver done).",
+        "Nome isolado não emite mandado.",
+        "Atributos compartilhados exigem cruzamento de múltiplas dimensões.",
+        "Mandado aprovado informa quais dimensões foram satisfeitas.",
+        "Mandado negado informa quais dimensões falharam.",
+        "verify-random-scenarios PASS.",
+        "SHA dist/app.js inalterado ou com patch mínimo documentado.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "superseded_by": [
+        "AZ-SUSPECT-004-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-QA-003",
+      "task_kind": "qa",
+      "title": "Revisar dedução de suspeitos",
+      "description": "Auditoria da dedução de suspeitos: nenhum identificável por atributo único, culpado identificável por cruzamento, identificação isolada não resolve, inocente excluível por evidência válida.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-SUSPECT-004-V2",
+        "AZ-CONSTRAINT-007"
+      ],
+      "targets": [
+        "docs/qa/az-qa-003.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/qa/az-qa-003.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "audit",
+      "acceptance_criteria": [
+        "Confirmar que nenhum suspeito é identificável por atributo único.",
+        "Confirmar que o culpado correto pode ser identificado por cruzamento.",
+        "Confirmar que identificação isolada não resolve o caso.",
+        "Confirmar que suspeito inocente pode ser excluído por evidência válida.",
+        "Confirmar que AZ-CONSTRAINT-007 detecta casos com solução trivial.",
+        "Todas as suítes passam sem regressão."
+      ],
+      "required_review_mode": "regression"
+    },
+    {
+      "task_id": "AZ-HYP-002",
+      "task_kind": "impl",
+      "title": "Implementar serviço de hipóteses",
+      "description": "Implementar serviço de hipóteses",
+      "status": "in_progress",
+      "depends_on": [
+        "AZ-HYP-001",
+        "AZ-CONSTRAINT-005"
+      ],
+      "targets": [
+        "src/domain/hypotheses/hypothesis-service.js",
+        "dist/modules/hypothesis-service.js",
+        "tests/domain/hypothesis-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/hypotheses/hypothesis-service.js",
+          "dist/modules/hypothesis-service.js",
+          "tests/domain/hypothesis-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar createHypothesis(type, statement).",
+        "Exportar linkEvidence(hypothesisId, evidenceId, role), com role supports ou contradicts.",
+        "Exportar updateStatus(hypothesisId, status), com status active, supported, weakened, refuted ou inconclusive.",
+        "Exportar getHypotheses(state).",
+        "Hipótese não é evidência e não é fato.",
+        "Hipótese pode coexistir com hipóteses concorrentes.",
+        "Evidência contraditória não remove hipótese; muda status.",
+        "Testes cobrem criação, vínculo, atualização de status e coexistência de hipóteses concorrentes.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T17:12:13Z",
+      "superseded_by": [
+        "AZ-HYP-002-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-HYP-003",
+      "task_kind": "impl",
+      "title": "Implementar quadro de hipóteses",
+      "description": "Implementar quadro de hipóteses",
+      "status": "in_progress",
+      "depends_on": [
+        "AZ-HYP-002-V2"
+      ],
+      "targets": [
+        "src/ui/hypothesis-board/hypothesis-board.js",
+        "dist/modules/ui/hypothesis-board/hypothesis-board.js",
+        "tests/ui/hypothesis-board.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/ui/hypothesis-board/hypothesis-board.js",
+          "dist/modules/ui/hypothesis-board/hypothesis-board.js",
+          "tests/ui/hypothesis-board.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Apresentar hipóteses agrupadas por status.",
+        "Exibir evidências favoráveis e contraditórias de cada hipótese.",
+        "Jogador pode declarar, revisar e vincular hipóteses.",
+        "Confiança low, medium ou high é exibida, mas não substitui prova.",
+        "Hipótese refutada permanece visível para auditoria.",
+        "Navegação por teclado.",
+        "Testes cobrem agrupamento, vínculo e hipótese refutada visível.",
+        "Espelho ESM.",
+        "dist/app.js inalterado, em integração standalone."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T17:58:42Z",
+      "superseded_by": [
+        "AZ-HYP-003-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-REPORT-001",
+      "task_kind": "spec",
+      "title": "Especificar relatório investigativo final",
+      "description": "Especificar relatório investigativo final",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-001",
+        "AZ-VALIDATION-001"
+      ],
+      "targets": [
+        "docs/architecture/az-report-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-report-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Estrutura InvestigationReport alinhada ao schema existente em src/contracts/investigation-report.schema.json.",
+        "Seções obrigatórias: fatos, cronologia, rota, autoria, suporte, contradições, limitações e conclusão.",
+        "Fatos e interpretações separados explicitamente.",
+        "Conclusão deve citar evidências; relatório sem evidências é inválido.",
+        "Relatório inconclusivo é um resultado válido.",
+        "Critérios de aceite de AZ-REPORT-002, AZ-REPORT-003 e AZ-REPORT-004 incluídos."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-17T17:12:31Z",
+      "verification": {
+        "checks": [
+          "REPORT_SCHEMA_EXAMPLE_PASS errors=0",
+          "Schema canônico validado como Draft-07; exemplo contém os 8 campos required",
+          "Seções presentes: fatos, cronologia, rota, autoria, suporte, contradições, limitações e conclusão",
+          "Regra documentada: conclusãoEvidenceIds e evidenceIds não vazios; relatório sem evidência inválido",
+          "Conclusão inconclusive documentada e exemplificada com evidências citadas",
+          "Critérios de aceite de AZ-REPORT-002, AZ-REPORT-003 e AZ-REPORT-004 incluídos",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "SCHEMA_PASS version=3.x issues=0 file=dist/game.json",
+          "node --check dist/app.js PASS",
+          "python -m esaa verify: verify_status ok",
+          "dist/app.js SHA-256 preservado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "Diff restrito a docs/architecture/az-report-001.md; FN/CB impactados: nenhum"
+        ]
+      },
+      "completed_at": "2026-09-17T17:18:04Z"
+    },
+    {
+      "task_id": "AZ-REPORT-002",
+      "task_kind": "impl",
+      "title": "Implementar construtor de cronologia",
+      "description": "Implementar construtor de cronologia",
+      "status": "in_progress",
+      "depends_on": [
+        "AZ-REPORT-001",
+        "AZ-HYP-002-V2"
+      ],
+      "targets": [
+        "src/domain/reports/timeline-builder.js",
+        "dist/modules/timeline-builder.js",
+        "tests/domain/timeline-builder.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/reports/timeline-builder.js",
+          "dist/modules/timeline-builder.js",
+          "tests/domain/timeline-builder.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar buildTimeline(events).",
+        "Ordenar eventos com timestamp conhecido.",
+        "Eventos sem timestamp são inseridos como horário desconhecido.",
+        "Conflitos temporais são marcados, não resolvidos automaticamente.",
+        "O construtor não inventa horários ausentes.",
+        "Testes cobrem ordem, conflito e evento sem timestamp.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T17:58:42Z",
+      "superseded_by": [
+        "AZ-REPORT-002-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-CAREER-001",
+      "task_kind": "spec",
+      "title": "Especificar competências e patentes",
+      "description": "Especificar competências e patentes",
+      "status": "done",
+      "depends_on": [
+        "AZ-REPORT-001"
+      ],
+      "targets": [
+        "docs/architecture/az-career-001.md"
+      ],
+      "outputs": {
+        "files": [
+          "docs/architecture/az-career-001.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "governance",
+      "acceptance_criteria": [
+        "Seis patentes definidas: Trainee, Júnior, Pleno, Sênior, Especialista e Elite.",
+        "Sete competências definidas: observação, análise de evidências, raciocínio territorial, hipóteses, eficiência temporal, relatório e procedimento.",
+        "Critérios de promoção configuráveis, não baseados só em pontos.",
+        "Regra explícita: promoção não recompensa adivinhação.",
+        "Desbloqueios ampliam ferramentas, não revelam soluções.",
+        "Critérios de aceite de AZ-CAREER-002 incluídos."
+      ],
+      "required_review_mode": "governance",
+      "assigned_to": "agent-spec",
+      "started_at": "2026-09-17T17:58:43Z",
+      "verification": {
+        "checks": [
+          "Seis patentes definidas: Trainee, Júnior, Pleno, Sênior, Especialista e Elite, com casos mínimos, pisos configuráveis, variedade e ausência de violação crítica",
+          "Sete competências definidas: observacao, analise, territorialReasoning, hypothesisQuality, timeEfficiency, reportConsistency, legalProcedure — cada uma com definição, evidência observável e o que não mede",
+          "Promoção exige casos E competências; palpite sem evidência penaliza reportConsistency e hypothesisQuality; mandado errado penaliza legalProcedure; inconclusivo é avaliação parcial sem promoção; estrelas legadas não concedem patente avançada",
+          "Desbloqueios ampliam ferramentas e conteúdo; nenhum revela solução, culpado ou auto-preenche hipótese/relatório",
+          "Gap explícito: hypothesisScore sempre 0 no arrest-validator até AZ-HYP-004 integrar canSupportArrest; aceite de AZ-CAREER-002",
+          "Critérios de aceite de AZ-CAREER-002 incluídos (determinismo, razões observáveis, rito ruim, inconclusivo parcial, hipótese depende de HYP-004)",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "python3 -m esaa verify: verify_status ok",
+          "dist/app.js SHA-256 preservado: 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed",
+          "Diff restrito a docs/architecture/az-career-001.md; FN/CB impactados: nenhum"
+        ]
+      },
+      "completed_at": "2026-09-17T18:23:28Z"
+    },
+    {
+      "task_id": "AZ-HYP-002-V2",
+      "task_kind": "impl",
+      "title": "Implementar serviço de hipóteses",
+      "description": "Correção contratual de AZ-HYP-002 com boundary explícito para o espelho ESM exigido.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-001",
+        "AZ-CONSTRAINT-005"
+      ],
+      "targets": [
+        "src/domain/hypotheses/hypothesis-service.js",
+        "dist/modules/hypothesis-service.js",
+        "tests/domain/hypothesis-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/hypotheses/hypothesis-service.js",
+          "dist/modules/hypothesis-service.js",
+          "tests/domain/hypothesis-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/hypothesis-service.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar createHypothesis(type, statement).",
+        "Exportar linkEvidence(hypothesisId, evidenceId, role), com role supports ou contradicts.",
+        "Exportar updateStatus(hypothesisId, status), com status active, supported, weakened, refuted ou inconclusive.",
+        "Exportar getHypotheses(state).",
+        "Hipótese não é evidência e não é fato.",
+        "Hipótese pode coexistir com hipóteses concorrentes.",
+        "Evidência contraditória não remove hipótese; muda status.",
+        "Testes cobrem criação, vínculo, atualização de status e coexistência de hipóteses concorrentes.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "supersedes": [
+        "AZ-HYP-002"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T17:16:51Z",
+      "verification": {
+        "checks": [
+          "HYPOTHESIS_SERVICE_PASS tests=37",
+          "published hypothesis-record.schema.json required fields and enums exercised",
+          "DOMAIN_PASS invariants=5",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check CJS candidate: pass",
+          "node --input-type=module --check ESM candidate: pass",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python3 -m esaa --root . verify: verify_status ok before complete",
+          "standalone module: no FN-* or CB-* impact"
+        ]
+      },
+      "completed_at": "2026-09-17T17:18:04Z"
+    },
+    {
+      "task_id": "AZ-HYP-003-V2",
+      "task_kind": "impl",
+      "title": "Implementar quadro de hipóteses",
+      "description": "Correção contratual de AZ-HYP-003 com boundary explícito para o espelho ESM exigido.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-002-V2"
+      ],
+      "targets": [
+        "src/ui/hypothesis-board/hypothesis-board.js",
+        "dist/modules/ui/hypothesis-board/hypothesis-board.js",
+        "tests/ui/hypothesis-board.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/ui/hypothesis-board/hypothesis-board.js",
+          "dist/modules/ui/hypothesis-board/hypothesis-board.js",
+          "tests/ui/hypothesis-board.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/ui/hypothesis-board/hypothesis-board.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Apresentar hipóteses agrupadas por status.",
+        "Exibir evidências favoráveis e contraditórias de cada hipótese.",
+        "Jogador pode declarar, revisar e vincular hipóteses.",
+        "Confiança low, medium ou high é exibida, mas não substitui prova.",
+        "Hipótese refutada permanece visível para auditoria.",
+        "Navegação por teclado.",
+        "Testes cobrem agrupamento, vínculo e hipótese refutada visível.",
+        "Espelho ESM.",
+        "dist/app.js inalterado, em integração standalone."
+      ],
+      "required_review_mode": "functional",
+      "supersedes": [
+        "AZ-HYP-003"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T18:25:18Z",
+      "verification": {
+        "checks": [
+          "HYPOTHESIS_BOARD_PASS tests=41",
+          "INV-HB-001 a INV-HB-010 cobertas (empty, Sustentada, Refutada visível, favorável, contraditória, confiança visual, sem culpado, concorrentes, sem script inline, determinismo)",
+          "HYPOTHESIS_SERVICE_PASS tests=37",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "python3 -m esaa verify: verify_status ok before complete",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "standalone module: no FN-* or CB-* impact"
+        ]
+      },
+      "completed_at": "2026-09-17T18:26:12Z"
+    },
+    {
+      "task_id": "AZ-REPORT-002-V2",
+      "task_kind": "impl",
+      "title": "Implementar construtor de cronologia",
+      "description": "Correção contratual de AZ-REPORT-002 com boundary explícito para o espelho ESM exigido.",
+      "status": "done",
+      "depends_on": [
+        "AZ-REPORT-001",
+        "AZ-HYP-002-V2"
+      ],
+      "targets": [
+        "src/domain/reports/timeline-builder.js",
+        "dist/modules/timeline-builder.js",
+        "tests/domain/timeline-builder.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/reports/timeline-builder.js",
+          "dist/modules/timeline-builder.js",
+          "tests/domain/timeline-builder.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/modules/timeline-builder.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar buildTimeline(events).",
+        "Ordenar eventos com timestamp conhecido.",
+        "Eventos sem timestamp são inseridos como horário desconhecido.",
+        "Conflitos temporais são marcados, não resolvidos automaticamente.",
+        "O construtor não inventa horários ausentes.",
+        "Testes cobrem ordem, conflito e evento sem timestamp.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "supersedes": [
+        "AZ-REPORT-002"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T18:25:18Z",
+      "verification": {
+        "checks": [
+          "TIMELINE_BUILDER_PASS tests=44",
+          "INV-TL-001 a INV-TL-010 cobertas (vazio, timestamp null preservado, sort dated-first, compatível sem conflito, reverse-causation marca ambos, detectConflicts vazio/par, determinismo, fontes distintas, evento único sem horário)",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "python3 -m esaa verify: verify_status ok before complete",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "standalone module: no FN-* or CB-* impact"
+        ]
+      },
+      "completed_at": "2026-09-17T18:26:13Z"
+    },
+    {
+      "task_id": "AZ-SUSPECT-004-V2",
+      "task_kind": "impl",
+      "title": "Redesenhar dossiê e política de mandado",
+      "description": "Correção contratual de AZ-SUSPECT-004 com boundary_grant para dist/game.json (TRIVIAL_ATTR) e espelho ESM. issueWarrant exige suspeito único, suporte mínimo e hipótese de autoria; nome isolado não emite mandado.",
+      "status": "done",
+      "depends_on": [
+        "AZ-SUSPECT-002",
+        "AZ-SUSPECT-003",
+        "AZ-HYP-003-V2"
+      ],
+      "targets": [
+        "src/domain/dossier/dossier-service.js",
+        "dist/modules/dossier-service.js",
+        "tests/domain/dossier-service.test.mjs",
+        "dist/game.json"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/dossier/dossier-service.js",
+          "dist/modules/dossier-service.js",
+          "tests/domain/dossier-service.test.mjs",
+          "dist/game.json"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "dist/game.json",
+        "src/domain/dossier/dossier-service.js",
+        "dist/modules/dossier-service.js",
+        "tests/domain/dossier-service.test.mjs"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "issueWarrant exige suspeito único E suporte probatório mínimo E hipótese de autoria (quando AZ-HYP-003-V2 estiver done).",
+        "Nome isolado não emite mandado.",
+        "Atributos compartilhados exigem cruzamento de múltiplas dimensões.",
+        "Mandado aprovado informa quais dimensões foram satisfeitas.",
+        "Mandado negado informa quais dimensões falharam.",
+        "validate-case-constraints dist/game.json sem issues TRIVIAL_ATTR em specialty/vehicle.",
+        "verify-random-scenarios PASS.",
+        "SHA dist/app.js inalterado ou com patch mínimo documentado.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "supersedes": [
+        "AZ-SUSPECT-004"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T18:57:55Z",
+      "verification": {
+        "checks": [
+          "DOSSIER_SERVICE_PASS tests=33",
+          "CONSTRAINT_VALIDATOR_PASS issues=0 file=dist/game.json — zero TRIVIAL_ATTR em specialty/vehicle",
+          "nome isolado não emite mandado; duas dimensões isolam; hipóteses explícitas sem autoria sustentada negam",
+          "DOMAIN_PASS invariants=5",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python3 -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T19:10:06Z"
+    },
+    {
+      "task_id": "AZ-HYP-004",
+      "task_kind": "impl",
+      "title": "Implementar força probatória",
+      "description": "Implementar calculateStrength e atualizar arrest-validator para encerrar o gap hypothesisScore=0. Espelho ESM. Não alterar dist/app.js.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-002-V2",
+        "AZ-CONSTRAINT-005",
+        "AZ-VALIDATION-001",
+        "AZ-HYP-003-V2"
+      ],
+      "targets": [
+        "src/domain/hypotheses/evidence-strength.js",
+        "dist/modules/evidence-strength.js",
+        "tests/domain/evidence-strength.test.mjs",
+        "src/domain/arrest/arrest-validator.js",
+        "dist/modules/arrest-validator.js"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/hypotheses/evidence-strength.js",
+          "dist/modules/evidence-strength.js",
+          "tests/domain/evidence-strength.test.mjs",
+          "src/domain/arrest/arrest-validator.js",
+          "dist/modules/arrest-validator.js"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/domain/hypotheses/evidence-strength.js",
+        "dist/modules/evidence-strength.js",
+        "tests/domain/evidence-strength.test.mjs",
+        "src/domain/arrest/arrest-validator.js",
+        "dist/modules/arrest-validator.js"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar calculateStrength(hypotheses, discoveredEvidence, policy).",
+        "Retornar { score: 0.0–1.0, supporting: [], contradicting: [], inadmissible: [], reasons: [] }.",
+        "Evidência inadmissível (canSupportArrest=false) não contribui para score.",
+        "Evidência redundante não infla o score proporcionalmente.",
+        "hypothesisScore agora reflete o valor real calculado por este módulo — gap AZ-HYP-004 encerrado.",
+        "arrest-validator.js é ATUALIZADO para chamar calculateStrength em vez de retornar hypothesisScore=0.",
+        "Testes cobrem: evidência inadmissível, redundante, ausente, hipótese sem evidência e hipótese refutada.",
+        "Espelho ESM em dist/modules/evidence-strength.js.",
+        "verify-random-scenarios PASS.",
+        "HOTFIX_SUITE_PASS tests=4."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T18:57:54Z",
+      "verification": {
+        "checks": [
+          "EVIDENCE_STRENGTH_PASS tests=42",
+          "hypothesisScore>0 com autoria sustentada e evidência admissível descoberta; APPROVED sem hipóteses permanece APPROVED com hypothesisScore=0",
+          "wrong_warrant e insufficient_evidence permanecem DENIED",
+          "inadmissível e redundância não inflacionam score; hipótese refutada ou sem supports → 0",
+          "DOMAIN_PASS invariants=5",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python3 -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T19:10:05Z"
+    },
+    {
+      "task_id": "AZ-HYP-005",
+      "task_kind": "impl",
+      "title": "Implementar decisão governada de mandado",
+      "description": "requestWarrant valida suspeito único, hipótese sustentada, força probatória mínima e procedimento. Mandado não é vitória. Espelho ESM.",
+      "status": "todo",
+      "depends_on": [
+        "AZ-HYP-003-V2",
+        "AZ-HYP-004",
+        "AZ-SUSPECT-004-V2"
+      ],
+      "targets": [
+        "src/domain/validation/warrant-service.js",
+        "dist/modules/warrant-service.js",
+        "tests/domain/warrant-service.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/validation/warrant-service.js",
+          "dist/modules/warrant-service.js",
+          "tests/domain/warrant-service.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/domain/validation/warrant-service.js",
+        "dist/modules/warrant-service.js",
+        "tests/domain/warrant-service.test.mjs"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar requestWarrant(state, game, suspectId, hypothesisIds).",
+        "Validar: suspeito único + hipótese sustentada + força probatória mínima + conformidade processual.",
+        "Retornar { approved: bool, suspectId, reasons[], missingDimensions[] }.",
+        "Mandado negado informa quais dimensões falharam.",
+        "Mandado não equivale à vitória — é pré-requisito da prisão.",
+        "Um único atributo NÃO gera mandado aprovado.",
+        "Testes cobrem aprovado, negado por hipótese ausente, negado por prova insuficiente, negado por suspeito ambíguo.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "superseded_by": [
+        "AZ-HYP-005-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-REPORT-003",
+      "task_kind": "impl",
+      "title": "Implementar reconstrução de rota",
+      "description": "buildRoute ordena cidades visitadas e inferidas sem promover trecho sem evidência a fato. Cinco cidades migradas. Espelho ESM.",
+      "status": "done",
+      "depends_on": [
+        "AZ-REPORT-001",
+        "AZ-HYP-002-V2",
+        "AZ-TERR-002"
+      ],
+      "targets": [
+        "src/domain/reports/route-builder.js",
+        "dist/modules/route-builder.js",
+        "tests/domain/route-builder.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/reports/route-builder.js",
+          "dist/modules/route-builder.js",
+          "tests/domain/route-builder.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/domain/reports/route-builder.js",
+        "dist/modules/route-builder.js",
+        "tests/domain/route-builder.test.mjs"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar buildRoute(visitedCities, hypotheses, evidence).",
+        "Retornar [{ cityId, confirmed: bool, hypothesisId: string|null, evidenceIds: [] }].",
+        "Cidade visitada pelo jogador → confirmed: true.",
+        "Cidade inferida por hipótese → confirmed: false, hypothesisId preenchido.",
+        "Trechos sem evidência são marcados como hipótese, não como fato.",
+        "Rota usa as cinco cidades migradas (AZ-TERR-002) sem depender do catálogo nacional completo.",
+        "Testes cobrem rota confirmada, inferida e trechos mistos.",
+        "Espelho ESM."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T18:57:54Z",
+      "verification": {
+        "checks": [
+          "ROUTE_BUILDER_PASS tests=29",
+          "visitada confirmed=true; inferida confirmed=false com hypothesisId; cidade fora das cinco omitida",
+          "FUNCTION_MAP_PASS total=79 functions=42 arrows=37",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "dist/app.js SHA-256 8e0b2d03c597dd8fe6daf3896bdaa69f21b1ccb7ade47f90ed5856f54da6efed unchanged",
+          "python3 -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T19:10:05Z"
+    },
+    {
+      "task_id": "AZ-REPORT-004",
+      "task_kind": "impl",
+      "title": "Implementar editor de relatório",
+      "description": "Editor de InvestigationReport com oito seções. Jogador seleciona hipóteses e evidências. Standalone, dist/app.js inalterado. Espelho ESM.",
+      "status": "done",
+      "depends_on": [
+        "AZ-REPORT-002-V2",
+        "AZ-REPORT-003"
+      ],
+      "targets": [
+        "src/ui/report-editor/report-editor.js",
+        "dist/modules/ui/report-editor/report-editor.js",
+        "tests/ui/report-editor.test.mjs"
+      ],
+      "outputs": {
+        "files": [
+          "src/ui/report-editor/report-editor.js",
+          "dist/modules/ui/report-editor/report-editor.js",
+          "tests/ui/report-editor.test.mjs"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/ui/report-editor/report-editor.js",
+        "dist/modules/ui/report-editor/report-editor.js",
+        "tests/ui/report-editor.test.mjs"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar buildReportEditorHTML(state, game, hypotheses).",
+        "Exportar createReportController(container, state, game).",
+        "Seções obrigatórias: fatos, cronologia, rota, autoria, suporte, contradições, limitações, conclusão.",
+        "Jogador seleciona hipóteses e evidências — editor não decide.",
+        "Fatos e interpretações têm apresentação visual distinta.",
+        "Rascunho é persistido no estado sem alterar state do jogo.",
+        "Relatório sem evidências é marcado como inválido para prisão.",
+        "Testes cobrem seções obrigatórias, distinção fato/interpretação, relatório sem evidências.",
+        "Espelho ESM.",
+        "dist/app.js inalterado (standalone)."
+      ],
+      "required_review_mode": "functional",
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T19:26:12Z",
+      "verification": {
+        "checks": [
+          "REPORT_EDITOR_PASS tests=18",
+          "INV-RE-001 a INV-RE-010 cobertas",
+          "TIMELINE_BUILDER_PASS tests=44",
+          "ROUTE_BUILDER_PASS tests=29",
+          "FUNCTION_MAP_PASS total=78 functions=42 arrows=36",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "HOTFIX_SUITE_PASS tests=4",
+          "node --check dist/app.js PASS",
+          "dist/app.js SHA-256 ee5f2be9ed24890a18414979d688755dbb10cbe9388b8a57131a49e900ab328f inalterado nesta tarefa",
+          "python3 -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T19:37:38Z"
+    },
+    {
+      "task_id": "AZ-HYP-005-V2",
+      "task_kind": "impl",
+      "title": "Implementar decisão governada de mandado",
+      "description": "Correção contratual de AZ-HYP-005: requestWarrant + patch FN-017 em dist/app.js e function-map. Fecha ISSUE-AZ-DOSSIER-UI-INTEGRATION.",
+      "status": "done",
+      "depends_on": [
+        "AZ-HYP-003-V2",
+        "AZ-HYP-004",
+        "AZ-SUSPECT-004-V2"
+      ],
+      "targets": [
+        "src/domain/validation/warrant-service.js",
+        "dist/modules/warrant-service.js",
+        "tests/domain/warrant-service.test.mjs",
+        "src/domain/dossier/dossier-service.js",
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "outputs": {
+        "files": [
+          "src/domain/validation/warrant-service.js",
+          "dist/modules/warrant-service.js",
+          "tests/domain/warrant-service.test.mjs",
+          "src/domain/dossier/dossier-service.js",
+          "dist/app.js",
+          "docs/architecture/function-map.json",
+          "docs/architecture/function-map.md"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "src/domain/validation/warrant-service.js",
+        "dist/modules/warrant-service.js",
+        "tests/domain/warrant-service.test.mjs",
+        "src/domain/dossier/dossier-service.js",
+        "dist/app.js",
+        "docs/architecture/function-map.json",
+        "docs/architecture/function-map.md"
+      ],
+      "task_type": "feature",
+      "acceptance_criteria": [
+        "Exportar requestWarrant(state, game, chosen).",
+        "Chamar filterSuspects; [] ou length>1 → approved=false, reasons sem_candidato_único.",
+        "Score abaixo do limiar do caso → approved=false, reasons força_probatória_insuficiente.",
+        "Cruzamento único com prova suficiente → approved=true e suspectId.",
+        "Mandado aprovado não equivale à vitória.",
+        "Um único atributo NÃO gera mandado aprovado.",
+        "Patch FN-017 submitDossier delega a requestWarrant; function-map atualizado.",
+        "Negado não revela o culpado.",
+        "Espelho ESM; verify-random-scenarios PASS; CONSTRAINT_VALIDATOR_PASS issues=0."
+      ],
+      "required_review_mode": "functional",
+      "supersedes": [
+        "AZ-HYP-005"
+      ],
+      "assigned_to": "agent-impl",
+      "started_at": "2026-09-17T19:26:12Z",
+      "verification": {
+        "checks": [
+          "WARRANT_SERVICE_PASS tests=24",
+          "INV-WS-001 a INV-WS-007: nome isolado nega; cruzamento aprova cifra; dois compatíveis negam; score<limiar nega; recusa sem culpado; CONSTRAINT_VALIDATOR_PASS issues=0; RANDOM_SCENARIOS_PASS",
+          "FN-017 submitDossier chama requestWarrant; import warrant-service.js; CB-022 removido",
+          "FUNCTION_MAP_PASS total=78 functions=42 arrows=36",
+          "RANDOM_SCENARIOS_PASS chapters=4 scenarios=9 routes=9 culprit=byte|null|vertice|cifra",
+          "CONSTRAINT_VALIDATOR_PASS issues=0 file=dist/game.json",
+          "HOTFIX_SUITE_PASS tests=4",
+          "DOMAIN_PASS invariants=5",
+          "node --check dist/app.js PASS",
+          "dist/app.js SHA-256 ee5f2be9ed24890a18414979d688755dbb10cbe9388b8a57131a49e900ab328f",
+          "python3 -m esaa verify: verify_status ok before complete"
+        ]
+      },
+      "completed_at": "2026-09-17T19:37:37Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 66,
-      "todo": 2
+      "done": 87,
+      "in_progress": 3,
+      "todo": 4
     },
     "by_kind": {
-      "impl": 52,
-      "qa": 6,
-      "spec": 10
+      "impl": 72,
+      "qa": 8,
+      "spec": 14
     }
   }
 }

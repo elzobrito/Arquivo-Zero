@@ -1,0 +1,13 @@
+{
+  "after_sha256": "78e74b9319cc2b1e97aa0d319e6e92d4711a7c2ab0738d81c21b4e002527602c",
+  "artifact_id": "ART-78e74b9319cc2b1e97aa0d319e6e92d4711a7c2ab0738d81c21b4e002527602c",
+  "artifact_sha256": "bec6303535ce011daf302ca5c06e19e5b98d7bb8cc68aeb5886f48fdcb544fa3",
+  "before_sha256": "78e74b9319cc2b1e97aa0d319e6e92d4711a7c2ab0738d81c21b4e002527602c",
+  "bytes": 1737,
+  "content": "{\n  \"schemaVersion\": \"3.0\",\n  \"metadata\": { \"id\": \"cv-zero\", \"code\": \"CV-0\", \"title\": \"Zero\", \"briefing\": \"Fixture\", \"total_hours\": 10, \"start\": \"lab\" },\n  \"suspects\": [\n    { \"id\": \"alpha\", \"name\": \"Alpha\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"skill\": \"network\" },\n    { \"id\": \"beta\", \"name\": \"Beta\", \"specialty\": \"shared\", \"vehicle\": \"shared\", \"skill\": \"database\" }\n  ],\n  \"dossier\": { \"fields\": [] },\n  \"evidence\": [{ \"id\": \"E0\", \"title\": \"Base\", \"text\": \"Base\", \"tag\": \"base\" }],\n  \"locations\": [{ \"id\": \"lab\", \"name\": \"Lab\", \"type\": \"lab\", \"x\": 0, \"y\": 0, \"coords\": \"0,0\", \"description\": \"Fixture\", \"city_info\": { \"summary\": \"Fixture\", \"facts\": [] }, \"actions\": [{ \"id\": \"arrest\", \"label\": \"Prender\", \"cost\": 0, \"result\": \"Fim\", \"arrest\": true }] }],\n  \"travel\": {},\n  \"navigation\": { \"lab\": [] },\n  \"culprit\": \"alpha\",\n  \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n  \"scenarios\": [{ \"id\": \"zero\", \"code\": \"ZERO\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"constraints\": [{ \"id\": \"skill\", \"op\": \"ATOM\", \"path\": \"skill\", \"operator\": \"eq\", \"value\": \"visual\" }], \"action_overrides\": {} }],\n  \"ending\": { \"win_title\": \"Fim\", \"win_text\": \"Fim\", \"lose_title\": \"Fim\", \"lose_text\": \"Fim\" },\n  \"campaign\": { \"id\": \"cv-zero\", \"lieutenant_pool\": [\"alpha\"], \"lieutenant_chapters\": 1, \"boss\": \"alpha\", \"chapters\": { \"case\": {\n    \"culprit\": \"alpha\", \"start\": \"lab\", \"total_hours\": 10,\n    \"arrest_requirements\": { \"minimum_evidence\": 0, \"required_evidence\": [] },\n    \"scenarios\": [{ \"id\": \"zero\", \"code\": \"ZERO\", \"route\": [\"lab\"], \"navigation\": { \"lab\": [] }, \"constraints\": [{ \"id\": \"skill\", \"op\": \"ATOM\", \"path\": \"skill\", \"operator\": \"eq\", \"value\": \"visual\" }], \"action_overrides\": {} }]\n  } } }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "tests/qa/fixtures/constraint-zero-solution.json",
+  "source_path": "tests/qa/fixtures/constraint-zero-solution.json",
+  "ts": "2026-09-17T17:03:21Z"
+}

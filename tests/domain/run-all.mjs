@@ -51,8 +51,10 @@ check("INV-3 essential chapter", isEssential("E01", game) === true && isEssentia
 // INV-4 warrant unique
 const none = filterSuspects(game, []);
 check("INV-4 empty chosen all", none.length === 2);
-const one = filterSuspects(game, [["name", "Cifra"]]);
-check("INV-4 unique", one.length === 1 && one[0].id === "cifra");
+const nameOnly = filterSuspects(game, [["name", "Cifra"]]);
+check("INV-4 name-only does not unique-match", nameOnly.length === 0);
+const two = filterSuspects(game, [["name", "Cifra"], ["specialty", "Social"]]);
+check("INV-4 two keys unique-match", two.length === 1 && two[0].id === "cifra");
 const issued = issueWarrant(state, "cifra");
 check("INV-4 warrant flag", issued.warrant === true && issued.warrantSuspect === "cifra");
 

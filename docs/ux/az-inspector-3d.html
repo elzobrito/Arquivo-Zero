@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Arquivo Zero — Inspector 3D</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#070d1a;--bg2:#0d1526;--bg3:#111e36;
+  --border:#1a2a4a;--accent:#4488ff;
+  --text:#c8d8f0;--dim:#5a7099;
+  --ok:#44cc88;--warn:#ffcc44;--err:#ff4444;
+  --ch:#aa44ff;--sc:#ff8844;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Courier New',monospace}
+#app{display:flex;height:100vh;width:100vw}
+
+/* ── PANELS ─────────────────────────── */
+.panel{display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
+#pl{width:252px;min-width:252px;border-right:1px solid var(--border)}
+#pr{width:296px;min-width:296px;border-left:1px solid var(--border)}
+#canvas-wrap{flex:1;position:relative;overflow:hidden}
+canvas{display:block}
+
+.ph{padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;
+    letter-spacing:1.8px;text-transform:uppercase;color:var(--accent);font-weight:bold}
+.ps{padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px}
+.pscroll{overflow-y:auto;flex:1}
+
+h3{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);margin-bottom:7px;margin-top:2px}
+
+/* ── LEGEND ──────────────────────────── */
+.leg{display:flex;flex-direction:column;gap:5px}
+.li{display:flex;align-items:center;gap:7px;font-size:10px}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ── ERRORS ──────────────────────────── */
+.elist{display:flex;flex-direction:column;gap:4px}
+.ei{padding:7px 9px;border-radius:4px;font-size:9.5px;cursor:pointer;line-height:1.45;transition:filter .15s}
+.ei.error{background:rgba(255,68,68,.09);border:1px solid rgba(255,68,68,.28)}
+.ei.warning{background:rgba(255,204,68,.09);border:1px solid rgba(255,204,68,.28)}
+.ei:hover{filter:brightness(1.35)}
+.badge{display:inline-block;border-radius:9px;padding:1px 5px;font-size:9px;margin-right:3px;font-weight:bold}
+.badge.e{background:var(--err);color:#fff}
+.badge.w{background:var(--warn);color:#000}
+#stats{font-size:9px;color:var(--dim);margin-top:6px}
+
+/* ── DETAIL ──────────────────────────── */
+#dtitle{font-size:12px;font-weight:bold;color:var(--accent);margin-bottom:3px}
+#dsub{font-size:9.5px;color:var(--dim);margin-bottom:10px}
+.route{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:6px 0}
+.chip{background:rgba(68,136,255,.13);border:1px solid rgba(68,136,255,.28);
+      padding:2px 8px;border-radius:3px;font-size:9px}
+.eid{background:rgba(68,255,136,.1);border:1px solid rgba(68,255,136,.28);
+     color:var(--ok);padding:2px 6px;border-radius:3px;font-size:9px;display:inline-block;margin:2px}
+.ew{color:var(--dim);font-size:9px}
+.tbl{width:100%;border-collapse:collapse;font-size:9.5px}
+.tbl th{text-align:left;padding:3px 6px;color:var(--dim);border-bottom:1px solid var(--border);
+        font-weight:normal;text-transform:uppercase;font-size:8.5px}
+.tbl td{padding:4px 6px;border-bottom:1px solid rgba(26,42,74,.4);vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.025)}
+.ok{color:var(--ok)}.wn{color:var(--warn)}.er{color:var(--err)}
+.di{color:var(--dim)}
+
+/* ── LOAD SCREEN ─────────────────────── */
+#load{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:14px;z-index:999}
+#load h1{font-size:22px;color:var(--accent);letter-spacing:3px}
+#load p{font-size:11px;color:var(--dim)}
+#dz{border:2px dashed var(--border);border-radius:8px;padding:28px 56px;
+    text-align:center;color:var(--dim);font-size:11px;transition:all .2s;cursor:pointer}
+#dz.over{border-color:var(--accent);color:var(--accent);background:rgba(68,136,255,.04)}
+.btn{background:rgba(68,136,255,.14);border:1px solid var(--accent);color:var(--accent);
+     padding:9px 22px;border-radius:4px;cursor:pointer;font-family:monospace;font-size:12px;
+     letter-spacing:1px}
+.btn:hover{background:rgba(68,136,255,.24)}
+#lerr{color:var(--err);font-size:11px;display:none}
+input[type=file]{display:none}
+
+/* ── TOOLTIP ─────────────────────────── */
+#tip{position:fixed;background:rgba(7,13,26,.95);border:1px solid var(--accent);
+     padding:5px 10px;border-radius:4px;font-size:10px;pointer-events:none;display:none;z-index:500}
+
+/* ── CONTROLS HINT ───────────────────── */
+.chint{font-size:9.5px;color:var(--dim);line-height:1.9}
+
+/* ── SCROLLBAR ───────────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- Load -->
+<div id="load">
+  <h1>◉ ARQUIVO ZERO</h1>
+  <p>Inspector 3D de game.json · <a href="az-inspector.html" style="color:#4488ff">abrir v2 (2D)</a></p>
+  <div id="dz">
+    Arraste o <strong>game.json</strong> aqui<br>ou<br><br>
+    <label class="btn" for="fi">Selecionar arquivo</label>
+    <input type="file" id="fi" accept=".json">
+  </div>
+  <p id="lerr"></p>
+</div>
+
+<!-- App -->
+<div id="app" style="display:none">
+
+  <!-- Left panel -->
+  <div class="panel" id="pl">
+    <div class="ph">◉ AZ Inspector</div>
+
+    <div class="ps">
+      <h3>Legenda</h3>
+      <div class="leg">
+        <div class="li"><div class="dot" style="background:#4488ff"></div>Campanha</div>
+        <div class="li"><div class="dot" style="background:#aa44ff"></div>Capítulo</div>
+        <div class="li"><div class="dot" style="background:#ff8844"></div>Cenário OK</div>
+        <div class="li"><div class="dot" style="background:#ffcc44"></div>Cenário — aviso</div>
+        <div class="li"><div class="dot" style="background:#ff4444"></div>Cenário — erro</div>
+        <div class="li"><div class="dot" style="width:9px;height:9px;border-radius:2px;background:#ff4444"></div>Anel = problema ativo</div>
+      </div>
+    </div>
+
+    <div class="ps pscroll">
+      <h3>Problemas detectados</h3>
+      <div id="elist" class="elist"><span style="color:var(--dim);font-size:10px">Analisando...</span></div>
+      <div id="stats"></div>
+    </div>
+
+    <div class="ps" style="margin-top:auto;border-top:1px solid var(--border);border-bottom:none">
+      <h3>Navegação 3D</h3>
+      <div class="chint">
+        Arrastar — rotacionar<br>
+        Scroll — zoom<br>
+        Botão direito — mover<br>
+        Clique — selecionar nó<br>
+        Clique no erro — focar nó
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div id="canvas-wrap">
+    <div id="tip"></div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="panel" id="pr">
+    <div class="ph">Detalhes do nó</div>
+    <div class="pscroll" id="detail">
+      <div class="ps" style="color:var(--dim);font-size:10px">
+        Clique em um nó para ver detalhes.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+'use strict'
+
+// ─── FILE LOADING ────────────────────────────────────────────────────────────
+const fi = document.getElementById('fi')
+const dz = document.getElementById('dz')
+const lerr = document.getElementById('lerr')
+let GAME = null
+
+fi.addEventListener('change', e => { if (e.target.files[0]) readFile(e.target.files[0]) })
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over') })
+dz.addEventListener('dragleave', () => dz.classList.remove('over'))
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('over')
+  if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0])
+})
+
+function readFile(f) {
+  const r = new FileReader()
+  r.onload = e => {
+    try { GAME = JSON.parse(e.target.result); startApp() }
+    catch(err) { lerr.textContent = 'Erro JSON: ' + err.message; lerr.style.display = 'block' }
+  }
+  r.readAsText(f)
+}
+
+// ─── VALIDATION ──────────────────────────────────────────────────────────────
+function validate(game) {
+  const issues = []
+  const evIds = new Set((game.evidence || []).map(e => e.id))
+
+  // Base actions map
+  const base = {}
+  ;(game.locations || []).forEach(loc => {
+    ;(loc.actions || []).forEach(a => {
+      base[a.id] = { ...a, city: loc.name, cityId: loc.id }
+    })
+  })
+
+  // Culprit → evidence mapping (inferred)
+  const culpritEv = {
+    byte: new Set(['E11','E12']),
+    null: new Set(['E13','E14']),
+    vertice: new Set(['E15','E16']),
+    cifra: new Set(['E01','E02','E03','E04','E05','E06','E07','E08'])
+  }
+
+  const chaps = game.campaign?.chapters || {}
+  Object.entries(chaps).forEach(([cid, ch]) => {
+    // Required evidence exists?
+    ;(ch.arrest_requirements?.required_evidence || []).forEach(eid => {
+      if (!evIds.has(eid))
+        push(issues, 'error', 'MISSING_REQUIRED_EV', cid, null, null,
+          `Evidência obrigatória ${eid} não existe no catálogo`,
+          `chapters.${cid}.arrest_requirements`)
+    })
+
+    ;(ch.scenarios || []).forEach(sc => {
+      const routeSet = new Set(sc.route || [])
+      const ov = sc.action_overrides || {}
+
+      // Route ↔ navigation consistency
+      ;(sc.route || []).forEach(city => {
+        if (!(sc.navigation || {})[city])
+          push(issues, 'warning', 'ROUTE_NAV_MISMATCH', cid, sc.id, null,
+            `Cidade "${city}" na rota mas sem entrada na navigation`,
+            `chapters.${cid}.scenarios[${sc.id}].navigation`)
+      })
+
+      // Check each base action
+      Object.values(base).forEach(ba => {
+        const override = ov[ba.id]
+        const hasOv = override !== undefined
+
+        if (hasOv) {
+          // Broken evidence ref
+          if (override.evidence && !evIds.has(override.evidence))
+            push(issues, 'error', 'BROKEN_EV_REF', cid, sc.id, ba.id,
+              `override.evidence="${override.evidence}" não existe no catálogo`,
+              `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+        } else {
+          // No override — check misleading base clue
+          if (ba.evidence === 'E05' && !routeSet.has('brasilia'))
+            push(issues, 'error', 'MISLEADING_CLUE', cid, sc.id, ba.id,
+              `"${ba.id}" sem override → E05 implica Brasília, rota=[${(sc.route||[]).join('→')}]`,
+              `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+
+          // Wrong-suspect evidence in base
+          if (ba.evidence) {
+            const others = Object.entries(culpritEv)
+              .filter(([c]) => c !== cid)
+              .flatMap(([,s]) => [...s])
+            if (others.includes(ba.evidence))
+              push(issues, 'warning', 'WRONG_SUSPECT_EV', cid, sc.id, ba.id,
+                `"${ba.id}" sem override → base usa ${ba.evidence} (outro suspeito)`,
+                `chapters.${cid}.scenarios[${sc.id}].action_overrides.${ba.id}`)
+          }
+        }
+      })
+
+      // Orphan overrides
+      Object.keys(ov).forEach(aid => {
+        if (!base[aid])
+          push(issues, 'warning', 'ORPHAN_OVERRIDE', cid, sc.id, aid,
+            `Override para "${aid}" mas ação não existe em nenhuma location`,
+            `chapters.${cid}.scenarios[${sc.id}].action_overrides.${aid}`)
+      })
+    })
+  })
+  return issues
+}
+
+function push(arr, sev, type, chapter, scenario, action, message, path) {
+  arr.push({ severity: sev, type, chapter, scenario, action, message, path })
+}
+
+// ─── TREE BUILDING ────────────────────────────────────────────────────────────
+function buildTree(game, issues) {
+  const byScen = {}, byCh = {}
+  issues.forEach(i => {
+    const sk = `${i.chapter}::${i.scenario}`
+    if (i.scenario) { if (!byScen[sk]) byScen[sk] = []; byScen[sk].push(i) }
+    if (!byCh[i.chapter]) byCh[i.chapter] = []; byCh[i.chapter].push(i)
+  })
+
+  const baseMap = {}
+  ;(game.locations || []).forEach(loc =>
+    (loc.actions || []).forEach(a => { baseMap[a.id] = { ...a, city: loc.name, cityId: loc.id } })
+  )
+
+  const root = {
+    id: 'root', label: 'Campanha', type: 'campaign',
+    issues: [], pos: [0,0,0],
+    data: { id: game.campaign?.id, pool: game.campaign?.lieutenant_pool, boss: game.campaign?.boss },
+    children: []
+  }
+
+  const chaps = game.campaign?.chapters || {}
+  Object.entries(chaps).forEach(([cid, ch]) => {
+    const chapIssues = (byCh[cid] || []).filter(i => !i.scenario)
+    const chapNode = {
+      id: `ch_${cid}`, label: cid.toUpperCase(), type: 'chapter',
+      chapId: cid, issues: chapIssues, pos: [0,0,0],
+      data: { culprit: ch.culprit, hours: ch.total_hours, briefing: ch.briefing,
+              req: ch.arrest_requirements },
+      children: []
+    }
+
+    ;(ch.scenarios || []).forEach(sc => {
+      const key = `${cid}::${sc.id}`
+      const sci = byScen[key] || []
+      const hasErr = sci.some(i => i.severity === 'error')
+      const hasWarn = sci.some(i => i.severity === 'warning')
+      const status = hasErr ? 'error' : hasWarn ? 'warning' : 'ok'
+
+      // Build action detail list for right panel
+      const actions = Object.values(baseMap).map(ba => {
+        const ov = (sc.action_overrides || {})[ba.id]
+        const hasOv = ov !== undefined
+        const evId = hasOv ? ov.evidence : ba.evidence
+        const issue = sci.find(i => i.action === ba.id)
+        let st = 'ok'
+        if (issue) st = issue.severity
+        else if (!hasOv && evId === 'E05') st = 'check'
+        return { id: ba.id, city: ba.city, cityId: ba.cityId, hasOv, evId,
+                 result: hasOv ? ov.result : ba.result, cost: ov?.cost || ba.cost,
+                 st, issue }
+      })
+
+      const scenNode = {
+        id: `sc_${cid}_${sc.id}`, label: sc.code + '\n' + sc.id,
+        type: 'scenario', status, chapId: cid, scenId: sc.id,
+        issues: sci, pos: [0,0,0],
+        data: { code: sc.code, route: sc.route, navigation: sc.navigation,
+                action_overrides: sc.action_overrides, evidence_overrides: sc.evidence_overrides,
+                actions },
+        children: []
+      }
+      chapNode.children.push(scenNode)
+    })
+
+    root.children.push(chapNode)
+  })
+  return root
+}
+
+// ─── LAYOUT ──────────────────────────────────────────────────────────────────
+function layout(node, x, y, spread) {
+  node.pos = [x, y, 0]
+  if (!node.children.length) return
+  const n = node.children.length
+  const w = spread * (n - 1)
+  node.children.forEach((c, i) => layout(c, x - w/2 + i*spread, y - 210, spread*0.7))
+}
+
+// ─── THREE.JS ────────────────────────────────────────────────────────────────
+let scene, cam, ren, ctrl, ray, mouse2, meshMap = [], selMesh = null
+
+const NC = {
+  campaign: 0x4488ff, chapter: 0xaa44ff,
+  scenario_ok: 0xff8844, scenario_warning: 0xffcc44, scenario_error: 0xff4444
+}
+const NS = { campaign: 18, chapter: 13, scenario: 9 }
+
+function initThree() {
+  const wrap = document.getElementById('canvas-wrap')
+  const W = wrap.clientWidth, H = wrap.clientHeight
+
+  scene = new THREE.Scene()
+  scene.background = new THREE.Color(0x070d1a)
+  scene.fog = new THREE.FogExp2(0x070d1a, 0.0009)
+
+  cam = new THREE.PerspectiveCamera(52, W/H, 0.1, 3000)
+  cam.position.set(0, 120, 780)
+  cam.lookAt(0, 0, 0)
+
+  ren = new THREE.WebGLRenderer({ antialias: true })
+  ren.setSize(W, H)
+  ren.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  wrap.appendChild(ren.domElement)
+
+  ctrl = new THREE.OrbitControls(cam, ren.domElement)
+  ctrl.enableDamping = true
+  ctrl.dampingFactor = 0.06
+  ctrl.target.set(0, 0, 0)
+
+  ray = new THREE.Raycaster()
+  mouse2 = new THREE.Vector2()
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x223355, 1.2))
+  const p1 = new THREE.PointLight(0x4488ff, 2, 1500)
+  p1.position.set(0, 500, 300)
+  scene.add(p1)
+
+  // Grid
+  const grid = new THREE.GridHelper(1800, 30, 0x0d1a33, 0x0d1a33)
+  grid.position.y = -480
+  scene.add(grid)
+
+  window.addEventListener('resize', () => {
+    const W = wrap.clientWidth, H = wrap.clientHeight
+    cam.aspect = W/H; cam.updateProjectionMatrix(); ren.setSize(W, H)
+  })
+
+  ren.domElement.addEventListener('mousemove', onMove)
+  ren.domElement.addEventListener('click', onClick)
+}
+
+function makeSprite(text, hexColor, size = 22) {
+  const lines = text.split('\n')
+  const c = document.createElement('canvas')
+  const ctx = c.getContext('2d')
+  ctx.font = `bold ${size}px Courier New`
+  const mw = Math.max(...lines.map(l => ctx.measureText(l).width))
+  c.width = mw + 20
+  c.height = lines.length * (size + 4) + 12
+  ctx.clearRect(0, 0, c.width, c.height)
+  ctx.fillStyle = 'rgba(7,13,26,0.82)'
+  rrect(ctx, 0, 0, c.width, c.height, 4)
+  ctx.fill()
+  ctx.font = `bold ${size}px Courier New`
+  ctx.fillStyle = '#' + hexColor.toString(16).padStart(6,'0')
+  ctx.textAlign = 'center'
+  lines.forEach((l, i) => ctx.fillText(l, c.width/2, size + i*(size+4)))
+  const tex = new THREE.CanvasTexture(c)
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false }))
+  sp.scale.set((c.width/c.height)*38, 38, 1)
+  return sp
+}
+
+function rrect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y)
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r)
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h)
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r)
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath()
+}
+
+function addNode(node) {
+  const type = node.type === 'scenario' ? `scenario_${node.status}` : node.type
+  const color = NC[type] || NC.scenario_ok
+  const size = node.type === 'scenario' ? NS.scenario : NS[node.type] || 9
+
+  const geo = new THREE.SphereGeometry(size, 20, 20)
+  const mat = new THREE.MeshPhongMaterial({
+    color, emissive: color, emissiveIntensity: 0.25, shininess: 60
+  })
+  const mesh = new THREE.Mesh(geo, mat)
+  mesh.position.set(...node.pos)
+  scene.add(mesh)
+
+  // Error ring
+  const hasErr = node.issues?.some(i => i.severity === 'error')
+  const hasWarn = node.issues?.some(i => i.severity === 'warning')
+  if (hasErr || hasWarn) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(size + 5, 1.8, 8, 32),
+      new THREE.MeshBasicMaterial({ color: hasErr ? 0xff4444 : 0xffcc44 })
+    )
+    scene.add(ring)
+    ring.position.set(...node.pos)
+    // Animate ring (stored for loop)
+    ring.userData.isRing = true
+    ring.userData.baseY = node.pos[1]
+  }
+
+  // Label
+  const labelColors = {
+    campaign: 0x7aaeff, chapter: 0xcc88ff,
+    scenario_ok: 0xffaa66, scenario_warning: 0xffdd66, scenario_error: 0xff8888
+  }
+  const sp = makeSprite(node.label, labelColors[type] || 0xe0e8f0)
+  sp.position.set(node.pos[0], node.pos[1] + size + 30, node.pos[2])
+  scene.add(sp)
+
+  meshMap.push({ mesh, node })
+  node.children.forEach(c => addNode(c))
+}
+
+function addEdges(node) {
+  node.children.forEach(c => {
+    const pts = [new THREE.Vector3(...node.pos), new THREE.Vector3(...c.pos)]
+    const geo = new THREE.BufferGeometry().setFromPoints(pts)
+    const mat = new THREE.LineBasicMaterial({ color: 0x1a3560, transparent: true, opacity: 0.55 })
+    scene.add(new THREE.Line(geo, mat))
+    addEdges(c)
+  })
+}
+
+// ─── INTERACTION ─────────────────────────────────────────────────────────────
+const tip = document.getElementById('tip')
+
+function onMove(e) {
+  const wrap = document.getElementById('canvas-wrap')
+  const rc = wrap.getBoundingClientRect()
+  mouse2.x = ((e.clientX - rc.left) / wrap.clientWidth) * 2 - 1
+  mouse2.y = -((e.clientY - rc.top) / wrap.clientHeight) * 2 + 1
+  ray.setFromCamera(mouse2, cam)
+  const hits = ray.intersectObjects(meshMap.map(o => o.mesh))
+  if (hits.length) {
+    const obj = meshMap.find(o => o.mesh === hits[0].object)
+    tip.style.display = 'block'
+    tip.style.left = (e.clientX + 14) + 'px'
+    tip.style.top = (e.clientY - 6) + 'px'
+    tip.textContent = (obj?.node.label || '').replace('\n', ' · ')
+    ren.domElement.style.cursor = 'pointer'
+  } else {
+    tip.style.display = 'none'
+    ren.domElement.style.cursor = 'default'
+  }
+}
+
+function onClick(e) {
+  const wrap = document.getElementById('canvas-wrap')
+  const rc = wrap.getBoundingClientRect()
+  mouse2.x = ((e.clientX - rc.left) / wrap.clientWidth) * 2 - 1
+  mouse2.y = -((e.clientY - rc.top) / wrap.clientHeight) * 2 + 1
+  ray.setFromCamera(mouse2, cam)
+  const hits = ray.intersectObjects(meshMap.map(o => o.mesh))
+  if (hits.length) {
+    const obj = meshMap.find(o => o.mesh === hits[0].object)
+    if (obj) selectNode(obj)
+  }
+}
+
+function selectNode(obj) {
+  if (selMesh) selMesh.material.emissiveIntensity = 0.25
+  selMesh = obj.mesh
+  selMesh.material.emissiveIntensity = 1.1
+  renderDetail(obj.node)
+}
+
+function focusNode(id) {
+  const obj = meshMap.find(o => o.node.id === id)
+  if (!obj) return
+  selectNode(obj)
+  const pos = new THREE.Vector3(...obj.node.pos)
+  const tgt = pos.clone().add(new THREE.Vector3(0, 60, 320))
+  animCam(tgt, pos)
+}
+
+function animCam(toPos, toTarget) {
+  const sp = cam.position.clone(), st = ctrl.target.clone()
+  let t = 0
+  function step() {
+    t += 0.035; if (t > 1) return
+    cam.position.lerpVectors(sp, toPos, t)
+    ctrl.target.lerpVectors(st, toTarget, t)
+    requestAnimationFrame(step)
+  }
+  step()
+}
+
+// ─── DETAIL PANEL ─────────────────────────────────────────────────────────────
+function renderDetail(node) {
+  const d = document.getElementById('detail')
+
+  if (node.type === 'campaign') {
+    d.innerHTML = `<div class="ps">
+      <div id="dtitle">◉ Campanha</div>
+      <div id="dsub">${node.data.id || ''}</div>
+      <h3>Lieutenants</h3>
+      <div style="margin-bottom:8px">${(node.data.pool||[]).map(l=>`<span class="eid" style="color:#cc88ff;border-color:rgba(170,68,255,.3)">${l}</span>`).join('')}</div>
+      <h3>Boss</h3><span class="eid" style="color:var(--err);border-color:rgba(255,68,68,.3)">${node.data.boss||''}</span>
+    </div>`; return
+  }
+
+  if (node.type === 'chapter') {
+    d.innerHTML = `<div class="ps">
+      <div id="dtitle">Capítulo · ${node.chapId}</div>
+      <div id="dsub">Culprit: <strong>${node.data.culprit}</strong> · ${node.data.hours}h</div>
+      <h3>Evidências obrigatórias</h3>
+      <div style="margin-bottom:8px">${(node.data.req?.required_evidence||[]).map(e=>`<span class="eid">${e}</span>`).join('')||'—'}</div>
+      <h3>Mínimo de evidências</h3>
+      <div style="font-size:10px;margin-bottom:8px">${node.data.req?.minimum_evidence||'?'}</div>
+      <h3>Briefing</h3>
+      <p style="font-size:9px;color:var(--dim);line-height:1.5">${node.data.briefing||''}</p>
+    </div>`; return
+  }
+
+  if (node.type === 'scenario') {
+    const dt = node.data
+    const routeHtml = (dt.route||[]).map((c,i)=>
+      `<span class="chip">${c}</span>${i<dt.route.length-1?'<span class="ew">→</span>':''}`).join('')
+
+    const errHtml = node.issues.length
+      ? node.issues.map(i=>`
+          <div class="ei ${i.severity}" style="margin-bottom:4px">
+            <span class="badge ${i.severity==='error'?'e':'w'}">${i.type}</span><br>
+            ${i.action ? `<span style="color:var(--dim)">${i.action} · </span>` : ''}${i.message}
+          </div>`).join('')
+      : '<span style="color:var(--ok);font-size:10px">✓ Nenhum problema</span>'
+
+    const rows = (dt.actions||[]).map(a => {
+      const ov = a.hasOv
+        ? `<span class="ok">✓</span>`
+        : `<span class="wn">base</span>`
+
+      let st = ''
+      if (a.st === 'error') st = `<span class="er">✗ ERRO</span>`
+      else if (a.st === 'warning') st = `<span class="wn">⚠ AVISO</span>`
+      else if (a.st === 'check') st = `<span class="wn">⚠ checar</span>`
+      else if (a.hasOv && !a.evId) st = `<span class="ok">null ✓</span>`
+      else if (a.evId) st = `<span class="ok">${a.evId}</span>`
+      else st = `<span class="di">—</span>`
+
+      const tip2 = (a.result||'').substring(0,120).replace(/"/g,'&quot;')
+      return `<tr title="${tip2}"><td class="di">${a.id}</td><td class="di">${a.cityId}</td><td>${ov}</td><td>${st}</td></tr>`
+    }).join('')
+
+    d.innerHTML = `
+      <div class="ps">
+        <div id="dtitle">${dt.code} · ${node.scenId}</div>
+        <div id="dsub">Capítulo: ${node.chapId}</div>
+        <h3>Rota</h3><div class="route">${routeHtml}</div>
+        <h3>Problemas</h3>${errHtml}
+      </div>
+      <div class="ps">
+        <h3>Ações</h3>
+        <table class="tbl">
+          <thead><tr><th>Ação</th><th>Cidade</th><th>Ov?</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <p style="font-size:8.5px;color:var(--dim);margin-top:6px">Passe o mouse na linha para ver o resultado</p>
+      </div>
+      <div class="ps">
+        <h3>Evidências obrigatórias</h3>
+        ${(GAME?.campaign?.chapters?.[node.chapId]?.arrest_requirements?.required_evidence||[]).map(e=>`<span class="eid">${e}</span>`).join('')}
+      </div>`
+  }
+}
+
+// ─── ERROR PANEL ─────────────────────────────────────────────────────────────
+function renderErrors(issues) {
+  const list = document.getElementById('elist')
+  const stats = document.getElementById('stats')
+  const errs = issues.filter(i => i.severity === 'error').length
+  const warns = issues.filter(i => i.severity === 'warning').length
+
+  stats.textContent = `${errs} erro(s) · ${warns} aviso(s) · ${issues.length} total`
+
+  if (!issues.length) {
+    list.innerHTML = '<span style="color:var(--ok);font-size:10px">✓ Nenhum problema detectado.</span>'
+    return
+  }
+
+  list.innerHTML = issues.map((iss, n) => {
+    const sid = iss.scenario ? `sc_${iss.chapter}_${iss.scenario}` : `ch_${iss.chapter}`
+    return `<div class="ei ${iss.severity}" onclick="focusNode('${sid}')">
+      <span class="badge ${iss.severity==='error'?'e':'w'}">${n+1}</span>
+      <strong>${iss.chapter}${iss.scenario ? ' · '+iss.scenario : ''}</strong><br>
+      ${iss.message}
+    </div>`
+  }).join('')
+}
+
+// ─── MAIN LOOP ────────────────────────────────────────────────────────────────
+function loop() {
+  requestAnimationFrame(loop)
+  ctrl.update()
+  // Pulse rings
+  scene.children.forEach(c => {
+    if (c.userData.isRing) {
+      c.rotation.x += 0.008
+      c.rotation.z += 0.005
+    }
+  })
+  ren.render(scene, cam)
+}
+
+// ─── START ────────────────────────────────────────────────────────────────────
+function startApp() {
+  document.getElementById('load').style.display = 'none'
+  document.getElementById('app').style.display = 'flex'
+
+  const issues = validate(GAME)
+  const root = buildTree(GAME, issues)
+  layout(root, 0, 300, 260)
+
+  initThree()
+  addEdges(root)
+  addNode(root)
+  renderErrors(issues)
+
+  loop()
+}
+
+// Make focusNode global for onclick handlers
+window.focusNode = focusNode
+</script>
+</body>
+</html>
