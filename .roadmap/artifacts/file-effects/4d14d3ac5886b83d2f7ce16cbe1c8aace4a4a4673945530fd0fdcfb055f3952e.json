@@ -1,0 +1,13 @@
+{
+  "after_sha256": "494dd6f6a2ea941a048d3b4c4206e3538594d77f7f676deeccf21264eff4971f",
+  "artifact_id": "ART-494dd6f6a2ea941a048d3b4c4206e3538594d77f7f676deeccf21264eff4971f",
+  "artifact_sha256": "4d14d3ac5886b83d2f7ce16cbe1c8aace4a4a4673945530fd0fdcfb055f3952e",
+  "before_sha256": "494dd6f6a2ea941a048d3b4c4206e3538594d77f7f676deeccf21264eff4971f",
+  "bytes": 199,
+  "content": "{\n  \"name\": \"arquivo-zero\",\n  \"private\": true,\n  \"description\": \"CI tooling deps for schema validation scripts\",\n  \"engines\": {\n    \"node\": \">=20\"\n  },\n  \"dependencies\": {\n    \"ajv\": \"^8.17.1\"\n  }\n}\n",
+  "effect_scope": "workspace",
+  "encoding": "utf-8",
+  "path": "package.json",
+  "source_path": "package.json",
+  "ts": "2026-09-18T14:30:14Z"
+}

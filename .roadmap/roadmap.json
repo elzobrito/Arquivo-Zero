@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 1273,
-      "projection_hash_sha256": "b2609a9498a792cbcb9776776062ab91f111625b4a4bb02d9131643e6bdafb40",
+      "last_event_seq": 1295,
+      "projection_hash_sha256": "8426d8c213c99f6e5128297e75b3f34d644a297093779529a7a8bf9b88b18f54",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-17T19:37:38Z"
+    "updated_at": "2026-09-18T14:30:38Z"
   },
   "project": {
     "name": "esaa-core",
@@ -4708,16 +4708,97 @@
         ]
       },
       "completed_at": "2026-09-17T19:37:37Z"
+    },
+    {
+      "task_id": "AZ-CI-AJV-001",
+      "task_kind": "impl",
+      "title": "Corrigir SCHEMA_PASS: declarar e instalar ajv no CI",
+      "description": "GitHub Actions falha em SCHEMA_PASS com Cannot find module ajv. validate-case.mjs exige ajv; repo sem package.json e workflow sem npm install. Localmente resolve via ~/node_modules.",
+      "status": "in_progress",
+      "depends_on": [],
+      "targets": [
+        "package.json",
+        "package-lock.json",
+        ".github/workflows/deploy-pages.yml"
+      ],
+      "outputs": {
+        "files": [
+          "package.json",
+          "package-lock.json",
+          ".github/workflows/deploy-pages.yml"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "package.json declara ajv e workflow instala deps antes do SCHEMA_PASS",
+        "node scripts/validate-case.mjs dist/game.json imprime SCHEMA_PASS version=3.x issues=0 sem depender de node_modules fora do repo"
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "cursor-agent",
+      "started_at": "2026-09-18T14:28:20Z",
+      "superseded_by": [
+        "AZ-CI-AJV-001-V2"
+      ]
+    },
+    {
+      "task_id": "AZ-CI-AJV-001-V2",
+      "task_kind": "impl",
+      "title": "Corrigir SCHEMA_PASS: declarar e instalar ajv no CI",
+      "description": "V2 com boundary_grant. CI falha: Cannot find module ajv. validate-case.mjs exige ajv; sem package.json e sem npm ci no workflow.",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        "package.json",
+        "package-lock.json",
+        ".github/workflows/deploy-pages.yml"
+      ],
+      "outputs": {
+        "files": [
+          "package.json",
+          "package-lock.json",
+          ".github/workflows/deploy-pages.yml"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        "package.json",
+        "package-lock.json",
+        ".github/workflows/deploy-pages.yml"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "package.json declara ajv e workflow instala deps antes do SCHEMA_PASS",
+        "node scripts/validate-case.mjs dist/game.json -> SCHEMA_PASS version=3.x issues=0 com ajv do repo"
+      ],
+      "required_review_mode": "regression",
+      "supersedes": [
+        "AZ-CI-AJV-001"
+      ],
+      "assigned_to": "cursor-agent",
+      "started_at": "2026-09-18T14:30:14Z",
+      "verification": {
+        "checks": [
+          "node scripts/validate-case.mjs dist/game.json -> SCHEMA_PASS version=3.x issues=0",
+          "require.resolve(ajv) sob ./node_modules/ajv",
+          "deploy-pages.yml tem npm ci antes de SCHEMA_PASS"
+        ]
+      },
+      "completed_at": "2026-09-18T14:30:38Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 87,
-      "in_progress": 3,
+      "done": 88,
+      "in_progress": 4,
       "todo": 4
     },
     "by_kind": {
-      "impl": 72,
+      "impl": 74,
       "qa": 8,
       "spec": 14
     }
