@@ -7,11 +7,11 @@
     "run": {
       "run_id": "RUN-0001",
       "status": "success",
-      "last_event_seq": 1295,
-      "projection_hash_sha256": "8426d8c213c99f6e5128297e75b3f34d644a297093779529a7a8bf9b88b18f54",
+      "last_event_seq": 1308,
+      "projection_hash_sha256": "c327c6c33c8cae9d8b7b7d169398f8302fe9057a2af7e221f34a03d624320c7b",
       "verify_status": "ok"
     },
-    "updated_at": "2026-09-18T14:30:38Z"
+    "updated_at": "2026-09-18T14:31:28Z"
   },
   "project": {
     "name": "esaa-core",
@@ -4789,16 +4789,52 @@
         ]
       },
       "completed_at": "2026-09-18T14:30:38Z"
+    },
+    {
+      "task_id": "AZ-CI-FMAP-001",
+      "task_kind": "impl",
+      "title": "Alinhar CI FUNCTION_MAP_PASS ao total=78",
+      "description": "Após ajv, SCHEMA_PASS ok; CI falha porque workflow exige total=79 e verify-function-map.mjs reporta 78 (pós AZ-HYP-005-V2).",
+      "status": "done",
+      "depends_on": [],
+      "targets": [
+        ".github/workflows/deploy-pages.yml"
+      ],
+      "outputs": {
+        "files": [
+          ".github/workflows/deploy-pages.yml"
+        ]
+      },
+      "immutability": {
+        "done_is_immutable": true
+      },
+      "boundary_grant": [
+        ".github/workflows/deploy-pages.yml"
+      ],
+      "task_type": "hotfix",
+      "acceptance_criteria": [
+        "workflow grep FUNCTION_MAP_PASS total=78 alinhado ao script"
+      ],
+      "required_review_mode": "regression",
+      "assigned_to": "cursor-agent",
+      "started_at": "2026-09-18T14:31:15Z",
+      "verification": {
+        "checks": [
+          "node scripts/verify-function-map.mjs -> FUNCTION_MAP_PASS total=78",
+          "deploy-pages.yml grep total=78"
+        ]
+      },
+      "completed_at": "2026-09-18T14:31:28Z"
     }
   ],
   "indexes": {
     "by_status": {
-      "done": 88,
+      "done": 89,
       "in_progress": 4,
       "todo": 4
     },
     "by_kind": {
-      "impl": 74,
+      "impl": 75,
       "qa": 8,
       "spec": 14
     }
